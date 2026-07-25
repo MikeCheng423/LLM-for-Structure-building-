@@ -1,0 +1,632 @@
+{
+  "complete": true,
+  "dataset_sha256": "0fd47425eb537a841f6d04fad4a86e24dbd174cc390770a3d8e2b725695e8545",
+  "evaluation_ids_sha256": "69f4b9d76f45134f95e452d907b1af8d12fcac2625c57aeb592bc3661d796971",
+  "results": [
+    {
+      "elapsed_seconds": 63.2573,
+      "error": "same failed tool call repeated more than twice",
+      "exact_structure_match": false,
+      "exact_tool_sequence": false,
+      "expected_calls": [
+        "build_surface",
+        "add_atomic_adsorbate",
+        "finish"
+      ],
+      "expected_output_hash": "8d70dfe620c93d2968c032e46bd27bfd212a5cd67982e9f131ef301b28af7c3f",
+      "failed_call_count": 3,
+      "failed_call_details": [
+        {
+          "args": {
+            "element": "H",
+            "height": 1.8,
+            "name": "H_adsorbate",
+            "site": "ontop",
+            "site_index": 1,
+            "xy": [
+              1.276328,
+              0.736888
+            ]
+          },
+          "error": {
+            "code": "KeyError",
+            "message": "\"no structure named 'H_adsorbate'\""
+          },
+          "tool": "add_atomic_adsorbate"
+        },
+        {
+          "args": {
+            "element": "H",
+            "height": 1.8,
+            "name": "H_adsorbate",
+            "site": "ontop",
+            "site_index": 1,
+            "xy": [
+              1.276328,
+              0.736888
+            ]
+          },
+          "error": {
+            "code": "KeyError",
+            "message": "\"no structure named 'H_adsorbate'\""
+          },
+          "tool": "add_atomic_adsorbate"
+        },
+        {
+          "args": {
+            "element": "H",
+            "height": 1.8,
+            "name": "H_adsorbate",
+            "site": "ontop",
+            "site_index": 1,
+            "xy": [
+              1.276328,
+              0.736888
+            ]
+          },
+          "error": {
+            "code": "KeyError",
+            "message": "\"no structure named 'H_adsorbate'\""
+          },
+          "tool": "add_atomic_adsorbate"
+        }
+      ],
+      "finished": false,
+      "generated_calls": [
+        "build_surface",
+        "list_adsorption_sites",
+        "add_atomic_adsorbate",
+        "add_atomic_adsorbate",
+        "add_atomic_adsorbate"
+      ],
+      "generated_texts": [
+        "<tool_call>\n{\"name\": \"build_surface\", \"arguments\": {\"name\": \"Cu_slab\", \"element\": \"Cu\", \"miller\": [0, 1, 0], \"layers\": 5, \"crystal\": \"fcc\", \"repeat\": [2, 2, 1]}}\n</tool_call>",
+        "<tool_call>\n{\"name\": \"list_adsorption_sites\", \"arguments\": {\"name\": \"Cu_slab\", \"tolerance\": 0.1}}\n</tool_call>",
+        "<tool_call>\n{\"name\": \"add_atomic_adsorbate\", \"arguments\": {\"name\": \"H_adsorbate\", \"element\": \"H\", \"site\": \"ontop\", \"site_index\": 1, \"xy\": [1.276328, 0.736888], \"height\": 1.8}}\n</tool_call>",
+        "<tool_call>\n{\"name\": \"add_atomic_adsorbate\", \"arguments\": {\"name\": \"H_adsorbate\", \"element\": \"H\", \"site\": \"ontop\", \"site_index\": 1, \"xy\": [1.276328, 0.736888], \"height\": 1.8}}\n</tool_call>",
+        "<tool_call>\n{\"name\": \"add_atomic_adsorbate\", \"arguments\": {\"name\": \"H_adsorbate\", \"element\": \"H\", \"site\": \"ontop\", \"site_index\": 1, \"xy\": [1.276328, 0.736888], \"height\": 1.8}}\n</tool_call>"
+      ],
+      "generated_tokens": 332,
+      "id": "cu-100-5-2x2-h-ontop-p1",
+      "output_hash": null,
+      "split_group": "atomic_adsorption:Cu-H:cu-100-5-2x2-h-ontop",
+      "state": "FAILED",
+      "successful_calls": [
+        "build_surface",
+        "list_adsorption_sites"
+      ],
+      "unknown_calls": []
+    },
+    {
+      "elapsed_seconds": 37.6681,
+      "error": null,
+      "exact_structure_match": false,
+      "exact_tool_sequence": false,
+      "expected_calls": [
+        "build_bulk",
+        "repeat",
+        "finish"
+      ],
+      "expected_output_hash": "2390df71272168de3b3076744dceb744a471346a05da1178314e82d7b5064ecb",
+      "failed_call_count": 0,
+      "failed_call_details": [],
+      "finished": true,
+      "generated_calls": [
+        "build_bulk",
+        "finish"
+      ],
+      "generated_texts": [
+        "<tool_call>\n{\"name\": \"build_bulk\", \"arguments\": {\"name\": \"W_bcc_2x2x2\", \"element\": \"W\", \"crystal\": \"bcc\", \"repeat\": [2, 2, 2]}}\n</tool_call>",
+        "The 2x2x2 bcc tungsten (W) bulk crystal has been successfully built with 8 atoms. The structure is periodic with a cubic lattice of side length 5.473281 \u00c5, and the unit cell angles are all approximately 109.47\u00b0, consistent with a body-centered cubic (bcc) structure. The minimum interatomic distance is 2.73664 \u00c5, and the structure is valid and stable.\n\nFinal structure: **W_bcc_2x2x2**.  \nI will now finalize this structure.  \n<tool_call>\n{\"name\": \"finish\", \"arguments\": {\"name\": \"W_bcc_2x2x2\"}}\n</tool_call>"
+      ],
+      "generated_tokens": 204,
+      "id": "w-bcc-2x2x2-p1",
+      "output_hash": "5eaef2904c239937a0058c8f1a26182c8d7558b07441b021f5253e9791fea25f",
+      "split_group": "bulk:W:w-bcc-2x2x2",
+      "state": "FINISHED",
+      "successful_calls": [
+        "build_bulk",
+        "finish"
+      ],
+      "unknown_calls": []
+    },
+    {
+      "elapsed_seconds": 64.9889,
+      "error": "model-turn budget exhausted",
+      "exact_structure_match": false,
+      "exact_tool_sequence": false,
+      "expected_calls": [
+        "build_surface",
+        "add_molecular_adsorbate",
+        "finish"
+      ],
+      "expected_output_hash": "9210a314d97924c8146fc25f54cdca2ac60232c1ac5f903388223b409dbd09ab",
+      "failed_call_count": 3,
+      "failed_call_details": [
+        {
+          "args": {
+            "element": "C",
+            "height": 1.9,
+            "name": "co_ads",
+            "site": "ontop",
+            "site_index": 1,
+            "xy": [
+              2.552655,
+              1.473776
+            ]
+          },
+          "error": {
+            "code": "KeyError",
+            "message": "\"no structure named 'co_ads'\""
+          },
+          "tool": "add_atomic_adsorbate"
+        },
+        {
+          "args": {
+            "element": "Cu",
+            "layers": 3,
+            "miller": [
+              0,
+              0,
+              1
+            ],
+            "name": "cu_slab",
+            "vacuum": 10.0
+          },
+          "error": {
+            "code": "ToolExecutionError",
+            "message": "structure 'cu_slab' already exists"
+          },
+          "tool": "build_surface"
+        },
+        {
+          "args": {
+            "element": "C",
+            "height": 1.9,
+            "name": "co_ads",
+            "site": "ontop",
+            "site_index": 1,
+            "xy": [
+              2.552655,
+              1.473776
+            ]
+          },
+          "error": {
+            "code": "KeyError",
+            "message": "\"no structure named 'co_ads'\""
+          },
+          "tool": "add_atomic_adsorbate"
+        }
+      ],
+      "finished": false,
+      "generated_calls": [
+        "build_surface",
+        "list_adsorption_sites",
+        "add_atomic_adsorbate",
+        "build_surface",
+        "list_adsorption_sites",
+        "add_atomic_adsorbate"
+      ],
+      "generated_texts": [
+        "<tool_call>\n{\"name\": \"build_surface\", \"arguments\": {\"name\": \"cu_slab\", \"element\": \"Cu\", \"miller\": [0, 0, 1], \"layers\": 3, \"vacuum\": 10.0}}\n</tool_call>",
+        "<tool_call>\n{\"name\": \"list_adsorption_sites\", \"arguments\": {\"name\": \"cu_slab\", \"tolerance\": 0.1}}\n</tool_call>",
+        "<tool_call>\n{\"name\": \"add_atomic_adsorbate\", \"arguments\": {\"name\": \"co_ads\", \"element\": \"C\", \"site\": \"ontop\", \"site_index\": 1, \"xy\": [2.552655, 1.473776], \"height\": 1.9}}\n</tool_call>",
+        "<tool_call>\n{\"name\": \"build_surface\", \"arguments\": {\"name\": \"cu_slab\", \"element\": \"Cu\", \"miller\": [0, 0, 1], \"layers\": 3, \"vacuum\": 10.0}}\n</tool_call>",
+        "<tool_call>\n{\"name\": \"list_adsorption_sites\", \"arguments\": {\"name\": \"cu_slab\", \"tolerance\": 0.1}}\n</tool_call>",
+        "<tool_call>\n{\"name\": \"add_atomic_adsorbate\", \"arguments\": {\"name\": \"co_ads\", \"element\": \"C\", \"site\": \"ontop\", \"site_index\": 1, \"xy\": [2.552655, 1.473776], \"height\": 1.9}}\n</tool_call>"
+      ],
+      "generated_tokens": 332,
+      "id": "cu-111-4-2x2-co-p1",
+      "output_hash": null,
+      "split_group": "molecular_adsorption:Cu-CO:cu-111-4-2x2-co",
+      "state": "BUDGET_EXHAUSTED",
+      "successful_calls": [
+        "build_surface",
+        "list_adsorption_sites",
+        "list_adsorption_sites"
+      ],
+      "unknown_calls": []
+    },
+    {
+      "elapsed_seconds": 23.8174,
+      "error": "model stopped without calling finish",
+      "exact_structure_match": false,
+      "exact_tool_sequence": false,
+      "expected_calls": [
+        "build_molecule",
+        "finish"
+      ],
+      "expected_output_hash": "fcac4c47127a5ed2080b26e93ebfe03aec5c07d48b16b722e2de3440ba0af555",
+      "failed_call_count": 0,
+      "failed_call_details": [],
+      "finished": false,
+      "generated_calls": [
+        "build_molecule"
+      ],
+      "generated_texts": [
+        "<tool_call>\n{\"name\": \"build_molecule\", \"arguments\": {\"name\": \"CO\", \"species\": \"CO\", \"box\": 15}}\n</tool_call>",
+        "The isolated CO molecule has been successfully built in a 15 angstrom cubic box. The structure consists of one carbon (C) and one oxygen (O) atom with a bond length of 1.15034 \u00c5, conforming to expected values for a CO molecule. The system is periodic in all directions with a box size of 15 \u00c5, and the structure is valid and ready for further analysis or simulation.\n\nFinal structure: **CO** (isolated in a 15 \u00c5 cubic box)."
+      ],
+      "generated_tokens": 142,
+      "id": "co-15-p1",
+      "output_hash": null,
+      "split_group": "molecule:CO:co-15",
+      "state": "FAILED",
+      "successful_calls": [
+        "build_molecule"
+      ],
+      "unknown_calls": []
+    },
+    {
+      "elapsed_seconds": 38.1039,
+      "error": null,
+      "exact_structure_match": true,
+      "exact_tool_sequence": true,
+      "expected_calls": [
+        "build_nanotube",
+        "finish"
+      ],
+      "expected_output_hash": "a2a21226b24aac29794d51adf97930eab9c4b43b3f25638011f8e01689449305",
+      "failed_call_count": 0,
+      "failed_call_details": [],
+      "finished": true,
+      "generated_calls": [
+        "build_nanotube",
+        "finish"
+      ],
+      "generated_texts": [
+        "<tool_call>\n{\"name\": \"build_nanotube\", \"arguments\": {\"name\": \"carbon_nanotube\", \"element\": \"C\", \"n\": 6, \"m\": 3, \"length\": 1, \"vacuum\": 10}}\n</tool_call>",
+        "The (6,3) carbon nanotube has been successfully built with a length of 1 unit cell and a 10 \u00c5 radial vacuum. The structure consists of 84 carbon atoms arranged in a cylindrical geometry with a hexagonal lattice pattern. The cell parameters are set to match the nanotube's geometry, with lattice vectors aligned to the nanotube's symmetry.\n\nFinal structure details:\n- Name: carbon_nanotube\n- Element: C\n- Formula: C\u2088\u2084\n- Length: 1 unit cell\n- Vacuum: 10 \u00c5\n- Geometry: (6,3) carbon nanotube\n\nThis structure is valid and ready for further analysis or simulation. I will now finalize it.\n\n<tool_call>\n{\"name\": \"finish\", \"arguments\": {\"name\": \"carbon_nanotube\"}}\n</tool_call>"
+      ],
+      "generated_tokens": 230,
+      "id": "cnt-6-3-1-p1",
+      "output_hash": "a2a21226b24aac29794d51adf97930eab9c4b43b3f25638011f8e01689449305",
+      "split_group": "nanotube:C:cnt-6-3-1",
+      "state": "FINISHED",
+      "successful_calls": [
+        "build_nanotube",
+        "finish"
+      ],
+      "unknown_calls": []
+    },
+    {
+      "elapsed_seconds": 33.3493,
+      "error": "model stopped without calling finish",
+      "exact_structure_match": false,
+      "exact_tool_sequence": false,
+      "expected_calls": [
+        "build_prototype",
+        "finish"
+      ],
+      "expected_output_hash": "e1194e22ad8681b28c843cdef6347ad9503bf7e4edfe9c6bf8cb2afdaeda54a7",
+      "failed_call_count": 0,
+      "failed_call_details": [],
+      "finished": false,
+      "generated_calls": [
+        "build_prototype"
+      ],
+      "generated_texts": [
+        "<tool_call>\n{\"name\": \"build_prototype\", \"arguments\": {\"name\": \"anatase-TiO2\", \"prototype\": \"anatase-TiO2\"}}\n</tool_call>",
+        "The anatase-TiO\u2082 prototype has been successfully built with the following properties:\n\n- **Formula**: O\u2088Ti\u2084  \n- **Cell dimensions**: a = 3.785 \u00c5, b = 3.785 \u00c5, c = 9.514 \u00c5  \n- **Cell angles**: 90\u00b0, 90\u00b0, 90\u00b0  \n- **Elements**: 4 Ti atoms and 8 O atoms  \n- **Structure**: Confirmed as a valid anatase-TiO\u2082 structure  \n\nNo constraints or modifications were applied. The structure is ready for further analysis or modifications.  \n\nFinal structure selected: **anatase-TiO\u2082**."
+      ],
+      "generated_tokens": 188,
+      "id": "anatase-tio2-p1",
+      "output_hash": null,
+      "split_group": "prototype:anatase-TiO2:anatase-tio2",
+      "state": "FAILED",
+      "successful_calls": [
+        "build_prototype"
+      ],
+      "unknown_calls": []
+    },
+    {
+      "elapsed_seconds": 35.724,
+      "error": null,
+      "exact_structure_match": false,
+      "exact_tool_sequence": false,
+      "expected_calls": [
+        "build_bulk",
+        "repeat",
+        "substitute",
+        "finish"
+      ],
+      "expected_output_hash": "527972849c8c1fb1085b3bf2cade7d2ff60beea83c04f5079def93110c7395fd",
+      "failed_call_count": 0,
+      "failed_call_details": [],
+      "finished": true,
+      "generated_calls": [
+        "build_bulk",
+        "substitute",
+        "finish"
+      ],
+      "generated_texts": [
+        "<tool_call>\n{\"name\": \"build_bulk\", \"arguments\": {\"name\": \"Al_fcc\", \"element\": \"Al\", \"crystal\": \"fcc\", \"repeat\": [2, 2, 2]}}\n</tool_call>",
+        "<tool_call>\n{\"name\": \"substitute\", \"arguments\": {\"name\": \"Al_fcc\", \"selector\": {\"indices\": [1]}, \"element\": \"Au\"}}\n</tool_call>",
+        "The structure is complete: a 2x2x2 face-centered cubic (fcc) aluminum bulk with one aluminum atom replaced by gold (Au). The final structure contains 7 Al and 1 Au atom, with the Au atom at index 1. The structure is valid and ready for further analysis or use.\n\nFinal structure name: Al_fcc  \nFinal composition: Al\u2087Au  \nFinal atom count: 8 atoms  \n\nFinish the structure.\n<tool_call>\n{\"name\": \"finish\", \"arguments\": {\"name\": \"Al_fcc\"}}\n</tool_call>"
+      ],
+      "generated_tokens": 198,
+      "id": "al-fcc-2x2x2-au-p1",
+      "output_hash": "1730365369b8eed91e8198947515896de0807d1ac86ab376ff06eb6b434d7dd9",
+      "split_group": "substitution:Al-Au:al-fcc-2x2x2-au",
+      "state": "FINISHED",
+      "successful_calls": [
+        "build_bulk",
+        "substitute",
+        "finish"
+      ],
+      "unknown_calls": []
+    },
+    {
+      "elapsed_seconds": 28.011,
+      "error": "model stopped without calling finish",
+      "exact_structure_match": false,
+      "exact_tool_sequence": false,
+      "expected_calls": [
+        "build_surface",
+        "finish"
+      ],
+      "expected_output_hash": "dc5609fc830179d0a52124cb7970cfac12fd5409bfe30d97e6c40bdabf2a1d8a",
+      "failed_call_count": 0,
+      "failed_call_details": [],
+      "finished": false,
+      "generated_calls": [
+        "build_surface"
+      ],
+      "generated_texts": [
+        "<tool_call>\n{\"name\": \"build_surface\", \"arguments\": {\"name\": \"Cu_111_slab\", \"element\": \"Cu\", \"miller\": [1, 1, 1], \"layers\": 3, \"vacuum\": 12.0}}\n</tool_call>",
+        "The Cu(111) slab has been successfully built with 3 layers and a 12 \u00c5 vacuum. The structure is a periodic surface slab of copper with the specified orientation and thickness. The lattice parameters are consistent with the (111) surface of copper, and the structure is ready for further analysis or modifications.\n\nFinal structure: **Cu_111_slab**."
+      ],
+      "generated_tokens": 142,
+      "id": "cu-111-3-1x1-p1",
+      "output_hash": null,
+      "split_group": "surface:Cu:cu-111-3-1x1",
+      "state": "FAILED",
+      "successful_calls": [
+        "build_surface"
+      ],
+      "unknown_calls": []
+    },
+    {
+      "elapsed_seconds": 31.5998,
+      "error": "model stopped without calling finish",
+      "exact_structure_match": false,
+      "exact_tool_sequence": false,
+      "expected_calls": [
+        "build_surface",
+        "freeze_layers",
+        "finish"
+      ],
+      "expected_output_hash": "be3ee26c9fb1da7a10b5dad98a7ca795823461a1ea0e5599c40eb5c45cb97537",
+      "failed_call_count": 0,
+      "failed_call_details": [],
+      "finished": false,
+      "generated_calls": [
+        "build_surface",
+        "freeze_layers"
+      ],
+      "generated_texts": [
+        "<tool_call>\n{\"name\": \"build_surface\", \"arguments\": {\"name\": \"cu_slab\", \"element\": \"Cu\", \"miller\": [1, 0, 0], \"layers\": 5, \"vacuum\": 10.0}}\n</tool_call>",
+        "<tool_call>\n{\"name\": \"freeze_layers\", \"arguments\": {\"name\": \"cu_slab\", \"side\": \"bottom\", \"layers\": 2, \"axes\": \"xyz\"}}\n</tool_call>",
+        "The Cu(100) 5-layer slab has been successfully built and its bottom two layers are now frozen. The structure is stable with a Cu5 formula and a lattice defined by the specified cell parameters. Final validation confirms the structure's integrity and the successful application of layer constraints. \n\nFinal structure: cu_slab"
+      ],
+      "generated_tokens": 163,
+      "id": "cu-100-5-1x1-frozen-p1",
+      "output_hash": null,
+      "split_group": "surface_constraint:Cu:cu-100-5-1x1-frozen",
+      "state": "FAILED",
+      "successful_calls": [
+        "build_surface",
+        "freeze_layers"
+      ],
+      "unknown_calls": []
+    },
+    {
+      "elapsed_seconds": 27.6088,
+      "error": "model stopped without calling finish",
+      "exact_structure_match": false,
+      "exact_tool_sequence": false,
+      "expected_calls": [
+        "build_bulk",
+        "repeat",
+        "make_vacancy",
+        "finish"
+      ],
+      "expected_output_hash": "82be7d70ce5ac1acd02060327279552cce2eb86cf71c0317d3c3e395c53a6c37",
+      "failed_call_count": 0,
+      "failed_call_details": [],
+      "finished": false,
+      "generated_calls": [
+        "build_bulk",
+        "delete_atoms"
+      ],
+      "generated_texts": [
+        "<tool_call>\n{\"name\": \"build_bulk\", \"arguments\": {\"name\": \"Si_diamond\", \"element\": \"Si\", \"crystal\": \"diamond\", \"repeat\": [2, 2, 1]}}\n</tool_call>",
+        "<tool_call>\n{\"name\": \"delete_atoms\", \"arguments\": {\"name\": \"Si_diamond\", \"selector\": {\"indices\": [1]}}}\n</tool_call>",
+        "The structure is a 2x2x1 diamond silicon cell with one Si atom removed. The final structure consists of 7 Si atoms, maintaining the diamond lattice framework with the specified cell parameters. \n\nFinal structure: **Si7**."
+      ],
+      "generated_tokens": 131,
+      "id": "si-diamond-2x2x1-vacancy-p1",
+      "output_hash": null,
+      "split_group": "vacancy:Si:si-diamond-2x2x1-vacancy",
+      "state": "FAILED",
+      "successful_calls": [
+        "build_bulk",
+        "delete_atoms"
+      ],
+      "unknown_calls": []
+    }
+  ],
+  "summary": {
+    "adapter": null,
+    "elapsed_seconds": 384.1285,
+    "exact_structure_rate": 0.1,
+    "exact_tool_sequence_rate": 0.1,
+    "failed_call_count": 6,
+    "family_metrics": {
+      "atomic_adsorption": {
+        "elapsed_seconds": 63.2573,
+        "exact_structure_rate": 0.0,
+        "exact_tool_sequence_rate": 0.0,
+        "failed_call_count": 3,
+        "finish_rate": 0.0,
+        "forbidden_action_rate": 0.0,
+        "generated_tokens": 332,
+        "record_count": 1,
+        "schema_execution_success_rate": 0.4,
+        "states": {
+          "FAILED": 1
+        },
+        "unknown_call_count": 0
+      },
+      "bulk": {
+        "elapsed_seconds": 37.6681,
+        "exact_structure_rate": 0.0,
+        "exact_tool_sequence_rate": 0.0,
+        "failed_call_count": 0,
+        "finish_rate": 1.0,
+        "forbidden_action_rate": 0.0,
+        "generated_tokens": 204,
+        "record_count": 1,
+        "schema_execution_success_rate": 1.0,
+        "states": {
+          "FINISHED": 1
+        },
+        "unknown_call_count": 0
+      },
+      "molecular_adsorption": {
+        "elapsed_seconds": 64.9889,
+        "exact_structure_rate": 0.0,
+        "exact_tool_sequence_rate": 0.0,
+        "failed_call_count": 3,
+        "finish_rate": 0.0,
+        "forbidden_action_rate": 0.0,
+        "generated_tokens": 332,
+        "record_count": 1,
+        "schema_execution_success_rate": 0.5,
+        "states": {
+          "BUDGET_EXHAUSTED": 1
+        },
+        "unknown_call_count": 0
+      },
+      "molecule": {
+        "elapsed_seconds": 23.8174,
+        "exact_structure_rate": 0.0,
+        "exact_tool_sequence_rate": 0.0,
+        "failed_call_count": 0,
+        "finish_rate": 0.0,
+        "forbidden_action_rate": 0.0,
+        "generated_tokens": 142,
+        "record_count": 1,
+        "schema_execution_success_rate": 1.0,
+        "states": {
+          "FAILED": 1
+        },
+        "unknown_call_count": 0
+      },
+      "nanotube": {
+        "elapsed_seconds": 38.1039,
+        "exact_structure_rate": 1.0,
+        "exact_tool_sequence_rate": 1.0,
+        "failed_call_count": 0,
+        "finish_rate": 1.0,
+        "forbidden_action_rate": 0.0,
+        "generated_tokens": 230,
+        "record_count": 1,
+        "schema_execution_success_rate": 1.0,
+        "states": {
+          "FINISHED": 1
+        },
+        "unknown_call_count": 0
+      },
+      "prototype": {
+        "elapsed_seconds": 33.3493,
+        "exact_structure_rate": 0.0,
+        "exact_tool_sequence_rate": 0.0,
+        "failed_call_count": 0,
+        "finish_rate": 0.0,
+        "forbidden_action_rate": 0.0,
+        "generated_tokens": 188,
+        "record_count": 1,
+        "schema_execution_success_rate": 1.0,
+        "states": {
+          "FAILED": 1
+        },
+        "unknown_call_count": 0
+      },
+      "substitution": {
+        "elapsed_seconds": 35.724,
+        "exact_structure_rate": 0.0,
+        "exact_tool_sequence_rate": 0.0,
+        "failed_call_count": 0,
+        "finish_rate": 1.0,
+        "forbidden_action_rate": 0.0,
+        "generated_tokens": 198,
+        "record_count": 1,
+        "schema_execution_success_rate": 1.0,
+        "states": {
+          "FINISHED": 1
+        },
+        "unknown_call_count": 0
+      },
+      "surface": {
+        "elapsed_seconds": 28.011,
+        "exact_structure_rate": 0.0,
+        "exact_tool_sequence_rate": 0.0,
+        "failed_call_count": 0,
+        "finish_rate": 0.0,
+        "forbidden_action_rate": 0.0,
+        "generated_tokens": 142,
+        "record_count": 1,
+        "schema_execution_success_rate": 1.0,
+        "states": {
+          "FAILED": 1
+        },
+        "unknown_call_count": 0
+      },
+      "surface_constraint": {
+        "elapsed_seconds": 31.5998,
+        "exact_structure_rate": 0.0,
+        "exact_tool_sequence_rate": 0.0,
+        "failed_call_count": 0,
+        "finish_rate": 0.0,
+        "forbidden_action_rate": 0.0,
+        "generated_tokens": 163,
+        "record_count": 1,
+        "schema_execution_success_rate": 1.0,
+        "states": {
+          "FAILED": 1
+        },
+        "unknown_call_count": 0
+      },
+      "vacancy": {
+        "elapsed_seconds": 27.6088,
+        "exact_structure_rate": 0.0,
+        "exact_tool_sequence_rate": 0.0,
+        "failed_call_count": 0,
+        "finish_rate": 0.0,
+        "forbidden_action_rate": 0.0,
+        "generated_tokens": 131,
+        "record_count": 1,
+        "schema_execution_success_rate": 1.0,
+        "states": {
+          "FAILED": 1
+        },
+        "unknown_call_count": 0
+      }
+    },
+    "finish_rate": 0.3,
+    "forbidden_action_rate": 0.0,
+    "generated_tokens": 2062,
+    "model": "Qwen/Qwen3-4B-Instruct-2507",
+    "record_count": 10,
+    "revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+    "schema_execution_success_rate": 0.76,
+    "states": {
+      "BUDGET_EXHAUSTED": 1,
+      "FAILED": 6,
+      "FINISHED": 3
+    },
+    "tool_mode": "full",
+    "unknown_call_count": 0
+  }
+}

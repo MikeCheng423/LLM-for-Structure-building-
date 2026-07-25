@@ -1,0 +1,32 @@
+{
+  "family": "nanotube",
+  "required_placeholders": [
+    "chirality",
+    "length"
+  ],
+  "optional_placeholders": [],
+  "all_placeholders": [
+    "chirality",
+    "length"
+  ],
+  "num_templates": 10,
+  "samples": [
+    {
+      "case_id": "cnt-4-0-1",
+      "placeholder_values": {
+        "chirality": "(4,0)",
+        "length": "1"
+      },
+      "canonical_example": "Build a (4,0) carbon nanotube 1 unit cells long with 10 A radial vacuum."
+    },
+    {
+      "case_id": "cnt-6-0-2",
+      "placeholder_values": {
+        "chirality": "(6,0)",
+        "length": "2"
+      },
+      "canonical_example": "Build a (6,0) carbon nanotube 2 unit cells long with 10 A radial vacuum."
+    }
+  ],
+  "output_path": "training/generators/paraphrase_templates/nanotube.json"
+}

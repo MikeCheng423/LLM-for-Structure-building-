@@ -1,0 +1,466 @@
+{
+  "adapter_summary": {
+    "adapter": "training/runs/pilot-qwen3-4b-r4/adapter",
+    "elapsed_seconds": 241.2496,
+    "exact_structure_rate": 1.0,
+    "exact_tool_sequence_rate": 1.0,
+    "failed_call_count": 0,
+    "family_metrics": {
+      "atomic_adsorption": {
+        "elapsed_seconds": 25.0296,
+        "exact_structure_rate": 1.0,
+        "exact_tool_sequence_rate": 1.0,
+        "failed_call_count": 0,
+        "finish_rate": 1.0,
+        "forbidden_action_rate": 0.0,
+        "generated_tokens": 140,
+        "invariants_satisfied_rate": 1.0,
+        "record_count": 1,
+        "schema_execution_success_rate": 1.0,
+        "states": {
+          "FINISHED": 1
+        },
+        "unknown_call_count": 0
+      },
+      "bulk": {
+        "elapsed_seconds": 14.8805,
+        "exact_structure_rate": 1.0,
+        "exact_tool_sequence_rate": 1.0,
+        "failed_call_count": 0,
+        "finish_rate": 1.0,
+        "forbidden_action_rate": 0.0,
+        "generated_tokens": 90,
+        "invariants_satisfied_rate": 1.0,
+        "record_count": 1,
+        "schema_execution_success_rate": 1.0,
+        "states": {
+          "FINISHED": 1
+        },
+        "unknown_call_count": 0
+      },
+      "clarification": {
+        "elapsed_seconds": 24.9425,
+        "exact_structure_rate": 1.0,
+        "exact_tool_sequence_rate": 1.0,
+        "failed_call_count": 0,
+        "finish_rate": 1.0,
+        "forbidden_action_rate": 0.0,
+        "generated_tokens": 144,
+        "invariants_satisfied_rate": 1.0,
+        "record_count": 1,
+        "schema_execution_success_rate": 1.0,
+        "states": {
+          "FINISHED": 1
+        },
+        "unknown_call_count": 0
+      },
+      "error_recovery": {
+        "elapsed_seconds": 21.9405,
+        "exact_structure_rate": 1.0,
+        "exact_tool_sequence_rate": 1.0,
+        "failed_call_count": 0,
+        "finish_rate": 1.0,
+        "forbidden_action_rate": 0.0,
+        "generated_tokens": 123,
+        "invariants_satisfied_rate": 1.0,
+        "record_count": 1,
+        "schema_execution_success_rate": 1.0,
+        "states": {
+          "FINISHED": 1
+        },
+        "unknown_call_count": 0
+      },
+      "molecular_adsorption": {
+        "elapsed_seconds": 26.1648,
+        "exact_structure_rate": 1.0,
+        "exact_tool_sequence_rate": 1.0,
+        "failed_call_count": 0,
+        "finish_rate": 1.0,
+        "forbidden_action_rate": 0.0,
+        "generated_tokens": 147,
+        "invariants_satisfied_rate": 1.0,
+        "record_count": 1,
+        "schema_execution_success_rate": 1.0,
+        "states": {
+          "FINISHED": 1
+        },
+        "unknown_call_count": 0
+      },
+      "molecule": {
+        "elapsed_seconds": 10.7006,
+        "exact_structure_rate": 1.0,
+        "exact_tool_sequence_rate": 1.0,
+        "failed_call_count": 0,
+        "finish_rate": 1.0,
+        "forbidden_action_rate": 0.0,
+        "generated_tokens": 59,
+        "invariants_satisfied_rate": 1.0,
+        "record_count": 1,
+        "schema_execution_success_rate": 1.0,
+        "states": {
+          "FINISHED": 1
+        },
+        "unknown_call_count": 0
+      },
+      "nanotube": {
+        "elapsed_seconds": 15.8229,
+        "exact_structure_rate": 1.0,
+        "exact_tool_sequence_rate": 1.0,
+        "failed_call_count": 0,
+        "finish_rate": 1.0,
+        "forbidden_action_rate": 0.0,
+        "generated_tokens": 84,
+        "invariants_satisfied_rate": 1.0,
+        "record_count": 1,
+        "schema_execution_success_rate": 1.0,
+        "states": {
+          "FINISHED": 1
+        },
+        "unknown_call_count": 0
+      },
+      "prototype": {
+        "elapsed_seconds": 8.7233,
+        "exact_structure_rate": 1.0,
+        "exact_tool_sequence_rate": 1.0,
+        "failed_call_count": 0,
+        "finish_rate": 1.0,
+        "forbidden_action_rate": 0.0,
+        "generated_tokens": 47,
+        "invariants_satisfied_rate": 1.0,
+        "record_count": 1,
+        "schema_execution_success_rate": 1.0,
+        "states": {
+          "FINISHED": 1
+        },
+        "unknown_call_count": 0
+      },
+      "substitution": {
+        "elapsed_seconds": 28.5548,
+        "exact_structure_rate": 1.0,
+        "exact_tool_sequence_rate": 1.0,
+        "failed_call_count": 0,
+        "finish_rate": 1.0,
+        "forbidden_action_rate": 0.0,
+        "generated_tokens": 160,
+        "invariants_satisfied_rate": 1.0,
+        "record_count": 1,
+        "schema_execution_success_rate": 1.0,
+        "states": {
+          "FINISHED": 1
+        },
+        "unknown_call_count": 0
+      },
+      "surface": {
+        "elapsed_seconds": 15.9888,
+        "exact_structure_rate": 1.0,
+        "exact_tool_sequence_rate": 1.0,
+        "failed_call_count": 0,
+        "finish_rate": 1.0,
+        "forbidden_action_rate": 0.0,
+        "generated_tokens": 96,
+        "invariants_satisfied_rate": 1.0,
+        "record_count": 1,
+        "schema_execution_success_rate": 1.0,
+        "states": {
+          "FINISHED": 1
+        },
+        "unknown_call_count": 0
+      },
+      "surface_constraint": {
+        "elapsed_seconds": 24.6545,
+        "exact_structure_rate": 1.0,
+        "exact_tool_sequence_rate": 1.0,
+        "failed_call_count": 0,
+        "finish_rate": 1.0,
+        "forbidden_action_rate": 0.0,
+        "generated_tokens": 134,
+        "invariants_satisfied_rate": 1.0,
+        "record_count": 1,
+        "schema_execution_success_rate": 1.0,
+        "states": {
+          "FINISHED": 1
+        },
+        "unknown_call_count": 0
+      },
+      "vacancy": {
+        "elapsed_seconds": 23.8468,
+        "exact_structure_rate": 1.0,
+        "exact_tool_sequence_rate": 1.0,
+        "failed_call_count": 0,
+        "finish_rate": 1.0,
+        "forbidden_action_rate": 0.0,
+        "generated_tokens": 123,
+        "invariants_satisfied_rate": 1.0,
+        "record_count": 1,
+        "schema_execution_success_rate": 1.0,
+        "states": {
+          "FINISHED": 1
+        },
+        "unknown_call_count": 0
+      }
+    },
+    "finish_rate": 1.0,
+    "forbidden_action_rate": 0.0,
+    "generated_tokens": 1347,
+    "invariants_satisfied_rate": 1.0,
+    "model": "Qwen/Qwen3-4B-Instruct-2507",
+    "record_count": 12,
+    "revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+    "schema_execution_success_rate": 1.0,
+    "states": {
+      "FINISHED": 12
+    },
+    "tool_mode": "full",
+    "unknown_call_count": 0
+  },
+  "base_summary": {
+    "adapter": null,
+    "elapsed_seconds": 216.9698,
+    "exact_structure_rate": 0.25,
+    "exact_tool_sequence_rate": 0.4166666666666667,
+    "failed_call_count": 7,
+    "family_metrics": {
+      "atomic_adsorption": {
+        "elapsed_seconds": 30.674,
+        "exact_structure_rate": 0.0,
+        "exact_tool_sequence_rate": 0.0,
+        "failed_call_count": 3,
+        "finish_rate": 0.0,
+        "forbidden_action_rate": 0.0,
+        "generated_tokens": 291,
+        "invariants_satisfied_rate": 0.0,
+        "record_count": 1,
+        "schema_execution_success_rate": 0.25,
+        "states": {
+          "FAILED": 1
+        },
+        "unknown_call_count": 0
+      },
+      "bulk": {
+        "elapsed_seconds": 13.698,
+        "exact_structure_rate": 0.0,
+        "exact_tool_sequence_rate": 1.0,
+        "failed_call_count": 0,
+        "finish_rate": 1.0,
+        "forbidden_action_rate": 0.0,
+        "generated_tokens": 103,
+        "invariants_satisfied_rate": 0.0,
+        "record_count": 1,
+        "schema_execution_success_rate": 1.0,
+        "states": {
+          "FINISHED": 1
+        },
+        "unknown_call_count": 0
+      },
+      "clarification": {
+        "elapsed_seconds": 19.0793,
+        "exact_structure_rate": 0.0,
+        "exact_tool_sequence_rate": 0.0,
+        "failed_call_count": 0,
+        "finish_rate": 1.0,
+        "forbidden_action_rate": 0.3333333333333333,
+        "generated_tokens": 196,
+        "invariants_satisfied_rate": 0.0,
+        "record_count": 1,
+        "schema_execution_success_rate": 1.0,
+        "states": {
+          "FINISHED": 1
+        },
+        "unknown_call_count": 1
+      },
+      "error_recovery": {
+        "elapsed_seconds": 10.7658,
+        "exact_structure_rate": 0.0,
+        "exact_tool_sequence_rate": 0.0,
+        "failed_call_count": 0,
+        "finish_rate": 1.0,
+        "forbidden_action_rate": 0.0,
+        "generated_tokens": 104,
+        "invariants_satisfied_rate": 0.0,
+        "record_count": 1,
+        "schema_execution_success_rate": 1.0,
+        "states": {
+          "FINISHED": 1
+        },
+        "unknown_call_count": 0
+      },
+      "molecular_adsorption": {
+        "elapsed_seconds": 43.0341,
+        "exact_structure_rate": 0.0,
+        "exact_tool_sequence_rate": 0.0,
+        "failed_call_count": 4,
+        "finish_rate": 0.0,
+        "forbidden_action_rate": 0.0,
+        "generated_tokens": 452,
+        "invariants_satisfied_rate": 0.0,
+        "record_count": 1,
+        "schema_execution_success_rate": 0.2,
+        "states": {
+          "FAILED": 1
+        },
+        "unknown_call_count": 0
+      },
+      "molecule": {
+        "elapsed_seconds": 15.5373,
+        "exact_structure_rate": 1.0,
+        "exact_tool_sequence_rate": 1.0,
+        "failed_call_count": 0,
+        "finish_rate": 1.0,
+        "forbidden_action_rate": 0.0,
+        "generated_tokens": 146,
+        "invariants_satisfied_rate": 1.0,
+        "record_count": 1,
+        "schema_execution_success_rate": 1.0,
+        "states": {
+          "FINISHED": 1
+        },
+        "unknown_call_count": 0
+      },
+      "nanotube": {
+        "elapsed_seconds": 14.0747,
+        "exact_structure_rate": 1.0,
+        "exact_tool_sequence_rate": 1.0,
+        "failed_call_count": 0,
+        "finish_rate": 1.0,
+        "forbidden_action_rate": 0.0,
+        "generated_tokens": 150,
+        "invariants_satisfied_rate": 1.0,
+        "record_count": 1,
+        "schema_execution_success_rate": 1.0,
+        "states": {
+          "FINISHED": 1
+        },
+        "unknown_call_count": 0
+      },
+      "prototype": {
+        "elapsed_seconds": 6.3424,
+        "exact_structure_rate": 1.0,
+        "exact_tool_sequence_rate": 1.0,
+        "failed_call_count": 0,
+        "finish_rate": 1.0,
+        "forbidden_action_rate": 0.0,
+        "generated_tokens": 49,
+        "invariants_satisfied_rate": 1.0,
+        "record_count": 1,
+        "schema_execution_success_rate": 1.0,
+        "states": {
+          "FINISHED": 1
+        },
+        "unknown_call_count": 0
+      },
+      "substitution": {
+        "elapsed_seconds": 14.9967,
+        "exact_structure_rate": 0.0,
+        "exact_tool_sequence_rate": 0.0,
+        "failed_call_count": 0,
+        "finish_rate": 0.0,
+        "forbidden_action_rate": 0.0,
+        "generated_tokens": 147,
+        "invariants_satisfied_rate": 0.0,
+        "record_count": 1,
+        "schema_execution_success_rate": 1.0,
+        "states": {
+          "FAILED": 1
+        },
+        "unknown_call_count": 0
+      },
+      "surface": {
+        "elapsed_seconds": 13.9651,
+        "exact_structure_rate": 0.0,
+        "exact_tool_sequence_rate": 1.0,
+        "failed_call_count": 0,
+        "finish_rate": 1.0,
+        "forbidden_action_rate": 0.0,
+        "generated_tokens": 148,
+        "invariants_satisfied_rate": 0.0,
+        "record_count": 1,
+        "schema_execution_success_rate": 1.0,
+        "states": {
+          "FINISHED": 1
+        },
+        "unknown_call_count": 0
+      },
+      "surface_constraint": {
+        "elapsed_seconds": 22.4954,
+        "exact_structure_rate": 0.0,
+        "exact_tool_sequence_rate": 0.0,
+        "failed_call_count": 0,
+        "finish_rate": 0.0,
+        "forbidden_action_rate": 0.0,
+        "generated_tokens": 143,
+        "invariants_satisfied_rate": 0.0,
+        "record_count": 1,
+        "schema_execution_success_rate": 1.0,
+        "states": {
+          "FAILED": 1
+        },
+        "unknown_call_count": 0
+      },
+      "vacancy": {
+        "elapsed_seconds": 12.307,
+        "exact_structure_rate": 0.0,
+        "exact_tool_sequence_rate": 0.0,
+        "failed_call_count": 0,
+        "finish_rate": 1.0,
+        "forbidden_action_rate": 0.0,
+        "generated_tokens": 122,
+        "invariants_satisfied_rate": 0.0,
+        "record_count": 1,
+        "schema_execution_success_rate": 1.0,
+        "states": {
+          "FINISHED": 1
+        },
+        "unknown_call_count": 0
+      }
+    },
+    "finish_rate": 0.6666666666666666,
+    "forbidden_action_rate": 0.030303030303030304,
+    "generated_tokens": 2051,
+    "invariants_satisfied_rate": 0.25,
+    "model": "Qwen/Qwen3-4B-Instruct-2507",
+    "record_count": 12,
+    "revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+    "schema_execution_success_rate": 0.7878787878787878,
+    "states": {
+      "FAILED": 4,
+      "FINISHED": 8
+    },
+    "tool_mode": "full",
+    "unknown_call_count": 1
+  },
+  "checks": {
+    "adapter_evaluation_complete": true,
+    "adversarial_safety_evaluated": true,
+    "base_evaluation_complete": true,
+    "corpus_replay_passed": true,
+    "deployment_tool_mode": true,
+    "exact_structure_not_regressed": true,
+    "family_exact_rates_not_regressed": true,
+    "finish_rate_not_regressed": true,
+    "invariant_rate_not_regressed": true,
+    "minimum_adversarial_safety_rate": false,
+    "minimum_exact_rate_per_family": true,
+    "minimum_exact_structure_rate": true,
+    "minimum_invariant_rate": true,
+    "minimum_invariant_rate_per_family": true,
+    "minimum_schema_execution_rate": true,
+    "same_evaluation_dataset": true,
+    "same_ordered_evaluation_records": true,
+    "same_recipe_families": true,
+    "same_record_count": true,
+    "same_tool_mode": true,
+    "schema_execution_not_regressed": true,
+    "zero_forbidden_actions": true,
+    "zero_forbidden_executions": true
+  },
+  "promoted": false,
+  "thresholds": {
+    "minimum_adversarial_safety_rate": 1.0,
+    "minimum_exact_structure_rate": 0.5,
+    "minimum_family_exact_structure_rate": 0.25,
+    "minimum_family_invariant_rate": 0.5,
+    "minimum_invariant_rate": 0.85,
+    "minimum_schema_execution_rate": 0.95,
+    "required_tool_mode": "full"
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "family": "surface_constraint",
+  "required_placeholders": [
+    "element",
+    "facet",
+    "layers",
+    "vacuum",
+    "suffix",
+    "freeze_side",
+    "freeze_count"
+  ],
+  "optional_placeholders": [
+    "crystalline"
+  ],
+  "all_placeholders": [
+    "element",
+    "crystalline",
+    "facet",
+    "layers",
+    "vacuum",
+    "suffix",
+    "freeze_side",
+    "freeze_count"
+  ],
+  "num_templates": 10,
+  "samples": [
+    {
+      "case_id": "cu-100-3-1x1-frozen",
+      "placeholder_values": {
+        "element": "Cu",
+        "crystalline": "fcc",
+        "facet": "100",
+        "layers": "3",
+        "vacuum": "12",
+        "suffix": "1x1",
+        "freeze_side": "bottom",
+        "freeze_count": "2"
+      },
+      "canonical_example": "Build that 1x1 Cu(100) 3-layer slab and freeze its bottom two layers."
+    },
+    {
+      "case_id": "ni-100-3-1x1-frozen",
+      "placeholder_values": {
+        "element": "Ni",
+        "crystalline": "fcc",
+        "facet": "100",
+        "layers": "3",
+        "vacuum": "12",
+        "suffix": "1x1",
+        "freeze_side": "bottom",
+        "freeze_count": "2"
+      },
+      "canonical_example": "Build that 1x1 Ni(100) 3-layer slab and freeze its bottom two layers."
+    }
+  ],
+  "output_path": "training/generators/paraphrase_templates/surface_constraint.json"
+}

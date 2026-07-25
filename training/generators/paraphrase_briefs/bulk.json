@@ -1,0 +1,36 @@
+{
+  "family": "bulk",
+  "required_placeholders": [
+    "element",
+    "crystalline",
+    "repeat3"
+  ],
+  "optional_placeholders": [],
+  "all_placeholders": [
+    "element",
+    "crystalline",
+    "repeat3"
+  ],
+  "num_templates": 10,
+  "samples": [
+    {
+      "case_id": "al-fcc-1x1x1",
+      "placeholder_values": {
+        "element": "Al",
+        "crystalline": "fcc",
+        "repeat3": "1x1x1"
+      },
+      "canonical_example": "Build a 1x1x1 fcc Al bulk crystal."
+    },
+    {
+      "case_id": "ni-fcc-1x1x1",
+      "placeholder_values": {
+        "element": "Ni",
+        "crystalline": "fcc",
+        "repeat3": "1x1x1"
+      },
+      "canonical_example": "Build a 1x1x1 fcc Ni bulk crystal."
+    }
+  ],
+  "output_path": "training/generators/paraphrase_templates/bulk.json"
+}

@@ -1,0 +1,374 @@
+{
+  "adapter_summary": {
+    "adapter": "training/runs/pilot-qwen3-4b-r1/adapter",
+    "elapsed_seconds": 600.0566,
+    "exact_structure_rate": 0.3,
+    "exact_tool_sequence_rate": 0.0,
+    "failed_call_count": 4,
+    "family_metrics": {
+      "atomic_adsorption": {
+        "elapsed_seconds": 107.7285,
+        "exact_structure_rate": 0.0,
+        "exact_tool_sequence_rate": 0.0,
+        "failed_call_count": 1,
+        "finish_rate": 0.0,
+        "forbidden_action_rate": 0.0,
+        "generated_tokens": 359,
+        "record_count": 1,
+        "schema_execution_success_rate": 0.8571428571428571,
+        "states": {
+          "FAILED": 1
+        },
+        "unknown_call_count": 0
+      },
+      "bulk": {
+        "elapsed_seconds": 28.5514,
+        "exact_structure_rate": 0.0,
+        "exact_tool_sequence_rate": 0.0,
+        "failed_call_count": 0,
+        "finish_rate": 1.0,
+        "forbidden_action_rate": 0.0,
+        "generated_tokens": 92,
+        "record_count": 1,
+        "schema_execution_success_rate": 1.0,
+        "states": {
+          "FINISHED": 1
+        },
+        "unknown_call_count": 0
+      },
+      "molecular_adsorption": {
+        "elapsed_seconds": 117.5508,
+        "exact_structure_rate": 0.0,
+        "exact_tool_sequence_rate": 0.0,
+        "failed_call_count": 1,
+        "finish_rate": 0.0,
+        "forbidden_action_rate": 0.0,
+        "generated_tokens": 379,
+        "record_count": 1,
+        "schema_execution_success_rate": 0.875,
+        "states": {
+          "NEEDS_CLARIFICATION": 1
+        },
+        "unknown_call_count": 0
+      },
+      "molecule": {
+        "elapsed_seconds": 32.9243,
+        "exact_structure_rate": 1.0,
+        "exact_tool_sequence_rate": 0.0,
+        "failed_call_count": 0,
+        "finish_rate": 1.0,
+        "forbidden_action_rate": 0.0,
+        "generated_tokens": 97,
+        "record_count": 1,
+        "schema_execution_success_rate": 1.0,
+        "states": {
+          "FINISHED": 1
+        },
+        "unknown_call_count": 0
+      },
+      "nanotube": {
+        "elapsed_seconds": 35.9071,
+        "exact_structure_rate": 1.0,
+        "exact_tool_sequence_rate": 0.0,
+        "failed_call_count": 0,
+        "finish_rate": 1.0,
+        "forbidden_action_rate": 0.0,
+        "generated_tokens": 113,
+        "record_count": 1,
+        "schema_execution_success_rate": 1.0,
+        "states": {
+          "FINISHED": 1
+        },
+        "unknown_call_count": 0
+      },
+      "prototype": {
+        "elapsed_seconds": 33.5111,
+        "exact_structure_rate": 1.0,
+        "exact_tool_sequence_rate": 0.0,
+        "failed_call_count": 0,
+        "finish_rate": 1.0,
+        "forbidden_action_rate": 0.0,
+        "generated_tokens": 87,
+        "record_count": 1,
+        "schema_execution_success_rate": 1.0,
+        "states": {
+          "FINISHED": 1
+        },
+        "unknown_call_count": 0
+      },
+      "substitution": {
+        "elapsed_seconds": 42.4179,
+        "exact_structure_rate": 0.0,
+        "exact_tool_sequence_rate": 0.0,
+        "failed_call_count": 0,
+        "finish_rate": 1.0,
+        "forbidden_action_rate": 0.0,
+        "generated_tokens": 126,
+        "record_count": 1,
+        "schema_execution_success_rate": 1.0,
+        "states": {
+          "FINISHED": 1
+        },
+        "unknown_call_count": 0
+      },
+      "surface": {
+        "elapsed_seconds": 74.3001,
+        "exact_structure_rate": 0.0,
+        "exact_tool_sequence_rate": 0.0,
+        "failed_call_count": 1,
+        "finish_rate": 1.0,
+        "forbidden_action_rate": 0.0,
+        "generated_tokens": 251,
+        "record_count": 1,
+        "schema_execution_success_rate": 0.8,
+        "states": {
+          "FINISHED": 1
+        },
+        "unknown_call_count": 0
+      },
+      "surface_constraint": {
+        "elapsed_seconds": 80.7231,
+        "exact_structure_rate": 0.0,
+        "exact_tool_sequence_rate": 0.0,
+        "failed_call_count": 1,
+        "finish_rate": 1.0,
+        "forbidden_action_rate": 0.0,
+        "generated_tokens": 260,
+        "record_count": 1,
+        "schema_execution_success_rate": 0.8,
+        "states": {
+          "FINISHED": 1
+        },
+        "unknown_call_count": 0
+      },
+      "vacancy": {
+        "elapsed_seconds": 46.4423,
+        "exact_structure_rate": 0.0,
+        "exact_tool_sequence_rate": 0.0,
+        "failed_call_count": 0,
+        "finish_rate": 1.0,
+        "forbidden_action_rate": 0.0,
+        "generated_tokens": 122,
+        "record_count": 1,
+        "schema_execution_success_rate": 1.0,
+        "states": {
+          "FINISHED": 1
+        },
+        "unknown_call_count": 0
+      }
+    },
+    "finish_rate": 0.8,
+    "forbidden_action_rate": 0.0,
+    "generated_tokens": 1886,
+    "model": "Qwen/Qwen3-4B-Instruct-2507",
+    "record_count": 10,
+    "revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+    "schema_execution_success_rate": 0.9111111111111111,
+    "states": {
+      "FAILED": 1,
+      "FINISHED": 8,
+      "NEEDS_CLARIFICATION": 1
+    },
+    "tool_mode": "full",
+    "unknown_call_count": 0
+  },
+  "base_summary": {
+    "adapter": null,
+    "elapsed_seconds": 287.7916,
+    "exact_structure_rate": 0.1,
+    "exact_tool_sequence_rate": 0.1,
+    "failed_call_count": 6,
+    "family_metrics": {
+      "atomic_adsorption": {
+        "elapsed_seconds": 48.7007,
+        "exact_structure_rate": 0.0,
+        "exact_tool_sequence_rate": 0.0,
+        "failed_call_count": 3,
+        "finish_rate": 0.0,
+        "forbidden_action_rate": 0.0,
+        "generated_tokens": 332,
+        "record_count": 1,
+        "schema_execution_success_rate": 0.4,
+        "states": {
+          "FAILED": 1
+        },
+        "unknown_call_count": 0
+      },
+      "bulk": {
+        "elapsed_seconds": 25.1229,
+        "exact_structure_rate": 0.0,
+        "exact_tool_sequence_rate": 0.0,
+        "failed_call_count": 0,
+        "finish_rate": 1.0,
+        "forbidden_action_rate": 0.0,
+        "generated_tokens": 204,
+        "record_count": 1,
+        "schema_execution_success_rate": 1.0,
+        "states": {
+          "FINISHED": 1
+        },
+        "unknown_call_count": 0
+      },
+      "molecular_adsorption": {
+        "elapsed_seconds": 50.6402,
+        "exact_structure_rate": 0.0,
+        "exact_tool_sequence_rate": 0.0,
+        "failed_call_count": 3,
+        "finish_rate": 0.0,
+        "forbidden_action_rate": 0.0,
+        "generated_tokens": 332,
+        "record_count": 1,
+        "schema_execution_success_rate": 0.5,
+        "states": {
+          "BUDGET_EXHAUSTED": 1
+        },
+        "unknown_call_count": 0
+      },
+      "molecule": {
+        "elapsed_seconds": 18.9728,
+        "exact_structure_rate": 0.0,
+        "exact_tool_sequence_rate": 0.0,
+        "failed_call_count": 0,
+        "finish_rate": 0.0,
+        "forbidden_action_rate": 0.0,
+        "generated_tokens": 142,
+        "record_count": 1,
+        "schema_execution_success_rate": 1.0,
+        "states": {
+          "FAILED": 1
+        },
+        "unknown_call_count": 0
+      },
+      "nanotube": {
+        "elapsed_seconds": 28.3634,
+        "exact_structure_rate": 1.0,
+        "exact_tool_sequence_rate": 1.0,
+        "failed_call_count": 0,
+        "finish_rate": 1.0,
+        "forbidden_action_rate": 0.0,
+        "generated_tokens": 230,
+        "record_count": 1,
+        "schema_execution_success_rate": 1.0,
+        "states": {
+          "FINISHED": 1
+        },
+        "unknown_call_count": 0
+      },
+      "prototype": {
+        "elapsed_seconds": 24.0859,
+        "exact_structure_rate": 0.0,
+        "exact_tool_sequence_rate": 0.0,
+        "failed_call_count": 0,
+        "finish_rate": 0.0,
+        "forbidden_action_rate": 0.0,
+        "generated_tokens": 188,
+        "record_count": 1,
+        "schema_execution_success_rate": 1.0,
+        "states": {
+          "FAILED": 1
+        },
+        "unknown_call_count": 0
+      },
+      "substitution": {
+        "elapsed_seconds": 27.3026,
+        "exact_structure_rate": 0.0,
+        "exact_tool_sequence_rate": 0.0,
+        "failed_call_count": 0,
+        "finish_rate": 1.0,
+        "forbidden_action_rate": 0.0,
+        "generated_tokens": 198,
+        "record_count": 1,
+        "schema_execution_success_rate": 1.0,
+        "states": {
+          "FINISHED": 1
+        },
+        "unknown_call_count": 0
+      },
+      "surface": {
+        "elapsed_seconds": 19.6668,
+        "exact_structure_rate": 0.0,
+        "exact_tool_sequence_rate": 0.0,
+        "failed_call_count": 0,
+        "finish_rate": 0.0,
+        "forbidden_action_rate": 0.0,
+        "generated_tokens": 142,
+        "record_count": 1,
+        "schema_execution_success_rate": 1.0,
+        "states": {
+          "FAILED": 1
+        },
+        "unknown_call_count": 0
+      },
+      "surface_constraint": {
+        "elapsed_seconds": 24.1218,
+        "exact_structure_rate": 0.0,
+        "exact_tool_sequence_rate": 0.0,
+        "failed_call_count": 0,
+        "finish_rate": 0.0,
+        "forbidden_action_rate": 0.0,
+        "generated_tokens": 163,
+        "record_count": 1,
+        "schema_execution_success_rate": 1.0,
+        "states": {
+          "FAILED": 1
+        },
+        "unknown_call_count": 0
+      },
+      "vacancy": {
+        "elapsed_seconds": 20.8145,
+        "exact_structure_rate": 0.0,
+        "exact_tool_sequence_rate": 0.0,
+        "failed_call_count": 0,
+        "finish_rate": 0.0,
+        "forbidden_action_rate": 0.0,
+        "generated_tokens": 131,
+        "record_count": 1,
+        "schema_execution_success_rate": 1.0,
+        "states": {
+          "FAILED": 1
+        },
+        "unknown_call_count": 0
+      }
+    },
+    "finish_rate": 0.3,
+    "forbidden_action_rate": 0.0,
+    "generated_tokens": 2062,
+    "model": "Qwen/Qwen3-4B-Instruct-2507",
+    "record_count": 10,
+    "revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+    "schema_execution_success_rate": 0.76,
+    "states": {
+      "BUDGET_EXHAUSTED": 1,
+      "FAILED": 6,
+      "FINISHED": 3
+    },
+    "tool_mode": "full",
+    "unknown_call_count": 0
+  },
+  "checks": {
+    "adapter_evaluation_complete": true,
+    "base_evaluation_complete": true,
+    "corpus_replay_passed": true,
+    "deployment_tool_mode": true,
+    "exact_structure_not_regressed": true,
+    "family_exact_rates_not_regressed": true,
+    "finish_rate_not_regressed": true,
+    "minimum_exact_rate_per_family": false,
+    "minimum_exact_structure_rate": false,
+    "minimum_schema_execution_rate": false,
+    "same_evaluation_dataset": true,
+    "same_ordered_evaluation_records": true,
+    "same_recipe_families": true,
+    "same_record_count": true,
+    "same_tool_mode": true,
+    "schema_execution_not_regressed": true,
+    "zero_forbidden_actions": true
+  },
+  "promoted": false,
+  "thresholds": {
+    "minimum_exact_structure_rate": 0.5,
+    "minimum_family_exact_structure_rate": 0.25,
+    "minimum_schema_execution_rate": 0.95,
+    "required_tool_mode": "full"
+  }
+}

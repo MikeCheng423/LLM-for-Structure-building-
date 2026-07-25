@@ -1,0 +1,12 @@
+# Install PyTorch separately from its CUDA 12.4 wheel index before installing
+# this file. See training/README.md.
+transformers==4.53.3
+accelerate==1.8.1
+datasets==3.6.0
+peft==0.16.0
+trl==0.19.1
+bitsandbytes==0.46.1
+safetensors==0.5.3
+sentencepiece==0.2.0
+ase==3.28.0
+pytest==9.1.1

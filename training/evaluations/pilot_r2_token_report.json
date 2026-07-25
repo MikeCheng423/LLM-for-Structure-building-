@@ -1,0 +1,182 @@
+{
+  "assistant_loss_tokens": {
+    "count": 1314,
+    "maximum": 192,
+    "mean": 143.285,
+    "minimum": 68,
+    "p50": 159,
+    "p90": 165,
+    "p95": 172,
+    "p99": 187
+  },
+  "by_split": {
+    "test": {
+      "assistant_loss_tokens": {
+        "count": 147,
+        "maximum": 192,
+        "mean": 138.551,
+        "minimum": 68,
+        "p50": 159,
+        "p90": 172,
+        "p95": 172,
+        "p99": 192
+      },
+      "total_tokens": {
+        "count": 147,
+        "maximum": 1523,
+        "mean": 1010.782,
+        "minimum": 581,
+        "p50": 1127,
+        "p90": 1217,
+        "p95": 1495,
+        "p99": 1522
+      }
+    },
+    "train": {
+      "assistant_loss_tokens": {
+        "count": 1038,
+        "maximum": 192,
+        "mean": 144.249,
+        "minimum": 68,
+        "p50": 159,
+        "p90": 165,
+        "p95": 172,
+        "p99": 172
+      },
+      "total_tokens": {
+        "count": 1038,
+        "maximum": 1531,
+        "mean": 1053.358,
+        "minimum": 575,
+        "p50": 1159,
+        "p90": 1217,
+        "p95": 1467,
+        "p99": 1496
+      }
+    },
+    "validation": {
+      "assistant_loss_tokens": {
+        "count": 129,
+        "maximum": 192,
+        "mean": 140.93,
+        "minimum": 68,
+        "p50": 159,
+        "p90": 172,
+        "p95": 172,
+        "p99": 192
+      },
+      "total_tokens": {
+        "count": 129,
+        "maximum": 1523,
+        "mean": 1030.031,
+        "minimum": 578,
+        "p50": 1140,
+        "p90": 1217,
+        "p95": 1472,
+        "p99": 1522
+      }
+    }
+  },
+  "longest_records": [
+    {
+      "id": "si-invalid-index-recovery-p3",
+      "tokens": 1531
+    },
+    {
+      "id": "si-invalid-index-recovery-p2",
+      "tokens": 1529
+    },
+    {
+      "id": "si-invalid-index-recovery-p1",
+      "tokens": 1528
+    },
+    {
+      "id": "pt-invalid-index-recovery-p3",
+      "tokens": 1523
+    },
+    {
+      "id": "fe-invalid-index-recovery-p3",
+      "tokens": 1523
+    },
+    {
+      "id": "pt-invalid-index-recovery-p2",
+      "tokens": 1522
+    },
+    {
+      "id": "fe-invalid-index-recovery-p2",
+      "tokens": 1522
+    },
+    {
+      "id": "pt-invalid-index-recovery-p1",
+      "tokens": 1521
+    },
+    {
+      "id": "fe-invalid-index-recovery-p1",
+      "tokens": 1521
+    },
+    {
+      "id": "al-invalid-index-recovery-p3",
+      "tokens": 1521
+    },
+    {
+      "id": "al-invalid-index-recovery-p2",
+      "tokens": 1520
+    },
+    {
+      "id": "al-invalid-index-recovery-p1",
+      "tokens": 1519
+    },
+    {
+      "id": "si-diamond-2x2x2-au-p2",
+      "tokens": 1502
+    },
+    {
+      "id": "si-diamond-2x2x2-au-p3",
+      "tokens": 1501
+    },
+    {
+      "id": "si-diamond-2x2x1-au-p2",
+      "tokens": 1500
+    },
+    {
+      "id": "si-diamond-2x2x1-au-p3",
+      "tokens": 1499
+    },
+    {
+      "id": "si-diamond-2x2x2-au-p1",
+      "tokens": 1497
+    },
+    {
+      "id": "pt-fcc-2x2x2-au-p3",
+      "tokens": 1496
+    },
+    {
+      "id": "pt-fcc-2x2x2-au-p2",
+      "tokens": 1496
+    },
+    {
+      "id": "pt-fcc-2x2x1-au-p3",
+      "tokens": 1496
+    }
+  ],
+  "model": "Qwen/Qwen3-4B-Instruct-2507",
+  "over_limit": {
+    "1024": 870,
+    "1536": 0,
+    "2048": 0,
+    "4096": 0,
+    "512": 1314,
+    "768": 1043
+  },
+  "revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+  "total_tokens": {
+    "count": 1314,
+    "maximum": 1531,
+    "mean": 1046.305,
+    "minimum": 575,
+    "p50": 1149,
+    "p90": 1217,
+    "p95": 1467,
+    "p99": 1501
+  }
+}

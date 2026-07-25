@@ -1,0 +1,40 @@
+{
+  "family": "vacancy",
+  "required_placeholders": [
+    "element",
+    "crystalline",
+    "repeat3",
+    "defect_ordinal"
+  ],
+  "optional_placeholders": [],
+  "all_placeholders": [
+    "element",
+    "crystalline",
+    "repeat3",
+    "defect_ordinal"
+  ],
+  "num_templates": 10,
+  "samples": [
+    {
+      "case_id": "al-fcc-2x2x1-vacancy",
+      "placeholder_values": {
+        "element": "Al",
+        "crystalline": "fcc",
+        "repeat3": "2x2x1",
+        "defect_ordinal": "first"
+      },
+      "canonical_example": "Make a 2x2x1 fcc Al cell and remove atom 1."
+    },
+    {
+      "case_id": "ni-fcc-2x2x1-vacancy",
+      "placeholder_values": {
+        "element": "Ni",
+        "crystalline": "fcc",
+        "repeat3": "2x2x1",
+        "defect_ordinal": "first"
+      },
+      "canonical_example": "Make a 2x2x1 fcc Ni cell and remove atom 1."
+    }
+  ],
+  "output_path": "training/generators/paraphrase_templates/vacancy.json"
+}

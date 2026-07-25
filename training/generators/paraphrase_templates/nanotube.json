@@ -1,0 +1,12 @@
+[
+  "Build a {chirality} carbon nanotube {length} unit cells long.",
+  "Construct a single-walled carbon nanotube with chirality {chirality} spanning {length} unit cells.",
+  "Generate a {length}-unit-cell-long {chirality} carbon nanotube structure.",
+  "I need a carbon nanotube of chirality {chirality} that is {length} unit cells in length.",
+  "Set up a {chirality} CNT extending {length} unit cells along the tube axis.",
+  "Please create a nanotube {length} unit cells long with (n,m) indices {chirality}.",
+  "Model a carbon nanotube whose chirality is {chirality}, {length} unit cells long.",
+  "Assemble a {chirality} nanotube {length} unit cells in length, including 10 A radial vacuum.",
+  "Can you build a carbon nanotube with chirality {chirality} and a length of {length} unit cells?",
+  "For {length} unit cells, produce a {chirality} single-walled carbon nanotube."
+]

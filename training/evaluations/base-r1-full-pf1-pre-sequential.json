@@ -1,0 +1,462 @@
+{
+  "complete": true,
+  "dataset_sha256": "0fd47425eb537a841f6d04fad4a86e24dbd174cc390770a3d8e2b725695e8545",
+  "evaluation_ids_sha256": "69f4b9d76f45134f95e452d907b1af8d12fcac2625c57aeb592bc3661d796971",
+  "results": [
+    {
+      "elapsed_seconds": 48.7007,
+      "error": "same failed tool call repeated more than twice",
+      "exact_structure_match": false,
+      "exact_tool_sequence": false,
+      "expected_calls": [
+        "build_surface",
+        "add_atomic_adsorbate",
+        "finish"
+      ],
+      "expected_output_hash": "8d70dfe620c93d2968c032e46bd27bfd212a5cd67982e9f131ef301b28af7c3f",
+      "failed_call_count": 3,
+      "finished": false,
+      "generated_calls": [
+        "build_surface",
+        "list_adsorption_sites",
+        "add_atomic_adsorbate",
+        "add_atomic_adsorbate",
+        "add_atomic_adsorbate"
+      ],
+      "generated_tokens": 332,
+      "id": "cu-100-5-2x2-h-ontop-p1",
+      "output_hash": null,
+      "split_group": "atomic_adsorption:Cu-H:cu-100-5-2x2-h-ontop",
+      "state": "FAILED",
+      "successful_calls": [
+        "build_surface",
+        "list_adsorption_sites"
+      ],
+      "unknown_calls": []
+    },
+    {
+      "elapsed_seconds": 25.1229,
+      "error": null,
+      "exact_structure_match": false,
+      "exact_tool_sequence": false,
+      "expected_calls": [
+        "build_bulk",
+        "repeat",
+        "finish"
+      ],
+      "expected_output_hash": "2390df71272168de3b3076744dceb744a471346a05da1178314e82d7b5064ecb",
+      "failed_call_count": 0,
+      "finished": true,
+      "generated_calls": [
+        "build_bulk",
+        "finish"
+      ],
+      "generated_tokens": 204,
+      "id": "w-bcc-2x2x2-p1",
+      "output_hash": "5eaef2904c239937a0058c8f1a26182c8d7558b07441b021f5253e9791fea25f",
+      "split_group": "bulk:W:w-bcc-2x2x2",
+      "state": "FINISHED",
+      "successful_calls": [
+        "build_bulk",
+        "finish"
+      ],
+      "unknown_calls": []
+    },
+    {
+      "elapsed_seconds": 50.6402,
+      "error": "model-turn budget exhausted",
+      "exact_structure_match": false,
+      "exact_tool_sequence": false,
+      "expected_calls": [
+        "build_surface",
+        "add_molecular_adsorbate",
+        "finish"
+      ],
+      "expected_output_hash": "9210a314d97924c8146fc25f54cdca2ac60232c1ac5f903388223b409dbd09ab",
+      "failed_call_count": 3,
+      "finished": false,
+      "generated_calls": [
+        "build_surface",
+        "list_adsorption_sites",
+        "add_atomic_adsorbate",
+        "build_surface",
+        "list_adsorption_sites",
+        "add_atomic_adsorbate"
+      ],
+      "generated_tokens": 332,
+      "id": "cu-111-4-2x2-co-p1",
+      "output_hash": null,
+      "split_group": "molecular_adsorption:Cu-CO:cu-111-4-2x2-co",
+      "state": "BUDGET_EXHAUSTED",
+      "successful_calls": [
+        "build_surface",
+        "list_adsorption_sites",
+        "list_adsorption_sites"
+      ],
+      "unknown_calls": []
+    },
+    {
+      "elapsed_seconds": 18.9728,
+      "error": "model stopped without calling finish",
+      "exact_structure_match": false,
+      "exact_tool_sequence": false,
+      "expected_calls": [
+        "build_molecule",
+        "finish"
+      ],
+      "expected_output_hash": "fcac4c47127a5ed2080b26e93ebfe03aec5c07d48b16b722e2de3440ba0af555",
+      "failed_call_count": 0,
+      "finished": false,
+      "generated_calls": [
+        "build_molecule"
+      ],
+      "generated_tokens": 142,
+      "id": "co-15-p1",
+      "output_hash": null,
+      "split_group": "molecule:CO:co-15",
+      "state": "FAILED",
+      "successful_calls": [
+        "build_molecule"
+      ],
+      "unknown_calls": []
+    },
+    {
+      "elapsed_seconds": 28.3634,
+      "error": null,
+      "exact_structure_match": true,
+      "exact_tool_sequence": true,
+      "expected_calls": [
+        "build_nanotube",
+        "finish"
+      ],
+      "expected_output_hash": "a2a21226b24aac29794d51adf97930eab9c4b43b3f25638011f8e01689449305",
+      "failed_call_count": 0,
+      "finished": true,
+      "generated_calls": [
+        "build_nanotube",
+        "finish"
+      ],
+      "generated_tokens": 230,
+      "id": "cnt-6-3-1-p1",
+      "output_hash": "a2a21226b24aac29794d51adf97930eab9c4b43b3f25638011f8e01689449305",
+      "split_group": "nanotube:C:cnt-6-3-1",
+      "state": "FINISHED",
+      "successful_calls": [
+        "build_nanotube",
+        "finish"
+      ],
+      "unknown_calls": []
+    },
+    {
+      "elapsed_seconds": 24.0859,
+      "error": "model stopped without calling finish",
+      "exact_structure_match": false,
+      "exact_tool_sequence": false,
+      "expected_calls": [
+        "build_prototype",
+        "finish"
+      ],
+      "expected_output_hash": "e1194e22ad8681b28c843cdef6347ad9503bf7e4edfe9c6bf8cb2afdaeda54a7",
+      "failed_call_count": 0,
+      "finished": false,
+      "generated_calls": [
+        "build_prototype"
+      ],
+      "generated_tokens": 188,
+      "id": "anatase-tio2-p1",
+      "output_hash": null,
+      "split_group": "prototype:anatase-TiO2:anatase-tio2",
+      "state": "FAILED",
+      "successful_calls": [
+        "build_prototype"
+      ],
+      "unknown_calls": []
+    },
+    {
+      "elapsed_seconds": 27.3026,
+      "error": null,
+      "exact_structure_match": false,
+      "exact_tool_sequence": false,
+      "expected_calls": [
+        "build_bulk",
+        "repeat",
+        "substitute",
+        "finish"
+      ],
+      "expected_output_hash": "527972849c8c1fb1085b3bf2cade7d2ff60beea83c04f5079def93110c7395fd",
+      "failed_call_count": 0,
+      "finished": true,
+      "generated_calls": [
+        "build_bulk",
+        "substitute",
+        "finish"
+      ],
+      "generated_tokens": 198,
+      "id": "al-fcc-2x2x2-au-p1",
+      "output_hash": "1730365369b8eed91e8198947515896de0807d1ac86ab376ff06eb6b434d7dd9",
+      "split_group": "substitution:Al-Au:al-fcc-2x2x2-au",
+      "state": "FINISHED",
+      "successful_calls": [
+        "build_bulk",
+        "substitute",
+        "finish"
+      ],
+      "unknown_calls": []
+    },
+    {
+      "elapsed_seconds": 19.6668,
+      "error": "model stopped without calling finish",
+      "exact_structure_match": false,
+      "exact_tool_sequence": false,
+      "expected_calls": [
+        "build_surface",
+        "finish"
+      ],
+      "expected_output_hash": "dc5609fc830179d0a52124cb7970cfac12fd5409bfe30d97e6c40bdabf2a1d8a",
+      "failed_call_count": 0,
+      "finished": false,
+      "generated_calls": [
+        "build_surface"
+      ],
+      "generated_tokens": 142,
+      "id": "cu-111-3-1x1-p1",
+      "output_hash": null,
+      "split_group": "surface:Cu:cu-111-3-1x1",
+      "state": "FAILED",
+      "successful_calls": [
+        "build_surface"
+      ],
+      "unknown_calls": []
+    },
+    {
+      "elapsed_seconds": 24.1218,
+      "error": "model stopped without calling finish",
+      "exact_structure_match": false,
+      "exact_tool_sequence": false,
+      "expected_calls": [
+        "build_surface",
+        "freeze_layers",
+        "finish"
+      ],
+      "expected_output_hash": "be3ee26c9fb1da7a10b5dad98a7ca795823461a1ea0e5599c40eb5c45cb97537",
+      "failed_call_count": 0,
+      "finished": false,
+      "generated_calls": [
+        "build_surface",
+        "freeze_layers"
+      ],
+      "generated_tokens": 163,
+      "id": "cu-100-5-1x1-frozen-p1",
+      "output_hash": null,
+      "split_group": "surface_constraint:Cu:cu-100-5-1x1-frozen",
+      "state": "FAILED",
+      "successful_calls": [
+        "build_surface",
+        "freeze_layers"
+      ],
+      "unknown_calls": []
+    },
+    {
+      "elapsed_seconds": 20.8145,
+      "error": "model stopped without calling finish",
+      "exact_structure_match": false,
+      "exact_tool_sequence": false,
+      "expected_calls": [
+        "build_bulk",
+        "repeat",
+        "make_vacancy",
+        "finish"
+      ],
+      "expected_output_hash": "82be7d70ce5ac1acd02060327279552cce2eb86cf71c0317d3c3e395c53a6c37",
+      "failed_call_count": 0,
+      "finished": false,
+      "generated_calls": [
+        "build_bulk",
+        "delete_atoms"
+      ],
+      "generated_tokens": 131,
+      "id": "si-diamond-2x2x1-vacancy-p1",
+      "output_hash": null,
+      "split_group": "vacancy:Si:si-diamond-2x2x1-vacancy",
+      "state": "FAILED",
+      "successful_calls": [
+        "build_bulk",
+        "delete_atoms"
+      ],
+      "unknown_calls": []
+    }
+  ],
+  "summary": {
+    "adapter": null,
+    "elapsed_seconds": 287.7916,
+    "exact_structure_rate": 0.1,
+    "exact_tool_sequence_rate": 0.1,
+    "failed_call_count": 6,
+    "family_metrics": {
+      "atomic_adsorption": {
+        "elapsed_seconds": 48.7007,
+        "exact_structure_rate": 0.0,
+        "exact_tool_sequence_rate": 0.0,
+        "failed_call_count": 3,
+        "finish_rate": 0.0,
+        "forbidden_action_rate": 0.0,
+        "generated_tokens": 332,
+        "record_count": 1,
+        "schema_execution_success_rate": 0.4,
+        "states": {
+          "FAILED": 1
+        },
+        "unknown_call_count": 0
+      },
+      "bulk": {
+        "elapsed_seconds": 25.1229,
+        "exact_structure_rate": 0.0,
+        "exact_tool_sequence_rate": 0.0,
+        "failed_call_count": 0,
+        "finish_rate": 1.0,
+        "forbidden_action_rate": 0.0,
+        "generated_tokens": 204,
+        "record_count": 1,
+        "schema_execution_success_rate": 1.0,
+        "states": {
+          "FINISHED": 1
+        },
+        "unknown_call_count": 0
+      },
+      "molecular_adsorption": {
+        "elapsed_seconds": 50.6402,
+        "exact_structure_rate": 0.0,
+        "exact_tool_sequence_rate": 0.0,
+        "failed_call_count": 3,
+        "finish_rate": 0.0,
+        "forbidden_action_rate": 0.0,
+        "generated_tokens": 332,
+        "record_count": 1,
+        "schema_execution_success_rate": 0.5,
+        "states": {
+          "BUDGET_EXHAUSTED": 1
+        },
+        "unknown_call_count": 0
+      },
+      "molecule": {
+        "elapsed_seconds": 18.9728,
+        "exact_structure_rate": 0.0,
+        "exact_tool_sequence_rate": 0.0,
+        "failed_call_count": 0,
+        "finish_rate": 0.0,
+        "forbidden_action_rate": 0.0,
+        "generated_tokens": 142,
+        "record_count": 1,
+        "schema_execution_success_rate": 1.0,
+        "states": {
+          "FAILED": 1
+        },
+        "unknown_call_count": 0
+      },
+      "nanotube": {
+        "elapsed_seconds": 28.3634,
+        "exact_structure_rate": 1.0,
+        "exact_tool_sequence_rate": 1.0,
+        "failed_call_count": 0,
+        "finish_rate": 1.0,
+        "forbidden_action_rate": 0.0,
+        "generated_tokens": 230,
+        "record_count": 1,
+        "schema_execution_success_rate": 1.0,
+        "states": {
+          "FINISHED": 1
+        },
+        "unknown_call_count": 0
+      },
+      "prototype": {
+        "elapsed_seconds": 24.0859,
+        "exact_structure_rate": 0.0,
+        "exact_tool_sequence_rate": 0.0,
+        "failed_call_count": 0,
+        "finish_rate": 0.0,
+        "forbidden_action_rate": 0.0,
+        "generated_tokens": 188,
+        "record_count": 1,
+        "schema_execution_success_rate": 1.0,
+        "states": {
+          "FAILED": 1
+        },
+        "unknown_call_count": 0
+      },
+      "substitution": {
+        "elapsed_seconds": 27.3026,
+        "exact_structure_rate": 0.0,
+        "exact_tool_sequence_rate": 0.0,
+        "failed_call_count": 0,
+        "finish_rate": 1.0,
+        "forbidden_action_rate": 0.0,
+        "generated_tokens": 198,
+        "record_count": 1,
+        "schema_execution_success_rate": 1.0,
+        "states": {
+          "FINISHED": 1
+        },
+        "unknown_call_count": 0
+      },
+      "surface": {
+        "elapsed_seconds": 19.6668,
+        "exact_structure_rate": 0.0,
+        "exact_tool_sequence_rate": 0.0,
+        "failed_call_count": 0,
+        "finish_rate": 0.0,
+        "forbidden_action_rate": 0.0,
+        "generated_tokens": 142,
+        "record_count": 1,
+        "schema_execution_success_rate": 1.0,
+        "states": {
+          "FAILED": 1
+        },
+        "unknown_call_count": 0
+      },
+      "surface_constraint": {
+        "elapsed_seconds": 24.1218,
+        "exact_structure_rate": 0.0,
+        "exact_tool_sequence_rate": 0.0,
+        "failed_call_count": 0,
+        "finish_rate": 0.0,
+        "forbidden_action_rate": 0.0,
+        "generated_tokens": 163,
+        "record_count": 1,
+        "schema_execution_success_rate": 1.0,
+        "states": {
+          "FAILED": 1
+        },
+        "unknown_call_count": 0
+      },
+      "vacancy": {
+        "elapsed_seconds": 20.8145,
+        "exact_structure_rate": 0.0,
+        "exact_tool_sequence_rate": 0.0,
+        "failed_call_count": 0,
+        "finish_rate": 0.0,
+        "forbidden_action_rate": 0.0,
+        "generated_tokens": 131,
+        "record_count": 1,
+        "schema_execution_success_rate": 1.0,
+        "states": {
+          "FAILED": 1
+        },
+        "unknown_call_count": 0
+      }
+    },
+    "finish_rate": 0.3,
+    "forbidden_action_rate": 0.0,
+    "generated_tokens": 2062,
+    "model": "Qwen/Qwen3-4B-Instruct-2507",
+    "record_count": 10,
+    "revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+    "schema_execution_success_rate": 0.76,
+    "states": {
+      "BUDGET_EXHAUSTED": 1,
+      "FAILED": 6,
+      "FINISHED": 3
+    },
+    "tool_mode": "full",
+    "unknown_call_count": 0
+  }
+}

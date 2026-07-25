@@ -1,0 +1,113 @@
+{
+  "dataset_manifest_sha256": "2603f9034915043f082815e59060b55efd905a977d8b9c58260a29f85650dfb5",
+  "errors": [],
+  "execution_success_rate": 1.0,
+  "failed_replays": 0,
+  "family_counts": {
+    "atomic_adsorption": 432,
+    "bulk": 72,
+    "clarification": 9,
+    "error_recovery": 12,
+    "molecular_adsorption": 108,
+    "molecule": 72,
+    "nanotube": 66,
+    "prototype": 15,
+    "substitution": 48,
+    "surface": 216,
+    "surface_constraint": 216,
+    "vacancy": 48
+  },
+  "family_split_counts": {
+    "atomic_adsorption": {
+      "test": 33,
+      "train": 369,
+      "validation": 30
+    },
+    "bulk": {
+      "test": 12,
+      "train": 54,
+      "validation": 6
+    },
+    "clarification": {
+      "test": 3,
+      "train": 3,
+      "validation": 3
+    },
+    "error_recovery": {
+      "test": 3,
+      "train": 6,
+      "validation": 3
+    },
+    "molecular_adsorption": {
+      "test": 12,
+      "train": 87,
+      "validation": 9
+    },
+    "molecule": {
+      "test": 6,
+      "train": 54,
+      "validation": 12
+    },
+    "nanotube": {
+      "test": 12,
+      "train": 48,
+      "validation": 6
+    },
+    "prototype": {
+      "test": 3,
+      "train": 9,
+      "validation": 3
+    },
+    "substitution": {
+      "test": 6,
+      "train": 39,
+      "validation": 3
+    },
+    "surface": {
+      "test": 30,
+      "train": 168,
+      "validation": 18
+    },
+    "surface_constraint": {
+      "test": 24,
+      "train": 162,
+      "validation": 30
+    },
+    "vacancy": {
+      "test": 3,
+      "train": 39,
+      "validation": 6
+    }
+  },
+  "family_split_gaps": {},
+  "forbidden_action_rate": 0.0,
+  "maximum_atoms": 776,
+  "maximum_tool_calls": 4,
+  "output_hash_overlap": {
+    "train_test": [],
+    "train_validation": [],
+    "validation_test": []
+  },
+  "passed": true,
+  "recipe_hash_overlap": {
+    "train_test": [],
+    "train_validation": [],
+    "validation_test": []
+  },
+  "record_count": 1314,
+  "records_on_current_registry": 1314,
+  "registry_versions": {
+    "phase1-e8c88309b7ecc67c": 1314
+  },
+  "split_counts": {
+    "test": 147,
+    "train": 1038,
+    "validation": 129
+  },
+  "split_group_overlap": {
+    "train_test": [],
+    "train_validation": [],
+    "validation_test": []
+  },
+  "successful_replays": 1314
+}

@@ -1,0 +1,182 @@
+{
+  "assistant_loss_tokens": {
+    "count": 1293,
+    "maximum": 172,
+    "mean": 142.712,
+    "minimum": 68,
+    "p50": 159,
+    "p90": 165,
+    "p95": 172,
+    "p99": 172
+  },
+  "by_split": {
+    "test": {
+      "assistant_loss_tokens": {
+        "count": 117,
+        "maximum": 172,
+        "mean": 143.692,
+        "minimum": 68,
+        "p50": 165,
+        "p90": 172,
+        "p95": 172,
+        "p99": 172
+      },
+      "total_tokens": {
+        "count": 117,
+        "maximum": 1496,
+        "mean": 1054.034,
+        "minimum": 578,
+        "p50": 1167,
+        "p90": 1220,
+        "p95": 1486,
+        "p99": 1496
+      }
+    },
+    "train": {
+      "assistant_loss_tokens": {
+        "count": 1068,
+        "maximum": 172,
+        "mean": 143.14,
+        "minimum": 68,
+        "p50": 159,
+        "p90": 165,
+        "p95": 172,
+        "p99": 172
+      },
+      "total_tokens": {
+        "count": 1068,
+        "maximum": 1502,
+        "mean": 1044.363,
+        "minimum": 575,
+        "p50": 1148,
+        "p90": 1216,
+        "p95": 1463,
+        "p99": 1496
+      }
+    },
+    "validation": {
+      "assistant_loss_tokens": {
+        "count": 108,
+        "maximum": 172,
+        "mean": 137.417,
+        "minimum": 78,
+        "p50": 159,
+        "p90": 165,
+        "p95": 172,
+        "p99": 172
+      },
+      "total_tokens": {
+        "count": 108,
+        "maximum": 1496,
+        "mean": 1008.056,
+        "minimum": 609,
+        "p50": 1148,
+        "p90": 1208,
+        "p95": 1461,
+        "p99": 1496
+      }
+    }
+  },
+  "longest_records": [
+    {
+      "id": "si-diamond-2x2x2-au-p2",
+      "tokens": 1502
+    },
+    {
+      "id": "si-diamond-2x2x2-au-p3",
+      "tokens": 1501
+    },
+    {
+      "id": "si-diamond-2x2x1-au-p2",
+      "tokens": 1500
+    },
+    {
+      "id": "si-diamond-2x2x1-au-p3",
+      "tokens": 1499
+    },
+    {
+      "id": "si-diamond-2x2x2-au-p1",
+      "tokens": 1497
+    },
+    {
+      "id": "pt-fcc-2x2x2-au-p3",
+      "tokens": 1496
+    },
+    {
+      "id": "pt-fcc-2x2x2-au-p2",
+      "tokens": 1496
+    },
+    {
+      "id": "pt-fcc-2x2x1-au-p3",
+      "tokens": 1496
+    },
+    {
+      "id": "pt-fcc-2x2x1-au-p2",
+      "tokens": 1496
+    },
+    {
+      "id": "ni-fcc-2x2x2-au-p3",
+      "tokens": 1496
+    },
+    {
+      "id": "ni-fcc-2x2x2-au-p2",
+      "tokens": 1496
+    },
+    {
+      "id": "ni-fcc-2x2x1-au-p3",
+      "tokens": 1496
+    },
+    {
+      "id": "ni-fcc-2x2x1-au-p2",
+      "tokens": 1496
+    },
+    {
+      "id": "fe-bcc-2x2x2-au-p3",
+      "tokens": 1496
+    },
+    {
+      "id": "fe-bcc-2x2x2-au-p2",
+      "tokens": 1496
+    },
+    {
+      "id": "cu-fcc-2x2x2-au-p3",
+      "tokens": 1496
+    },
+    {
+      "id": "cu-fcc-2x2x2-au-p2",
+      "tokens": 1496
+    },
+    {
+      "id": "cu-fcc-2x2x1-au-p3",
+      "tokens": 1496
+    },
+    {
+      "id": "cu-fcc-2x2x1-au-p2",
+      "tokens": 1496
+    },
+    {
+      "id": "au-fcc-2x2x2-cu-p3",
+      "tokens": 1496
+    }
+  ],
+  "model": "Qwen/Qwen3-4B-Instruct-2507",
+  "over_limit": {
+    "1024": 852,
+    "1536": 0,
+    "2048": 0,
+    "4096": 0,
+    "512": 1293,
+    "768": 1022
+  },
+  "revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+  "total_tokens": {
+    "count": 1293,
+    "maximum": 1502,
+    "mean": 1042.206,
+    "minimum": 575,
+    "p50": 1149,
+    "p90": 1216,
+    "p95": 1463,
+    "p99": 1496
+  }
+}

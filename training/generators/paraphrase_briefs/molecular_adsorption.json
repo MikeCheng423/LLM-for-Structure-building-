@@ -1,0 +1,60 @@
+{
+  "family": "molecular_adsorption",
+  "required_placeholders": [
+    "element",
+    "facet",
+    "layers",
+    "vacuum",
+    "suffix",
+    "adsorbate",
+    "site",
+    "height",
+    "anchor"
+  ],
+  "optional_placeholders": [],
+  "all_placeholders": [
+    "element",
+    "facet",
+    "layers",
+    "vacuum",
+    "suffix",
+    "adsorbate",
+    "site",
+    "height",
+    "anchor"
+  ],
+  "num_templates": 10,
+  "samples": [
+    {
+      "case_id": "cu-100-3-2x2-co",
+      "placeholder_values": {
+        "element": "Cu",
+        "facet": "100",
+        "layers": "3",
+        "vacuum": "12",
+        "suffix": "2x2",
+        "adsorbate": "CO",
+        "site": "ontop",
+        "height": "1.9",
+        "anchor": "carbon"
+      },
+      "canonical_example": "Adsorb CO at the first ontop site of a 2x2 Cu(100) 3-layer slab with 12 A vacuum, carbon anchored 1.9 A high."
+    },
+    {
+      "case_id": "ni-100-3-2x2-co",
+      "placeholder_values": {
+        "element": "Ni",
+        "facet": "100",
+        "layers": "3",
+        "vacuum": "12",
+        "suffix": "2x2",
+        "adsorbate": "CO",
+        "site": "ontop",
+        "height": "1.9",
+        "anchor": "carbon"
+      },
+      "canonical_example": "Adsorb CO at the first ontop site of a 2x2 Ni(100) 3-layer slab with 12 A vacuum, carbon anchored 1.9 A high."
+    }
+  ],
+  "output_path": "training/generators/paraphrase_templates/molecular_adsorption.json"
+}

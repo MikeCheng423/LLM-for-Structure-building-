@@ -1,0 +1,34 @@
+{
+  "dataset_manifest_sha256": "7ceb8c00d548c5e0ada0a45d2f562fac537c6e49820be837aeb696b0a823f5f7",
+  "errors": [],
+  "execution_success_rate": 1.0,
+  "failed_replays": 0,
+  "family_counts": {
+    "atomic_adsorption": 432,
+    "bulk": 72,
+    "molecular_adsorption": 108,
+    "molecule": 72,
+    "nanotube": 66,
+    "prototype": 15,
+    "substitution": 48,
+    "surface": 216,
+    "surface_constraint": 216,
+    "vacancy": 48
+  },
+  "forbidden_action_rate": 0.0,
+  "maximum_atoms": 776,
+  "maximum_tool_calls": 4,
+  "passed": true,
+  "record_count": 1293,
+  "split_counts": {
+    "test": 117,
+    "train": 1068,
+    "validation": 108
+  },
+  "split_group_overlap": {
+    "train_test": [],
+    "train_validation": [],
+    "validation_test": []
+  },
+  "successful_replays": 1293
+}

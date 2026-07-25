@@ -1,0 +1,49 @@
+{
+  "family": "surface",
+  "required_placeholders": [
+    "element",
+    "facet",
+    "layers",
+    "vacuum",
+    "suffix"
+  ],
+  "optional_placeholders": [
+    "crystalline"
+  ],
+  "all_placeholders": [
+    "element",
+    "crystalline",
+    "facet",
+    "layers",
+    "vacuum",
+    "suffix"
+  ],
+  "num_templates": 10,
+  "samples": [
+    {
+      "case_id": "cu-100-3-1x1",
+      "placeholder_values": {
+        "element": "Cu",
+        "crystalline": "fcc",
+        "facet": "100",
+        "layers": "3",
+        "vacuum": "12",
+        "suffix": "1x1"
+      },
+      "canonical_example": "Build a 1x1 Cu(100) slab with 3 layers and 12 angstrom vacuum."
+    },
+    {
+      "case_id": "ni-100-3-1x1",
+      "placeholder_values": {
+        "element": "Ni",
+        "crystalline": "fcc",
+        "facet": "100",
+        "layers": "3",
+        "vacuum": "12",
+        "suffix": "1x1"
+      },
+      "canonical_example": "Build a 1x1 Ni(100) slab with 3 layers and 12 angstrom vacuum."
+    }
+  ],
+  "output_path": "training/generators/paraphrase_templates/surface.json"
+}

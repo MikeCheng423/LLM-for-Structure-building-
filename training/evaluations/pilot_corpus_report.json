@@ -1,0 +1,105 @@
+{
+  "dataset_manifest_sha256": "7ceb8c00d548c5e0ada0a45d2f562fac537c6e49820be837aeb696b0a823f5f7",
+  "errors": [],
+  "execution_success_rate": 1.0,
+  "failed_replays": 0,
+  "family_counts": {
+    "atomic_adsorption": 432,
+    "bulk": 72,
+    "molecular_adsorption": 108,
+    "molecule": 72,
+    "nanotube": 66,
+    "prototype": 15,
+    "substitution": 48,
+    "surface": 216,
+    "surface_constraint": 216,
+    "vacancy": 48
+  },
+  "family_split_counts": {
+    "atomic_adsorption": {
+      "test": 45,
+      "train": 345,
+      "validation": 42
+    },
+    "bulk": {
+      "test": 3,
+      "train": 57,
+      "validation": 12
+    },
+    "molecular_adsorption": {
+      "test": 15,
+      "train": 87,
+      "validation": 6
+    },
+    "molecule": {
+      "test": 9,
+      "train": 54,
+      "validation": 9
+    },
+    "nanotube": {
+      "test": 3,
+      "train": 51,
+      "validation": 12
+    },
+    "prototype": {
+      "test": 6,
+      "train": 9,
+      "validation": 0
+    },
+    "substitution": {
+      "test": 6,
+      "train": 39,
+      "validation": 3
+    },
+    "surface": {
+      "test": 15,
+      "train": 189,
+      "validation": 12
+    },
+    "surface_constraint": {
+      "test": 12,
+      "train": 195,
+      "validation": 9
+    },
+    "vacancy": {
+      "test": 3,
+      "train": 42,
+      "validation": 3
+    }
+  },
+  "family_split_gaps": {
+    "prototype": [
+      "validation"
+    ]
+  },
+  "forbidden_action_rate": 0.0,
+  "maximum_atoms": 776,
+  "maximum_tool_calls": 4,
+  "output_hash_overlap": {
+    "train_test": [],
+    "train_validation": [],
+    "validation_test": []
+  },
+  "passed": true,
+  "recipe_hash_overlap": {
+    "train_test": [],
+    "train_validation": [],
+    "validation_test": []
+  },
+  "record_count": 1293,
+  "records_on_current_registry": 0,
+  "registry_versions": {
+    "phase1-4d25de20834c813b": 1293
+  },
+  "split_counts": {
+    "test": 117,
+    "train": 1068,
+    "validation": 108
+  },
+  "split_group_overlap": {
+    "train_test": [],
+    "train_validation": [],
+    "validation_test": []
+  },
+  "successful_replays": 1293
+}

@@ -1,0 +1,12 @@
+[
+  "Build a {suffix} {element}({facet}) slab that is {layers} layers thick with {vacuum} Å of vacuum, then freeze the {freeze_count} {freeze_side} layers.",
+  "Generate a {crystalline} {element}({facet}) surface using a {suffix} supercell, a {layers}-layer slab, {vacuum} angstrom of vacuum, and fix its {freeze_count} {freeze_side} layers in place.",
+  "Fix the {freeze_count} {freeze_side} layers of a {suffix} {element}({facet}) slab that has {layers} layers and a {vacuum} A vacuum gap.",
+  "I need a {element}({facet}) slab, {suffix} in-plane, {layers} layers deep, {vacuum} Å of vacuum spacing, with the {freeze_count} layers on the {freeze_side} held fixed.",
+  "Create a {suffix} {crystalline} {element}({facet}) slab with {layers} layers of atoms, leave {vacuum} A of vacuum above it, and freeze {freeze_count} layers at the {freeze_side}.",
+  "Make a {element}({facet}) slab expanded {suffix}, {layers} layers total, capped with {vacuum} angstrom of vacuum, and pin down the {freeze_side} {freeze_count} layers so they don't relax.",
+  "{suffix} {element}({facet}), {layers} layers, {vacuum} Å vacuum — then clamp the {freeze_side} {freeze_count} layers.",
+  "A {layers}-layer {suffix} {element}({facet}) slab should be built with {vacuum} Å of vacuum, and the {freeze_count} {freeze_side} layers should be constrained.",
+  "Please set up the {element}({facet}) surface as a {suffix} slab, {layers} layers thick with {vacuum} angstrom of vacuum, keeping the {freeze_count} {freeze_side} layers fixed throughout the relaxation.",
+  "Assemble a {crystalline} {suffix} {element}({facet}) slab totaling {layers} layers with {vacuum} A of vacuum on top, then lock the {freeze_side} {freeze_count} layers in position."
+]

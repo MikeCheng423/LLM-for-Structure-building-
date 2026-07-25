@@ -1,0 +1,115 @@
+{
+  "complete": true,
+  "dataset_sha256": "0fd47425eb537a841f6d04fad4a86e24dbd174cc390770a3d8e2b725695e8545",
+  "evaluation_ids_sha256": "9f8c1cf4efeea876f7afc88396c6010641bae26c0587dad5983b7fe4aff34276",
+  "results": [
+    {
+      "elapsed_seconds": 47.9482,
+      "error": null,
+      "exact_structure_match": true,
+      "exact_tool_sequence": true,
+      "expected_calls": [
+        "build_surface",
+        "add_atomic_adsorbate",
+        "finish"
+      ],
+      "expected_output_hash": "8d70dfe620c93d2968c032e46bd27bfd212a5cd67982e9f131ef301b28af7c3f",
+      "failed_call_count": 0,
+      "failed_call_details": [],
+      "finished": true,
+      "generated_calls": [
+        "build_surface",
+        "add_atomic_adsorbate",
+        "finish"
+      ],
+      "generated_texts": [
+        "<tool_call>\n{\"name\": \"build_surface\", \"arguments\": {\"name\": \"slab\", \"element\": \"Cu\", \"miller\": [1, 0, 0], \"layers\": 5, \"crystal\": \"fcc\", \"repeat\": [2, 2, 1], \"vacuum\": 12.0}}\n</tool_call>",
+        "<tool_call>\n{\"name\": \"add_atomic_adsorbate\", \"arguments\": {\"name\": \"slab\", \"element\": \"H\", \"site\": \"ontop\", \"height\": 1.8}}\n</tool_call>",
+        "<tool_call>\n{\"name\": \"finish\", \"arguments\": {\"name\": \"slab\"}}\n</tool_call>"
+      ],
+      "generated_tokens": 140,
+      "id": "cu-100-5-2x2-h-ontop-p1",
+      "output_hash": "8d70dfe620c93d2968c032e46bd27bfd212a5cd67982e9f131ef301b28af7c3f",
+      "split_group": "atomic_adsorption:Cu-H:cu-100-5-2x2-h-ontop",
+      "state": "FINISHED",
+      "successful_calls": [
+        "build_surface",
+        "add_atomic_adsorbate",
+        "finish"
+      ],
+      "unknown_calls": []
+    },
+    {
+      "elapsed_seconds": 50.949,
+      "error": null,
+      "exact_structure_match": true,
+      "exact_tool_sequence": true,
+      "expected_calls": [
+        "build_surface",
+        "add_atomic_adsorbate",
+        "finish"
+      ],
+      "expected_output_hash": "8d70dfe620c93d2968c032e46bd27bfd212a5cd67982e9f131ef301b28af7c3f",
+      "failed_call_count": 0,
+      "failed_call_details": [],
+      "finished": true,
+      "generated_calls": [
+        "build_surface",
+        "add_atomic_adsorbate",
+        "finish"
+      ],
+      "generated_texts": [
+        "<tool_call>\n{\"name\": \"build_surface\", \"arguments\": {\"name\": \"slab\", \"element\": \"Cu\", \"miller\": [1, 0, 0], \"layers\": 5, \"crystal\": \"fcc\", \"repeat\": [2, 2, 1], \"vacuum\": 12.0}}\n</tool_call>",
+        "<tool_call>\n{\"name\": \"add_atomic_adsorbate\", \"arguments\": {\"name\": \"slab\", \"element\": \"H\", \"site\": \"ontop\"}}\n</tool_call>",
+        "<tool_call>\n{\"name\": \"finish\", \"arguments\": {\"name\": \"slab\"}}\n</tool_call>"
+      ],
+      "generated_tokens": 152,
+      "id": "cu-100-5-2x2-h-ontop-p2",
+      "output_hash": "8d70dfe620c93d2968c032e46bd27bfd212a5cd67982e9f131ef301b28af7c3f",
+      "split_group": "atomic_adsorption:Cu-H:cu-100-5-2x2-h-ontop",
+      "state": "FINISHED",
+      "successful_calls": [
+        "build_surface",
+        "add_atomic_adsorbate",
+        "finish"
+      ],
+      "unknown_calls": []
+    }
+  ],
+  "summary": {
+    "adapter": "training/runs/pilot-qwen3-4b-r1/adapter",
+    "elapsed_seconds": 98.8972,
+    "exact_structure_rate": 1.0,
+    "exact_tool_sequence_rate": 1.0,
+    "failed_call_count": 0,
+    "family_metrics": {
+      "atomic_adsorption": {
+        "elapsed_seconds": 98.8972,
+        "exact_structure_rate": 1.0,
+        "exact_tool_sequence_rate": 1.0,
+        "failed_call_count": 0,
+        "finish_rate": 1.0,
+        "forbidden_action_rate": 0.0,
+        "generated_tokens": 292,
+        "record_count": 2,
+        "schema_execution_success_rate": 1.0,
+        "states": {
+          "FINISHED": 2
+        },
+        "unknown_call_count": 0
+      }
+    },
+    "finish_rate": 1.0,
+    "forbidden_action_rate": 0.0,
+    "generated_tokens": 292,
+    "model": "Qwen/Qwen3-4B-Instruct-2507",
+    "record_count": 2,
+    "revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+    "schema_execution_success_rate": 1.0,
+    "states": {
+      "FINISHED": 2
+    },
+    "tool_mode": "full",
+    "unknown_call_count": 0
+  }
+}

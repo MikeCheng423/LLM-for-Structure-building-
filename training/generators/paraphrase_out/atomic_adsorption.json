@@ -1,0 +1,66 @@
+{
+  "cu-100-3-1x1-h-ontop": [
+    "Build a 3-layer Cu(100) slab with 12 Å vacuum and put an H atom on an ontop site, 1.8 Å above the surface.",
+    "Set up a Cu(100) surface, 3 layers thick, 12 angstrom vacuum, then add H at the ontop site at a height of 1.8 angstrom.",
+    "Please create a Cu(100) 3-layer slab (12 A vacuum) and add one H adsorbate ontop, 1.8 A above the top atomic layer.",
+    "I want a 3 layer Cu(100) slab with a 12 Å vacuum gap, with H sitting ontop 1.8 Å above the surface.",
+    "Construct a slab of Cu(100), 3 layers, vacuum spacing 12 Å, and position an H atom above the ontop site at a height of 1.8 Å.",
+    "Prepare Cu(100), 3 layers with 12 angstrom vacuum, then adsorb H ontop at 1.8 angstrom height."
+  ],
+  "cu-100-3-1x1-o-ontop": [
+    "Create a 3-layer Cu(100) slab with 12 Å vacuum and place an O atom ontop, 1.8 Å above the surface.",
+    "Set up Cu(100), 3 layers thick, 12 angstrom vacuum, then put O at the ontop site with a height of 1.8 angstrom above it.",
+    "I need a Cu(100) 3-layer slab (12 A vacuum) with an O adsorbate sitting ontop, 1.8 A above the top layer.",
+    "Build a 3 layer Cu(100) surface with 12 Å of vacuum, adding O on an ontop site 1.8 Å above.",
+    "Construct a Cu(100) slab, 3 layers, vacuum 12 Å, and position O above the ontop site at a height of 1.8 Å.",
+    "Prepare a Cu(100) 3-layer slab with 12 angstrom vacuum then adsorb an oxygen (O) atom ontop at 1.8 angstrom height."
+  ],
+  "cu-100-3-2x2-h-ontop": [
+    "I'd like a Cu(100) slab, 3 layers, with a 12 Å vacuum region, and an H atom placed ontop at 1.8 Å above the surface.",
+    "Generate a 3-layer copper Cu(100) slab (12 angstrom vacuum) and adsorb H at an ontop site, height 1.8 angstrom.",
+    "Please set up Cu(100) with 3 layers and 12 A vacuum spacing, placing a single H atom ontop, 1.8 A above the topmost layer.",
+    "Make a Cu(100) 3-layer slab, vacuum gap of 12 Å, then add an H adsorbate at the ontop position 1.8 Å above.",
+    "Model a Cu(100) surface slab, 3 atomic layers, with 12 Å of vacuum, and put H ontop at a height of 1.8 Å.",
+    "Can you build Cu(100), 3 layers thick, 12 angstrom vacuum, and place an H atom at the ontop adsorption site, 1.8 angstrom above the surface?"
+  ],
+  "cu-100-3-2x2-o-ontop": [
+    "I'd like a Cu(100) 3-layer slab with 12 Å vacuum and an O atom placed ontop, 1.8 Å above the surface.",
+    "Generate a Cu(100) slab, 3 layers, 12 angstrom vacuum, then adsorb O at an ontop site at a height of 1.8 angstrom.",
+    "Please configure Cu(100) with 3 layers and 12 A vacuum, positioning a single O atom ontop, 1.8 A above the top layer.",
+    "Make a 3-layer Cu(100) surface, vacuum 12 Å, and add an O adsorbate at the ontop site 1.8 Å above it.",
+    "Model a Cu(100) slab, 3 atomic layers thick, with a 12 Å vacuum gap, and put O ontop at a height of 1.8 Å above the surface.",
+    "Can you build a Cu(100) 3-layer slab, 12 angstrom of vacuum, and place an oxygen (O) atom at the ontop site, 1.8 angstrom above?"
+  ],
+  "cu-100-4-1x1-h-ontop": [
+    "Build a 4-layer Cu(100) slab with 12 Å vacuum and place an H atom on an ontop site, 1.8 Å above the surface.",
+    "Set up a Cu(100) surface, 4 layers thick, 12 angstrom vacuum, then add H at the ontop site at a height of 1.8 angstrom.",
+    "I need a Cu(100) 4-layer slab (12 A vacuum) with one H adsorbate ontop, 1.8 A above the top atomic layer.",
+    "Construct Cu(100), 4 layers, vacuum spacing of 12 Å, and position H above the ontop site at a height of 1.8 Å.",
+    "Prepare a Cu(100) slab, 4 layers with 12 angstrom vacuum, then adsorb H ontop at 1.8 angstrom height.",
+    "Give me a 4 layer Cu(100) slab, 12 Å vacuum gap, with an H atom sitting ontop 1.8 Å above the surface."
+  ],
+  "cu-100-4-1x1-o-ontop": [
+    "Create a 4-layer Cu(100) slab with 12 Å vacuum and place an O atom ontop, 1.8 Å above the surface.",
+    "Set up Cu(100), 4 layers thick, 12 angstrom vacuum, then put O at the ontop site with a height of 1.8 angstrom above it.",
+    "I need a Cu(100) 4-layer slab (12 A vacuum) with an O adsorbate sitting ontop, 1.8 A above the top layer.",
+    "Build a 4 layer Cu(100) surface with 12 Å of vacuum, adding O on an ontop site 1.8 Å above.",
+    "Construct a Cu(100) slab, 4 layers, vacuum 12 Å, and position O above the ontop site at a height of 1.8 Å.",
+    "Prepare a Cu(100) 4-layer slab with 12 angstrom vacuum then adsorb an oxygen (O) atom ontop at 1.8 angstrom height."
+  ],
+  "cu-100-4-2x2-h-ontop": [
+    "I'd like a Cu(100) slab, 4 layers, with a 12 Å vacuum region, and an H atom placed ontop at 1.8 Å above the surface.",
+    "Generate a 4-layer copper Cu(100) slab (12 angstrom vacuum) and adsorb H at an ontop site, height 1.8 angstrom.",
+    "Please set up Cu(100) with 4 layers and 12 A vacuum spacing, placing a single H atom ontop, 1.8 A above the topmost layer.",
+    "Make a Cu(100) 4-layer slab, vacuum gap of 12 Å, then add an H adsorbate at the ontop position 1.8 Å above.",
+    "Model a Cu(100) surface slab, 4 atomic layers, with 12 Å of vacuum, and put H ontop at a height of 1.8 Å.",
+    "Can you build Cu(100), 4 layers thick, 12 angstrom vacuum, and place an H atom at the ontop adsorption site, 1.8 angstrom above the surface?"
+  ],
+  "cu-100-4-2x2-o-ontop": [
+    "I'd like a Cu(100) 4-layer slab with 12 Å vacuum and an O atom placed ontop, 1.8 Å above the surface.",
+    "Generate a Cu(100) slab, 4 layers, 12 angstrom vacuum, then adsorb O at an ontop site at a height of 1.8 angstrom.",
+    "Please configure Cu(100) with 4 layers and 12 A vacuum, positioning a single O atom ontop, 1.8 A above the top layer.",
+    "Make a 4-layer Cu(100) surface, vacuum 12 Å, and add an O adsorbate at the ontop site 1.8 Å above it.",
+    "Model a Cu(100) slab, 4 atomic layers thick, with a 12 Å vacuum gap, and put O ontop at a height of 1.8 Å above the surface.",
+    "Can you build a Cu(100) 4-layer slab, 12 angstrom of vacuum, and place an oxygen (O) atom at the ontop site, 1.8 angstrom above?"
+  ]
+}

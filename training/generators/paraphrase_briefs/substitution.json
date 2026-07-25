@@ -1,0 +1,44 @@
+{
+  "family": "substitution",
+  "required_placeholders": [
+    "element",
+    "crystalline",
+    "repeat3",
+    "defect_ordinal",
+    "dopant"
+  ],
+  "optional_placeholders": [],
+  "all_placeholders": [
+    "element",
+    "crystalline",
+    "repeat3",
+    "defect_ordinal",
+    "dopant"
+  ],
+  "num_templates": 10,
+  "samples": [
+    {
+      "case_id": "al-fcc-2x2x1-au",
+      "placeholder_values": {
+        "element": "Al",
+        "crystalline": "fcc",
+        "repeat3": "2x2x1",
+        "defect_ordinal": "first",
+        "dopant": "Au"
+      },
+      "canonical_example": "Build 2x2x1 fcc Al and replace atom 1 with Au."
+    },
+    {
+      "case_id": "ni-fcc-2x2x1-au",
+      "placeholder_values": {
+        "element": "Ni",
+        "crystalline": "fcc",
+        "repeat3": "2x2x1",
+        "defect_ordinal": "first",
+        "dopant": "Au"
+      },
+      "canonical_example": "Build 2x2x1 fcc Ni and replace atom 1 with Au."
+    }
+  ],
+  "output_path": "training/generators/paraphrase_templates/substitution.json"
+}

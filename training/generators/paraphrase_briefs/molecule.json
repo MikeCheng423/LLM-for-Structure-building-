@@ -1,0 +1,32 @@
+{
+  "family": "molecule",
+  "required_placeholders": [
+    "species",
+    "box"
+  ],
+  "optional_placeholders": [],
+  "all_placeholders": [
+    "species",
+    "box"
+  ],
+  "num_templates": 10,
+  "samples": [
+    {
+      "case_id": "ch4-10",
+      "placeholder_values": {
+        "species": "CH4",
+        "box": "10"
+      },
+      "canonical_example": "Build an isolated CH4 molecule in a 10 angstrom cubic box."
+    },
+    {
+      "case_id": "h2o-10",
+      "placeholder_values": {
+        "species": "H2O",
+        "box": "10"
+      },
+      "canonical_example": "Build an isolated H2O molecule in a 10 angstrom cubic box."
+    }
+  ],
+  "output_path": "training/generators/paraphrase_templates/molecule.json"
+}

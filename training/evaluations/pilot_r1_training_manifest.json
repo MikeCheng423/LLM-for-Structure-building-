@@ -1,0 +1,35 @@
+{
+  "base_model": "Qwen/Qwen3-4B-Instruct-2507",
+  "base_revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+  "dataset_sha256": "94e8d55bae21f9298754466958a43b41a72c44c401e239223bff769310a34904",
+  "environment": {
+    "bitsandbytes": "0.46.1",
+    "datasets": "3.6.0",
+    "gpu": "NVIDIA RTX 2000 Ada Generation",
+    "peft": "0.16.0",
+    "python": "3.12.3",
+    "torch": "2.6.0+cu124",
+    "transformers": "4.53.3"
+  },
+  "eval_dataset_sha256": "0a386d4a917f005d35c334162debda6bee899f26205ea16d7c650e455385a827",
+  "eval_record_count": 108,
+  "lora_rank": 16,
+  "lr_scheduler": "cosine",
+  "max_length": 1536,
+  "max_steps": 100,
+  "peak_gpu_memory_allocated_gib": 20.4906,
+  "peak_gpu_memory_reserved_gib": 72.6895,
+  "production_ready": false,
+  "record_count": 1068,
+  "seed": 42,
+  "smoke_run": false,
+  "train_metrics": {
+    "epoch": 0.7490636704119851,
+    "total_flos": 1.84443932717568e+16,
+    "train_loss": 0.046548142452375034,
+    "train_runtime": 2612.375,
+    "train_samples_per_second": 0.306,
+    "train_steps_per_second": 0.038
+  },
+  "training_data_gate_passed": true
+}

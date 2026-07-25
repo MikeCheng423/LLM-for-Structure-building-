@@ -1,0 +1,114 @@
+[
+  {
+    "case_id": "cu-100-3-1x1-h-ontop",
+    "family": "atomic_adsorption",
+    "required_slots": {
+      "element": "Cu",
+      "facet": "(100)",
+      "layers": "3",
+      "vacuum": "12 \u00c5",
+      "adsorbate": "H",
+      "site": "ontop",
+      "height": "1.8 \u00c5"
+    },
+    "canonical_example": "Put one H atom 1.8 A above an ontop site of a 1x1 Cu(100) 3-layer slab."
+  },
+  {
+    "case_id": "cu-100-3-1x1-o-ontop",
+    "family": "atomic_adsorption",
+    "required_slots": {
+      "element": "Cu",
+      "facet": "(100)",
+      "layers": "3",
+      "vacuum": "12 \u00c5",
+      "adsorbate": "O",
+      "site": "ontop",
+      "height": "1.8 \u00c5"
+    },
+    "canonical_example": "Put one O atom 1.8 A above an ontop site of a 1x1 Cu(100) 3-layer slab."
+  },
+  {
+    "case_id": "cu-100-3-2x2-h-ontop",
+    "family": "atomic_adsorption",
+    "required_slots": {
+      "element": "Cu",
+      "facet": "(100)",
+      "layers": "3",
+      "vacuum": "12 \u00c5",
+      "adsorbate": "H",
+      "site": "ontop",
+      "height": "1.8 \u00c5"
+    },
+    "canonical_example": "Put one H atom 1.8 A above an ontop site of a 2x2 Cu(100) 3-layer slab."
+  },
+  {
+    "case_id": "cu-100-3-2x2-o-ontop",
+    "family": "atomic_adsorption",
+    "required_slots": {
+      "element": "Cu",
+      "facet": "(100)",
+      "layers": "3",
+      "vacuum": "12 \u00c5",
+      "adsorbate": "O",
+      "site": "ontop",
+      "height": "1.8 \u00c5"
+    },
+    "canonical_example": "Put one O atom 1.8 A above an ontop site of a 2x2 Cu(100) 3-layer slab."
+  },
+  {
+    "case_id": "cu-100-4-1x1-h-ontop",
+    "family": "atomic_adsorption",
+    "required_slots": {
+      "element": "Cu",
+      "facet": "(100)",
+      "layers": "4",
+      "vacuum": "12 \u00c5",
+      "adsorbate": "H",
+      "site": "ontop",
+      "height": "1.8 \u00c5"
+    },
+    "canonical_example": "Put one H atom 1.8 A above an ontop site of a 1x1 Cu(100) 4-layer slab."
+  },
+  {
+    "case_id": "cu-100-4-1x1-o-ontop",
+    "family": "atomic_adsorption",
+    "required_slots": {
+      "element": "Cu",
+      "facet": "(100)",
+      "layers": "4",
+      "vacuum": "12 \u00c5",
+      "adsorbate": "O",
+      "site": "ontop",
+      "height": "1.8 \u00c5"
+    },
+    "canonical_example": "Put one O atom 1.8 A above an ontop site of a 1x1 Cu(100) 4-layer slab."
+  },
+  {
+    "case_id": "cu-100-4-2x2-h-ontop",
+    "family": "atomic_adsorption",
+    "required_slots": {
+      "element": "Cu",
+      "facet": "(100)",
+      "layers": "4",
+      "vacuum": "12 \u00c5",
+      "adsorbate": "H",
+      "site": "ontop",
+      "height": "1.8 \u00c5"
+    },
+    "canonical_example": "Put one H atom 1.8 A above an ontop site of a 2x2 Cu(100) 4-layer slab."
+  },
+  {
+    "case_id": "cu-100-4-2x2-o-ontop",
+    "family": "atomic_adsorption",
+    "required_slots": {
+      "element": "Cu",
+      "facet": "(100)",
+      "layers": "4",
+      "vacuum": "12 \u00c5",
+      "adsorbate": "O",
+      "site": "ontop",
+      "height": "1.8 \u00c5"
+    },
+    "canonical_example": "Put one O atom 1.8 A above an ontop site of a 2x2 Cu(100) 4-layer slab."
+  }
+]

@@ -1,0 +1,56 @@
+{
+  "family": "atomic_adsorption",
+  "required_placeholders": [
+    "element",
+    "facet",
+    "layers",
+    "vacuum",
+    "suffix",
+    "adsorbate",
+    "site",
+    "height"
+  ],
+  "optional_placeholders": [],
+  "all_placeholders": [
+    "element",
+    "facet",
+    "layers",
+    "vacuum",
+    "suffix",
+    "adsorbate",
+    "site",
+    "height"
+  ],
+  "num_templates": 10,
+  "samples": [
+    {
+      "case_id": "cu-100-3-1x1-h-ontop",
+      "placeholder_values": {
+        "element": "Cu",
+        "facet": "100",
+        "layers": "3",
+        "vacuum": "12",
+        "suffix": "1x1",
+        "adsorbate": "H",
+        "site": "ontop",
+        "height": "1.8"
+      },
+      "canonical_example": "Put one H atom 1.8 A above an ontop site of a 1x1 Cu(100) 3-layer slab."
+    },
+    {
+      "case_id": "ni-100-3-1x1-h-ontop",
+      "placeholder_values": {
+        "element": "Ni",
+        "facet": "100",
+        "layers": "3",
+        "vacuum": "12",
+        "suffix": "1x1",
+        "adsorbate": "H",
+        "site": "ontop",
+        "height": "1.8"
+      },
+      "canonical_example": "Put one H atom 1.8 A above an ontop site of a 1x1 Ni(100) 3-layer slab."
+    }
+  ],
+  "output_path": "training/generators/paraphrase_templates/atomic_adsorption.json"
+}

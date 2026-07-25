@@ -1,0 +1,24 @@
+{
+  "family": "prototype",
+  "required_placeholders": [
+    "prototype"
+  ],
+  "optional_placeholders": [],
+  "all_placeholders": [
+    "prototype"
+  ],
+  "num_templates": 10,
+  "samples": [
+    {
+      "case_id": "anatase-tio2",
+      "placeholder_values": {},
+      "canonical_example": "Build the anatase-TiO2 prototype."
+    },
+    {
+      "case_id": "graphite",
+      "placeholder_values": {},
+      "canonical_example": "Build the graphite prototype."
+    }
+  ],
+  "output_path": "training/generators/paraphrase_templates/prototype.json"
+}
