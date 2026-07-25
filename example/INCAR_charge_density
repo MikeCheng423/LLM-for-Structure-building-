@@ -1,0 +1,26 @@
+SYSTEM = Charge density calculation
+
+# Purpose:
+# Run after a converged SCF calculation if you need a high-quality CHGCAR.
+# Use the relaxed CONTCAR as POSCAR, and choose a dense KPOINTS mesh.
+
+# Accuracy and basis
+ENCUT  = 520       # Plane-wave cutoff energy in eV; keep consistent with prior SCF/relaxation.
+PREC   = Accurate  # Accurate FFT grids improve charge-density quality.
+EDIFF  = 1E-7      # Tight electronic convergence for smooth charge density.
+ALGO   = Normal    # Robust default SCF algorithm.
+
+# Static charge-density run
+IBRION = -1        # No ionic movement.
+NSW    = 0         # Static calculation only.
+ISIF   = 2         # No cell update because NSW=0.
+
+# Electronic occupation
+ISMEAR = 0         # Gaussian smearing; use tetrahedron settings for final bulk DOS/charge if appropriate.
+SIGMA  = 0.05      # Smearing width in eV.
+
+# Charge output
+LCHARG = .TRUE.    # Write CHGCAR containing the final charge density.
+LAECHG = .TRUE.    # Write AECCAR0 and AECCAR2 for Bader charge analysis if supported by POTCAR.
+LWAVE  = .FALSE.   # Skip WAVECAR unless it is needed for a later non-SCF calculation.
+LVTOT  = .FALSE.   # Set .TRUE. only if total local potential output is needed.

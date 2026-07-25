@@ -1,0 +1,41 @@
+! Reference Quantum ESPRESSO pw.x input (scf) — for illustration only.
+! vasp_auto generates pw.in automatically from the POSCAR when you pass
+! --engine qe; this file documents the layout it produces. To override the
+! generated input for a case, drop a file named `pw.in` in the case directory.
+&CONTROL
+  calculation = 'scf'
+  prefix = 'vasp_auto'
+  outdir = './tmp'
+  pseudo_dir = './pseudo'
+  tprnfor = .true.
+  verbosity = 'high'
+/
+&SYSTEM
+  ibrav = 0
+  nat = 2
+  ntyp = 1
+  ecutwfc = 50.0
+  ecutrho = 400.0
+  occupations = 'smearing'
+  smearing = 'gaussian'
+  degauss = 0.01
+/
+&ELECTRONS
+  conv_thr = 1.0e-6
+  mixing_beta = 0.7
+/
+
+ATOMIC_SPECIES
+  Si 28.0850 Si.pbe-n-kjpaw_psl.1.0.0.UPF
+
+CELL_PARAMETERS angstrom
+   0.0000000000  2.7150000000  2.7150000000
+   2.7150000000  0.0000000000  2.7150000000
+   2.7150000000  2.7150000000  0.0000000000
+
+ATOMIC_POSITIONS crystal
+  Si  0.0000000000  0.0000000000  0.0000000000
+  Si  0.2500000000  0.2500000000  0.2500000000
+
+K_POINTS automatic
+  6 6 6 0 0 0

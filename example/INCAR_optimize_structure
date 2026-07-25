@@ -1,0 +1,22 @@
+SYSTEM = Structure optimization
+
+# Accuracy and basis
+ENCUT  = 520       # Plane-wave cutoff energy in eV; match or exceed the largest POTCAR ENMAX.
+PREC   = Accurate  # Improves FFT grid and projection accuracy during relaxation.
+EDIFF  = 1E-6      # Electronic convergence criterion in eV for each ionic step.
+EDIFFG = -0.02     # Stop relaxation when all forces are below 0.02 eV/A; negative means force criterion.
+ALGO   = Normal    # Stable default electronic minimization algorithm.
+
+# Ionic relaxation
+IBRION = 2         # Conjugate-gradient ionic optimizer; good default for geometry optimization.
+NSW    = 100       # Maximum number of ionic relaxation steps.
+ISIF   = 3         # Relax ions, cell shape, and cell volume; use ISIF=2 to keep the cell fixed.
+POTIM  = 0.5       # Ionic step size scaling; reduce if relaxation is unstable.
+
+# Electronic occupation
+ISMEAR = 0         # Gaussian smearing; use ISMEAR=1 or 2 for many metallic systems.
+SIGMA  = 0.05      # Smearing width in eV.
+
+# Output
+LCHARG = .FALSE.   # Do not write CHGCAR during relaxation to save disk space.
+LWAVE  = .FALSE.   # Do not write WAVECAR during relaxation unless restart files are needed.

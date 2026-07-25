@@ -1,0 +1,30 @@
+SYSTEM = Work function (planar-averaged electrostatic potential)
+
+# Purpose:
+# Static run on a relaxed slab that writes LOCPOT, the local electrostatic
+# potential on the FFT grid. vasp_auto planar-averages it along the surface
+# normal and reports the work function W = V_vacuum - E_Fermi, the key
+# band-alignment quantity for photocatalysis and electrocatalysis.
+# Parse the result with: vasp-auto --work-function <job_dir>
+
+# Accuracy and basis
+ENCUT  = 520       # Plane-wave cutoff energy in eV; keep consistent with the relaxation.
+PREC   = Accurate  # Accurate FFT grids give a smooth vacuum plateau.
+EDIFF  = 1E-6      # Tight electronic convergence.
+ALGO   = Normal    # Stable default electronic minimisation.
+
+# Static slab run
+IBRION = -1        # No ionic relaxation.
+NSW    = 0         # Static calculation.
+IDIPOL = 3         # Dipole correction along z; essential for asymmetric slabs.
+LDIPOL = .TRUE.    # Self-consistent dipole correction in the potential.
+
+# Electronic occupation
+ISMEAR = 0         # Gaussian smearing.
+SIGMA  = 0.05      # Smearing width in eV.
+
+# Potential output
+LVHAR  = .TRUE.    # Write LOCPOT with the ionic + Hartree potential only
+                   # (no exchange-correlation), the correct choice for work functions.
+LWAVE  = .FALSE.
+LCHARG = .FALSE.

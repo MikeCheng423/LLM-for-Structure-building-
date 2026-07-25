@@ -1,0 +1,23 @@
+SYSTEM = Band structure calculation
+
+# Purpose:
+# Run after a converged SCF calculation. Copy CHGCAR into this directory and use ICHARG=11
+# for a non-self-consistent run along a line-mode KPOINTS k-path (--kpath fcc, etc.).
+
+# Accuracy and basis
+ENCUT  = 520       # Plane-wave cutoff energy in eV; keep consistent with the SCF calculation.
+PREC   = Accurate  # Accurate grids for reliable eigenvalues.
+EDIFF  = 1E-7      # Tight electronic convergence criterion.
+ALGO   = Normal    # Stable default electronic minimization algorithm.
+
+# Non-SCF band setup
+IBRION = -1        # No ionic relaxation.
+NSW    = 0         # Static calculation.
+ICHARG = 11        # Read CHGCAR and keep the charge density fixed.
+ISMEAR = 0         # Gaussian smearing; tetrahedron methods do not work with line-mode k-points.
+SIGMA  = 0.05      # Smearing width in eV.
+LORBIT = 11        # Orbital projections for fat-band analysis (PROCAR).
+
+# Output
+LCHARG = .FALSE.   # Do not rewrite CHGCAR for a fixed-charge run.
+LWAVE  = .FALSE.   # WAVECAR is usually unnecessary for band post-processing.

@@ -1,0 +1,21 @@
+SYSTEM = SCF single-point calculation
+
+# Accuracy and basis
+ENCUT  = 520       # Plane-wave cutoff energy in eV; set at least as high as the largest POTCAR ENMAX.
+PREC   = Accurate  # Uses tighter FFT grids and projection settings for reliable total energies.
+EDIFF  = 1E-6      # Electronic convergence criterion in eV; lower values give more accurate energies.
+ALGO   = Normal    # Robust electronic minimization algorithm for general SCF calculations.
+
+# Electronic occupation
+ISMEAR = 0         # Gaussian smearing; safe default for semiconductors/insulators and many molecules.
+SIGMA  = 0.05      # Smearing width in eV; reduce for accurate final energies if needed.
+
+# Static calculation control
+IBRION = -1        # No ionic relaxation; ions remain fixed.
+NSW    = 0         # Number of ionic steps; 0 means static single-point calculation.
+ISIF   = 2         # Stress/force setting is irrelevant for NSW=0, but kept as a common default.
+
+# Output
+LCHARG = .TRUE.    # Write CHGCAR; useful as input for DOS, band, or charge-density analysis.
+LWAVE  = .TRUE.    # Write WAVECAR; useful for restarting or post-processing.
+LORBIT = 11        # Write site- and orbital-projected information to PROCAR/DOSCAR where applicable.

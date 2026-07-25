@@ -1,0 +1,50 @@
+# Python environments and build products
+.venv/
+venv/
+build/
+dist/
+*.egg-info/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Editor and OS state
+*.swp
+*.swo
+.DS_Store
+
+# Local/private configuration
+.env
+.env.*
+config.yaml
+remotes.json
+*credentials*
+*secrets*
+
+# Calculation inputs, outputs, and proprietary data
+jobs/
+inputs/
+ui_logs/
+vasp_auto_background_logs/
+POTCAR/
+POTCAR
+WAVECAR
+CHGCAR
+AECCAR*
+vaspout.h5
+*.log
+
+# Training outputs and potentially private/large artifacts
+training/datasets/*
+!training/datasets/.gitkeep
+training/runs/
+training/cache/
+training/checkpoints/
+checkpoints/
+models/
+wandb/
+*.safetensors
+*.ckpt
+*.pt
+*.pth
+*.bin

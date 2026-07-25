@@ -1,0 +1,31 @@
+SYSTEM = Vibrational frequency calculation
+
+# Purpose:
+# Finite-difference vibrational frequencies of a relaxed structure, used for
+# zero-point energy and thermal (ZPE + TS) corrections in adsorption free
+# energies (computational hydrogen electrode, HER/OER/ORR diagrams).
+# Freeze the slab atoms with Selective dynamics (vasp-auto --freeze "z<0.4")
+# so only the adsorbate is displaced — VASP moves only T T T atoms.
+# Parse the result with: vasp-auto --thermo <job_dir>
+
+# Accuracy and basis (frequencies need tight forces)
+ENCUT  = 520       # Plane-wave cutoff energy in eV; match the preceding relaxation.
+PREC   = Accurate  # Accurate FFT grids for reliable second derivatives.
+EDIFF  = 1E-7      # Very tight electronic convergence; forces enter the Hessian directly.
+ADDGRID = .TRUE.   # Extra support grid improves force accuracy.
+
+# Finite-difference Hessian
+IBRION = 5         # Finite differences without symmetry (IBRION=6 uses symmetry).
+NFREE  = 2         # Central differences: two displacements per degree of freedom.
+POTIM  = 0.015     # Displacement step in Angstrom; 0.01-0.02 is the usual range.
+NSW    = 1         # A single Hessian construction cycle.
+ISYM   = 0         # Symmetry off; safest with Selective dynamics.
+
+# Electronic occupation
+ISMEAR = 0         # Gaussian smearing.
+SIGMA  = 0.05      # Smearing width in eV.
+
+# Output
+LREAL  = .FALSE.   # Reciprocal-space projection for accurate forces.
+LWAVE  = .FALSE.
+LCHARG = .FALSE.

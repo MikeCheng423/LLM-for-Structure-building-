@@ -1,0 +1,16 @@
+SYSTEM = vasp_auto_hse06
+PREC = Accurate
+ENCUT = 520
+EDIFF = 1E-6
+IBRION = -1
+NSW = 0
+ISMEAR = 0
+SIGMA = 0.05
+LHFCALC = .TRUE.
+HFSCREEN = 0.2
+AEXX = 0.25
+ALGO = Damped
+TIME = 0.4
+LREAL = .FALSE.
+LWAVE = .TRUE.
+LCHARG = .TRUE.

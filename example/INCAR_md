@@ -1,0 +1,25 @@
+SYSTEM = Ab-initio molecular dynamics
+
+# Accuracy and basis (MD trades accuracy for speed)
+ENCUT  = 400       # Moderate cutoff; raise for production runs if forces matter.
+PREC   = Normal    # Normal precision is customary for AIMD.
+EDIFF  = 1E-5      # Electronic convergence per MD step.
+ALGO   = Fast      # Mixed Davidson/RMM-DIIS; fast for repeated SCF cycles.
+
+# Molecular dynamics
+IBRION = 0         # Molecular dynamics.
+NSW    = 1000      # Number of MD steps.
+POTIM  = 1.0       # Timestep in fs; reduce for light elements (H: 0.5).
+TEBEG  = 300       # Initial temperature in K.
+TEEND  = 300       # Final temperature in K.
+SMASS  = 0         # Nose-Hoover thermostat (NVT); SMASS=-3 for NVE microcanonical.
+ISYM   = 0         # Symmetry off, as required for MD.
+NELMIN = 4         # Minimum electronic steps per ionic step; improves energy conservation.
+
+# Electronic occupation
+ISMEAR = 0         # Gaussian smearing.
+SIGMA  = 0.1       # Wider smearing is acceptable at finite temperature.
+
+# Output (keep trajectories small)
+LCHARG = .FALSE.   # Do not write CHGCAR every step.
+LWAVE  = .FALSE.   # Do not write WAVECAR every step.

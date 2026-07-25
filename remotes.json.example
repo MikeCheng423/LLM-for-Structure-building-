@@ -1,0 +1,28 @@
+{
+  "_comment": "Copy to remotes.json (git-ignored) or, better, add machines via the web UI Remote tab or `vasp-auto-setup-remote`. One entry per remote machine.",
+  "mycluster": {
+    "host": "cluster.example.edu",
+    "user": "myuser",
+    "port": "22",
+    "remote_root": "/scratch/myuser/vasp_jobs",
+    "vasp_executable": "/opt/vasp/6.5.1/bin/vasp_std",
+    "potcar_root": "/opt/vasp/potcar/potpaw_PBE.64",
+    "scheduler": "slurm",
+    "run_mode": "ssh_detached",
+    "env_setup": "module load vasp",
+    "_potcar_root": "Optional. If the machine has its own POTCAR library (<root>/<Element>/POTCAR), the remote builds the POTCAR there for ssh_detached offload runs and none is shipped. Omit it to ship a locally-built POTCAR instead."
+  },
+  "myworkstation": {
+    "host": "192.168.1.50",
+    "user": "myuser",
+    "port": "22",
+    "remote_root": "/home/myuser/runs",
+    "vasp_executable": "/usr/local/bin/vasp_std",
+    "scheduler": "slurm",
+    "run_mode": "ssh",
+    "env_setup": "source /opt/intel/oneapi/setvars.sh",
+    "qe_executable": "/usr/bin/pw.x",
+    "pseudo_dir": "/home/myuser/pseudo",
+    "_qe": "Optional, for --engine qe runs on this machine. qe_executable defaults to 'pw.x' on PATH. pseudo_dir is the machine's own UPF library; omit it to ship the locally-resolved UPFs with each offload instead. QE runs never source env_setup (a VASP/Intel environment breaks an OpenMPI pw.x); set qe_env_setup if the QE build needs its own."
+  }
+}

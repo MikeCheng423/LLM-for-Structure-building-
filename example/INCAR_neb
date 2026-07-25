@@ -1,0 +1,27 @@
+SYSTEM = Climbing-image NEB
+
+# Accuracy and basis
+ENCUT  = 520       # Plane-wave cutoff energy in eV.
+PREC   = Accurate  # Accurate grids for reliable barriers.
+EDIFF  = 1E-4      # Electronic convergence per ionic step.
+EDIFFG = -0.03     # Stop when all forces are below 0.03 eV/A.
+
+# NEB optimiser
+IBRION = 3         # Damped MD; POTIM=0 hands control to the NEB optimiser.
+POTIM  = 0         # Required with IBRION=3 for VTST-style NEB.
+NSW    = 200       # Maximum ionic steps.
+SPRING = -5        # Nudged elastic band spring constant.
+LCLIMB = .TRUE.    # Climbing image converges to the saddle point.
+ISYM   = 0         # Symmetry off for transition-state searches.
+
+# Electronic minimisation
+ALGO   = Normal
+LREAL  = .FALSE.
+ISMEAR = 0
+SIGMA  = 0.05
+
+# Output
+LWAVE  = .FALSE.
+LCHARG = .FALSE.
+
+# IMAGES is appended automatically by vasp_auto from --neb-images / config.

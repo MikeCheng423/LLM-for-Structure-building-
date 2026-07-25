@@ -1,0 +1,32 @@
+SYSTEM = Optical absorption (frequency-dependent dielectric function)
+
+# Purpose:
+# Run after a converged SCF calculation (reuse its WAVECAR). Computes the
+# frequency-dependent dielectric function in the independent-particle
+# approximation; vasp_auto converts it to an absorption coefficient for
+# photocatalyst light-harvesting analysis.
+# Parse the result with: vasp-auto --optics-parse <job_dir>
+
+# Accuracy and basis
+ENCUT  = 520       # Plane-wave cutoff energy in eV; keep consistent with the SCF run.
+PREC   = Accurate  # Accurate grids for reliable matrix elements.
+EDIFF  = 1E-7      # Tight electronic convergence.
+ALGO   = Normal    # Stable default; exact diagonalisation (ALGO = Exact) is even better.
+
+# Static run with many empty states
+IBRION = -1        # No ionic relaxation.
+NSW    = 0         # Static calculation.
+NBANDS = 64        # Raise to ~2-3x the default; empty states dominate the optical response.
+NEDOS  = 2000      # Dense frequency grid for the dielectric function.
+
+# Optical response
+LOPTICS = .TRUE.   # Frequency-dependent dielectric function (vasprun.xml + OUTCAR).
+CSHIFT  = 0.1      # Complex shift (broadening) in eV for the Kramers-Kronig transform.
+
+# Electronic occupation
+ISMEAR = 0         # Gaussian smearing.
+SIGMA  = 0.05      # Smearing width in eV.
+
+# Output
+LWAVE  = .FALSE.
+LCHARG = .FALSE.

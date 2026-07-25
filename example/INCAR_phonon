@@ -1,0 +1,25 @@
+SYSTEM = Phonon / DFPT calculation
+
+# Purpose:
+# Density-functional perturbation theory on a well-relaxed structure
+# (relax first with tight EDIFFG, then run this on the CONTCAR).
+
+# Accuracy and basis (phonons need very tight settings)
+ENCUT  = 600       # High cutoff for accurate force constants.
+PREC   = Accurate  # Accurate FFT grids.
+EDIFF  = 1E-8      # Very tight electronic convergence for second derivatives.
+ADDGRID = .TRUE.   # Extra support grid improves force accuracy.
+
+# DFPT setup
+IBRION = 8         # DFPT with symmetry reduction (IBRION=6 for finite differences).
+NSW    = 1         # Single perturbation cycle.
+LEPSILON = .TRUE.  # Dielectric tensor and Born effective charges (needed for LO-TO splitting).
+ISYM   = 2         # Symmetry on; reduces the number of displacements.
+
+# Electronic occupation
+ISMEAR = 0         # Gaussian smearing; insulators may use ISMEAR=-5 with a dense mesh.
+SIGMA  = 0.05      # Smearing width in eV.
+
+# Output
+LCHARG = .FALSE.
+LWAVE  = .FALSE.

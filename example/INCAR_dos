@@ -1,0 +1,28 @@
+SYSTEM = Density of states calculation
+
+# Purpose:
+# Run after a converged SCF calculation. Copy CHGCAR into this directory and use ICHARG=11
+# for a non-self-consistent DOS run on a denser KPOINTS mesh.
+
+# Accuracy and basis
+ENCUT  = 520       # Plane-wave cutoff energy in eV; keep consistent with SCF calculation.
+PREC   = Accurate  # Accurate grids help projected DOS quality.
+EDIFF  = 1E-7      # Tight electronic convergence criterion.
+ALGO   = Normal    # Stable default electronic minimization algorithm.
+
+# Non-SCF DOS setup
+IBRION = -1        # No ionic relaxation.
+NSW    = 0         # Static calculation.
+ICHARG = 11        # Read CHGCAR and keep charge density fixed for non-SCF DOS.
+ISMEAR = -5        # Tetrahedron method with Blöchl corrections; preferred for accurate DOS of bulk systems.
+SIGMA  = 0.05      # Smearing width; ignored by ISMEAR=-5 but retained for easy switching.
+
+# DOS controls
+NEDOS  = 2000      # Number of points in DOSCAR; increase for smoother DOS curves.
+EMIN   = -10       # Lower energy limit for DOS output in eV relative to VASP reference.
+EMAX   = 10        # Upper energy limit for DOS output in eV.
+LORBIT = 11        # Site- and orbital-projected DOS output.
+
+# Output
+LCHARG = .FALSE.   # Do not rewrite CHGCAR for fixed-charge DOS.
+LWAVE  = .FALSE.   # WAVECAR is usually unnecessary for DOS post-processing.
