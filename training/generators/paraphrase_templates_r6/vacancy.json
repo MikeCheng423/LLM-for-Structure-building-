@@ -1,0 +1,16 @@
+[
+  "Remove the {defect_ordinal} atom from {repeat3} {crystalline} {element} to seed a vacancy.",
+  "Form a monovacancy in a {repeat3} {crystalline} {element} supercell at the {defect_ordinal} site.",
+  "Build {repeat3} {crystalline} {element} and delete its {defect_ordinal} atom.",
+  "Knock the {defect_ordinal} atom out of a {repeat3} {crystalline} {element} cell.",
+  "Build a {repeat3} {crystalline} {element} supercell and remove the {defect_ordinal} atom.",
+  "Starting from bulk {crystalline} {element}, create a {repeat3} supercell, then delete the {defect_ordinal} atom to form a vacancy.",
+  "Generate a {crystalline} {element} cell repeated {repeat3} and take out the {defect_ordinal} atom.",
+  "I need a {repeat3} supercell of {crystalline} {element} with the {defect_ordinal} atom removed.",
+  "Construct a {element} {crystalline} lattice, expand it {repeat3}, and eliminate the {defect_ordinal} atom to introduce a point defect.",
+  "Please set up a {repeat3} {crystalline}-phase {element} supercell before deleting the {defect_ordinal} atom.",
+  "Can you make a {repeat3} block of {crystalline} {element} and knock out the {defect_ordinal} atom?",
+  "Using {crystalline} {element}, build a {repeat3} supercell and strip away the {defect_ordinal} atom for a single vacancy.",
+  "For this vacancy defect study, tile {crystalline} {element} into a {repeat3} supercell and remove the {defect_ordinal} atom.",
+  "After building a {repeat3} {crystalline} {element} supercell, get rid of the {defect_ordinal} atom."
+]

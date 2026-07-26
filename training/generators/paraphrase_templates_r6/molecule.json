@@ -1,0 +1,16 @@
+[
+  "Create an isolated {species} molecule within a {box} Å cubic box.",
+  "Place {species} alone in a cubic box of {box} angstrom.",
+  "Set up gas-phase {species} in a {box} Å cubic cell.",
+  "Model an isolated {species} molecule using a {box}-angstrom cube.",
+  "Build an isolated {species} molecule in a {box} Å cubic box.",
+  "Place a single {species} molecule at the center of a {box} angstrom cubic simulation box.",
+  "Set up an isolated {species} molecule inside a cubic cell measuring {box} Å on each side.",
+  "Construct a gas-phase {species} molecule confined to a {box}-angstrom cubic box.",
+  "I need a {box} Å cubic box containing one isolated {species} molecule.",
+  "Generate an isolated {species} molecule and enclose it in a cubic box of side {box} A.",
+  "For an isolated-molecule calculation, put {species} in a cubic box with edge length {box} angstroms.",
+  "Create a {box}-angstrom cubic box and place an isolated {species} molecule at its center.",
+  "Model {species} as an isolated molecule within a {box} Å cubic simulation cell.",
+  "Using a cubic box {box} angstroms on a side, build the isolated {species} molecule."
+]

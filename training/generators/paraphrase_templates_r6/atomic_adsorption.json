@@ -1,0 +1,16 @@
+[
+  "Adsorb one {adsorbate} atom at the {site} site {height} Å above a {suffix} {element}({facet}) slab of {layers} layers with {vacuum} Å vacuum.",
+  "Build {suffix} {element}({facet}), {layers} layers, {vacuum} angstrom vacuum, and place {adsorbate} at the {site} site {height} angstrom high.",
+  "Put a single {adsorbate} atom on the {site} site, {height} Å above a {layers}-layer {suffix} {element}({facet}) slab with {vacuum} Å vacuum.",
+  "On a {suffix} {element}({facet}) surface ({layers} layers, {vacuum} A vacuum), add {adsorbate} at the {site} site {height} A above.",
+  "Put one {adsorbate} atom {height} Å above the {site} site of a {suffix} {element}({facet}) {layers}-layer slab with {vacuum} Å vacuum.",
+  "Build a {suffix} {element}({facet}) slab, {layers} layers thick with a {vacuum} angstrom vacuum gap, then place a {adsorbate} atom at the {site} site {height} angstrom above the surface.",
+  "Set up a {element}({facet}) surface with {layers} layers and {vacuum} A of vacuum, expanded into a {suffix} supercell, and adsorb {adsorbate} at the {site} site with a height of {height} A.",
+  "Could you construct a {suffix} {element}({facet}) slab ({layers} layers, {vacuum} Å vacuum) and add an {adsorbate} atom on the {site} site, {height} Å above the top layer?",
+  "I need a {element}({facet}) {suffix} slab, {layers}-layer thick with {vacuum} angstrom vacuum, carrying a single {adsorbate} adsorbate positioned {height} angstrom above the {site} site.",
+  "Generate a {layers} layer {suffix} {element}({facet}) slab, leave {vacuum} Å of vacuum above it, and drop an {adsorbate} atom onto the {site} site at a height of {height} Å.",
+  "On top of a {suffix} {element}({facet}) slab that has {layers} layers and {vacuum} A vacuum, adsorb a single {adsorbate} atom {height} A above the {site} site.",
+  "Model a {suffix} supercell of {element}({facet}), {layers} layers with {vacuum} Å vacuum, then position {adsorbate} {height} Å above the {site} adsorption site.",
+  "Make a {element}({facet}) slab: {layers} layers, {vacuum} angstrom vacuum, {suffix} supercell, with {adsorbate} sitting {site}, {height} angstrom above.",
+  "For a {suffix} {element}({facet}) slab with {layers} layers and {vacuum} Å of vacuum, place the {adsorbate} adsorbate {height} Å above the surface at the {site} site."
+]

@@ -1,0 +1,16 @@
+[
+  "Fashion a {repeat3} bulk cell of {element} in the {crystalline} structure.",
+  "Replicate {crystalline} {element} across a {repeat3} bulk supercell.",
+  "Model bulk {element} ({crystalline} phase) as a {repeat3} repeat.",
+  "Create a {repeat3} periodic bulk block of {crystalline} {element}.",
+  "Build a {repeat3} supercell of {crystalline} {element} bulk crystal.",
+  "Create a bulk {crystalline} {element} crystal using a {repeat3} repeat.",
+  "Construct a {repeat3} {crystalline} {element} bulk supercell.",
+  "I need a {crystalline} {element} bulk structure expanded into a {repeat3} supercell.",
+  "Prepare {element} in its {crystalline} phase as a {repeat3} supercell for bulk calculations.",
+  "Set up a bulk crystal of {element} with {crystalline} symmetry as a {repeat3} supercell.",
+  "Generate a {repeat3} supercell for bulk {element} adopting the {crystalline} structure.",
+  "Please make a {crystalline}-phase {element} bulk cell tiled {repeat3}.",
+  "Assemble a {repeat3} {element} bulk crystal in the {crystalline} phase.",
+  "Can you build the bulk {crystalline} phase of {element}, repeated as a {repeat3} supercell?"
+]

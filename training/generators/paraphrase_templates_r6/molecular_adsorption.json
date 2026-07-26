@@ -1,0 +1,16 @@
+[
+  "Adsorb {adsorbate} at the {site} site of a {suffix} {element}({facet}) slab ({layers} layers, {vacuum} Å vacuum), anchored through its {anchor} {height} Å above.",
+  "Build {suffix} {element}({facet}), {layers} layers, {vacuum} angstrom vacuum, and place {adsorbate} at the {site} site through the {anchor} {height} angstrom up.",
+  "Put {adsorbate} on the {site} site of a {layers}-layer {suffix} {element}({facet}) slab with {vacuum} Å vacuum, anchored via {anchor} {height} Å high.",
+  "On a {suffix} {element}({facet}) slab ({layers} layers, {vacuum} A vacuum), adsorb {adsorbate} at the {site} site with its {anchor} {height} A above.",
+  "Build a {suffix} {element}({facet}) slab with {layers} layers and {vacuum} Å of vacuum, then adsorb {adsorbate} at the {site} site, anchored through its {anchor}, {height} Å above the surface.",
+  "Adsorb {adsorbate} through its {anchor} at the {site} site, {height} angstrom above a {suffix} {element}({facet}) slab that has {layers} layers and {vacuum} angstrom of vacuum.",
+  "Set up a {element}({facet}) slab, {suffix} in the surface plane and {layers} layers thick with a {vacuum} A vacuum gap, then place {adsorbate} at the {site} site, anchored through its {anchor}, {height} A above the surface.",
+  "Can you construct a {layers}-layer {suffix} {element}({facet}) slab under {vacuum} Å of vacuum and adsorb {adsorbate}, anchoring it through the {anchor}, at the {site} site {height} Å above the top layer?",
+  "I need a {suffix} {element}({facet}) slab, {layers} layers thick with {vacuum} angstrom of vacuum, carrying {adsorbate} bound at the {site} site through its {anchor} at a height of {height} angstrom.",
+  "Please generate a {element}({facet}) {suffix} slab, {layers} layers with {vacuum} Å vacuum, and dock {adsorbate} at the {site} site, anchoring it through the {anchor} {height} Å above the surface.",
+  "Anchor {adsorbate} through its {anchor} at the {site} site {height} A above a {suffix} {element}({facet}) slab built from {layers} layers with {vacuum} A of vacuum.",
+  "A {suffix} {element}({facet}) slab with {layers} layers and a {vacuum}-angstrom vacuum should carry {adsorbate} adsorbed at the {site} site, its {anchor} anchored {height} angstrom above the surface.",
+  "Model {adsorbate} chemisorbed at the {site} site, {anchor}-anchored {height} Å above the surface, on a {suffix} {element}({facet}) slab of {layers} layers separated by {vacuum} Å of vacuum.",
+  "For a {adsorbate} adsorption study, assemble a {suffix} {element}({facet}) slab with {layers} layers and {vacuum} Å vacuum, then place the molecule at the {site} site with its {anchor} anchored {height} Å above the surface."
+]

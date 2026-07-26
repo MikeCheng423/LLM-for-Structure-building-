@@ -1,0 +1,10 @@
+[
+  "Tile {crystalline} {element} into a {repeat3} bulk supercell.",
+  "Give me bulk {element} ({crystalline}) replicated {repeat3}.",
+  "Lay out a {repeat3} periodic cell of {crystalline}-structured {element}.",
+  "I want the {crystalline} allotrope of {element} as a {repeat3} bulk block.",
+  "Stack {crystalline} {element} into a {repeat3} crystalline supercell.",
+  "Produce bulk crystalline {element} in the {crystalline} lattice, tiled {repeat3}.",
+  "Expand a {crystalline} {element} unit cell to {repeat3} for a bulk model.",
+  "Deliver a {repeat3} bulk arrangement of {element} with {crystalline} packing."
+]

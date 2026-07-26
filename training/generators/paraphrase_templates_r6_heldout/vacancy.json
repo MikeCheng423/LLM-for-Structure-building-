@@ -1,0 +1,10 @@
+[
+  "Carve a vacancy into {repeat3} {crystalline} {element} by deleting its {defect_ordinal} atom.",
+  "From a {repeat3} {crystalline} {element} supercell, pull out the {defect_ordinal} atom.",
+  "Introduce a single vacancy at the {defect_ordinal} site of {repeat3} {crystalline} {element}.",
+  "Take {crystalline} {element}, build it {repeat3}, and vacate the {defect_ordinal} atomic position.",
+  "Excise the {defect_ordinal} atom from a {repeat3} supercell of {crystalline} {element}.",
+  "Assemble {repeat3} {crystalline} {element} and leave a hole where the {defect_ordinal} atom was.",
+  "In a {repeat3} {crystalline} {element} cell, drop the {defect_ordinal} atom to make a vacancy.",
+  "Prepare a vacancy-bearing {repeat3} {crystalline} {element} supercell missing its {defect_ordinal} atom."
+]

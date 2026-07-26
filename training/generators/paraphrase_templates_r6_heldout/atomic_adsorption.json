@@ -1,0 +1,10 @@
+[
+  "Adsorb a lone {adsorbate} atom at the {site} site, {height} Å above a {suffix} {element}({facet}) slab of {layers} layers with {vacuum} Å vacuum.",
+  "On a {suffix} {element}({facet}) slab ({layers} layers, {vacuum} angstrom vacuum), perch one {adsorbate} atom {height} angstrom over the {site} site.",
+  "Place {adsorbate} at height {height} Å on the {site} site of a {layers}-layer {suffix} {element}({facet}) surface with {vacuum} Å vacuum.",
+  "Build {element}({facet}), {suffix}, {layers} layers, {vacuum} A vacuum, and sit an {adsorbate} atom {height} A above the {site} site.",
+  "Decorate a {suffix} {element}({facet}) slab ({layers} layers, {vacuum} Å vacuum) with a single {adsorbate} at the {site} site {height} Å up.",
+  "I need {adsorbate} bound {height} angstrom above the {site} site of a {suffix} {element}({facet}) slab, {layers} layers, {vacuum} angstrom vacuum.",
+  "Put an {adsorbate} adatom on the {site} site — {height} Å above — of a {layers}-layer {suffix} {element}({facet}) slab with {vacuum} Å vacuum.",
+  "For a {suffix} {element}({facet}) surface of {layers} layers and {vacuum} A vacuum, seat {adsorbate} at the {site} site {height} A high."
+]

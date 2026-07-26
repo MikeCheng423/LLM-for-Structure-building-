@@ -1,0 +1,16 @@
+[
+  "Build a {suffix} {layers}-layer {element}({facet}) slab with {vacuum} Å vacuum.",
+  "Prepare the {element}({facet}) surface as a {suffix} slab, {layers} layers, {vacuum} angstrom vacuum.",
+  "Generate {element}({facet}) with {layers} layers and {vacuum} Å of vacuum in a {suffix} cell.",
+  "Cut a {suffix} {element}({facet}) slab, {layers} layers thick, {vacuum} A vacuum.",
+  "Build a {suffix} {element}({facet}) slab with {layers} layers and {vacuum} Å vacuum.",
+  "Create the {element}({facet}) surface, {suffix} in-plane, using {layers} layers and a {vacuum} angstrom vacuum gap.",
+  "Please construct a {layers}-layer {element}({facet}) slab ({suffix}) with {vacuum} A of vacuum.",
+  "Set up a {vacuum} Å vacuum {element}({facet}) slab spanning {layers} layers with a {suffix} in-plane repeat.",
+  "Prepare a {suffix} {element}({facet}) surface slab: {layers} layers thick, {vacuum} angstrom vacuum.",
+  "I need a {suffix} {element}({facet}) slab with {layers} layers and {vacuum} A vacuum spacing.",
+  "Generate the {element}({facet}) surface with {suffix} periodicity, {layers} layers, leaving {vacuum} Å of vacuum above.",
+  "Assemble a {crystalline} {element}({facet}) slab using {layers} layers, a {suffix} supercell, and {vacuum} angstrom vacuum.",
+  "Make me a {layers} layer {element}({facet}) slab with a {vacuum}-A vacuum region, {suffix} expansion.",
+  "Could you build the {element}({facet}) surface in a {suffix} cell with {layers} layers and {vacuum} Å vacuum on top?"
+]
