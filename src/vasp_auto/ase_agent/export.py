@@ -132,7 +132,7 @@ def write_bundle(
 
     payload: dict[str, Any] = {
         "schema_version": SIDECAR_SCHEMA_VERSION,
-        "generated_by": "vasp-auto-build",
+        "generated_by": "ASE_auto_build",
         "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "request": request,
         "controller_state": controller_state,

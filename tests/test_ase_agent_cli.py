@@ -1,4 +1,4 @@
-"""GPU-free tests for the `vasp-auto-build` entry point.
+"""GPU-free tests for the `ASE_auto_build` entry point.
 
 Everything here runs against a scripted fake chat callable, so no model is ever
 loaded: argument/stdin handling, the advisory pre-flight checker, the export

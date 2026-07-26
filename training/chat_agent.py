@@ -2,7 +2,7 @@
 """Deprecated shim: the entry point now lives in the runtime package.
 
 The real front door is ``vasp_auto.ase_agent.cli`` (console script
-``vasp-auto-build``), which does everything this REPL did *and* writes the
+``ASE_auto_build``), which does everything this REPL did *and* writes the
 finished structure out as a ready-to-run ``vasp-auto`` case. This file stays so
 existing commands, scripts, and notes keep working.
 
@@ -11,7 +11,7 @@ existing commands, scripts, and notes keep working.
     # new
     .venv/bin/python -m vasp_auto.ase_agent.cli --prompt "..."
     # or, once installed:
-    vasp-auto-build "..."
+    ASE_auto_build "..."
 
 Flag compatibility: ``--prompt``, ``--adapter``, ``--base-only``, ``--model``,
 ``--revision``, ``--cache-dir``, ``--max-turns``, and ``--max-new-tokens`` all
@@ -37,7 +37,7 @@ def _forward(argv: list[str]) -> list[str]:
 
 if __name__ == "__main__":
     print(
-        "training/chat_agent.py is deprecated; use `vasp-auto-build` "
+        "training/chat_agent.py is deprecated; use `ASE_auto_build` "
         "(python -m vasp_auto.ase_agent.cli). Running it for you, without "
         "writing files -- add --out DIR to get a POSCAR case.",
         file=sys.stderr,

@@ -1,11 +1,11 @@
-"""``vasp-auto-build`` -- describe a structure in plain language, get files back.
+"""``ASE_auto_build`` -- describe a structure in plain language, get files back.
 
 The user-facing front door to the fine-tuned ASE agent. You type (or pipe) a
 natural-language structure request; the model plans a sequence of deterministic
 ASE tool calls; a bounded workspace executes and validates every one of them;
 and the finished structure is written to disk as a ready-to-run VASP case.
 
-    vasp-auto-build "Build a 2x2 Cu(100) slab with 4 layers and 12 A vacuum"
+    ASE_auto_build "Build a 2x2 Cu(100) slab with 4 layers and 12 A vacuum"
     -> structures/Cu16-1a2b3c4d/POSCAR
        structures/Cu16-1a2b3c4d/structure.json
     -> vasp-auto structures/Cu16-1a2b3c4d --prepare
@@ -59,7 +59,7 @@ from .tools import create_default_registry
 from .validation import atoms_hash, structure_invariants
 from .workspace import ASEWorkspace
 
-PROGRAM = "vasp-auto-build"
+PROGRAM = "ASE_auto_build"
 
 EXIT_OK = 0
 EXIT_FAILED = 1
@@ -74,8 +74,9 @@ DEFAULT_OUT = Path("structures")
 DEFAULT_ADAPTER_RELATIVE = Path("training/runs/pilot-qwen3-4b-r5/adapter")
 DEFAULT_CACHE_RELATIVE = Path("training/cache/huggingface")
 
-ADAPTER_ENV = "VASP_AUTO_ASE_ADAPTER"
-OUT_ENV = "VASP_AUTO_BUILD_OUT"
+ADAPTER_ENV = "ASE_AUTO_BUILD_ADAPTER"
+LEGACY_ADAPTER_ENV = "VASP_AUTO_ASE_ADAPTER"
+OUT_ENV = "ASE_AUTO_BUILD_OUT"
 
 _STATE_EXIT = {
     ControllerState.FINISHED: EXIT_OK,
@@ -255,7 +256,7 @@ def run_request(
     """
     registry = create_default_registry()
     policy = AgentPolicy(max_model_turns=max_turns, max_tool_calls=max_turns)
-    workspace = ASEWorkspace(registry, policy=policy, session_id="vasp-auto-build")
+    workspace = ASEWorkspace(registry, policy=policy, session_id="ASE_auto_build")
     chat = chat_factory()
     controller = AgentController(workspace, chat)
 
@@ -451,8 +452,11 @@ def resolve_adapter(args) -> Path | None:
     candidates: list[Path] = []
     if args.adapter is not None:
         candidates.append(Path(args.adapter))
-    elif os.environ.get(ADAPTER_ENV):
-        candidates.append(Path(os.environ[ADAPTER_ENV]))
+    elif os.environ.get(ADAPTER_ENV) or os.environ.get(LEGACY_ADAPTER_ENV):
+        # LEGACY_ADAPTER_ENV is the pre-rename name; still honoured so an
+        # existing shell export keeps working.
+        candidates.append(Path(
+            os.environ.get(ADAPTER_ENV) or os.environ[LEGACY_ADAPTER_ENV]))
     else:
         candidates.append(repo_root() / DEFAULT_ADAPTER_RELATIVE)
         candidates.append(Path.cwd() / DEFAULT_ADAPTER_RELATIVE)
@@ -546,11 +550,11 @@ def load_chat_factory(args, adapter: Path | None) -> tuple[Callable[[], Any], di
 
 EPILOG = """\
 input modes (combined in this order):
-  vasp-auto-build "Build an H2O molecule in a 12 A box."     one-shot, positional
-  vasp-auto-build --prompt "..." --prompt "..."              one-shot, repeatable
-  vasp-auto-build --file requests.txt                        a description file
-  echo "..." | vasp-auto-build                               piped stdin
-  vasp-auto-build                                            interactive REPL
+  ASE_auto_build "Build an H2O molecule in a 12 A box."     one-shot, positional
+  ASE_auto_build --prompt "..." --prompt "..."              one-shot, repeatable
+  ASE_auto_build --file requests.txt                        a description file
+  echo "..." | ASE_auto_build                               piped stdin
+  ASE_auto_build                                            interactive REPL
 
   In a --file or on stdin, '#' lines are comments and a blank line starts a new
   request; a single-line file is simply one request.

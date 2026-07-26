@@ -8,6 +8,10 @@ __pycache__/
 *.py[cod]
 .pytest_cache/
 
+# Agent/tooling scratch state
+.claude/
+graphify-out/
+
 # Editor and OS state
 *.swp
 *.swo
@@ -24,7 +28,7 @@ remotes.json
 # Calculation inputs, outputs, and proprietary data
 jobs/
 inputs/
-# Default --out of `vasp-auto-build`: generated POSCAR cases.
+# Default --out of `ASE_auto_build`: generated POSCAR cases.
 structures/
 ui_logs/
 vasp_auto_background_logs/
@@ -35,6 +39,66 @@ CHGCAR
 AECCAR*
 vaspout.h5
 *.log
+
+# VASP/QE calculation code — kept on disk for local use, but this repository
+# publishes only ASE_auto_build. See README "Repository layout".
+/src/vasp_auto/*.py
+!/src/vasp_auto/__init__.py
+!/src/vasp_auto/structure.py
+!/src/vasp_auto/target_utils.py
+!/src/vasp_auto/ase_tools.py
+/src/vasp_auto_ui/
+/example/
+/config.yaml.example
+/remotes.json.example
+/docs/INSTALL.md
+/docs/MANUAL.md
+/docs/PORTABILITY.md
+/docs/Remote.txt
+/docs/TUTORIALS_INDEX.md
+/docs/TUTORIAL_0*.md
+/docs/TUTORIAL_1*.md
+/docs/TUTORIAL_CATALYSIS.md
+/docs/TUTORIAL_CEO2_GRAPHENE_CO2.md
+/docs/TUTORIAL_HETEROSTRUCTURE.md
+/selfcheck/
+
+# Tests covering the VASP/QE side (their modules are not published here).
+/tests/test_adsorption_build.py
+/tests/test_analysis.py
+/tests/test_ase_builders.py
+/tests/test_ase_engine.py
+/tests/test_bugfixes.py
+/tests/test_calc_types.py
+/tests/test_case_save.py
+/tests/test_chain.py
+/tests/test_chgcar.py
+/tests/test_cli_offload.py
+/tests/test_config_loader.py
+/tests/test_convergence.py
+/tests/test_error_handling.py
+/tests/test_excel_writer.py
+/tests/test_freq_thermo.py
+/tests/test_job_log.py
+/tests/test_job_manager.py
+/tests/test_kpoints.py
+/tests/test_ml_tools.py
+/tests/test_parser.py
+/tests/test_pass3_features.py
+/tests/test_pass7_features.py
+/tests/test_potcar_finder.py
+/tests/test_py4vasp_tools.py
+/tests/test_qe.py
+/tests/test_qe_remote.py
+/tests/test_qe_ui_api.py
+/tests/test_remote_analysis.py
+/tests/test_remote_setup.py
+/tests/test_report_trajectory.py
+/tests/test_resume_cpus.py
+/tests/test_resume_ranks.py
+/tests/test_runner.py
+/tests/test_ui_server.py
+/tests/test_workflow.py
 
 # Training outputs and potentially private/large artifacts
 training/datasets/*
