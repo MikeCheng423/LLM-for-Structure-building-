@@ -13,16 +13,16 @@ and documentation changes for this project must stay inside:
 /home/vv/Structure_building
 ```
 
-The original project at `/home/vv/ase_auto_build` is read-only reference material.
+The original project at `/home/vv/vasp_auto` is read-only reference material.
 Do not edit, patch, format, delete, copy generated files into, or otherwise
-mutate anything under `/home/vv/ase_auto_build` while working on this project.
+mutate anything under `/home/vv/vasp_auto` while working on this project.
 
 Do not install this workspace by modifying the original environment or original
 checkout. Prefer a virtual environment inside `/home/vv/Structure_building`.
 An existing external interpreter may be used to run tests only when imports are
 confirmed to resolve from this workspace's `src/` directory.
 
-Integration back into `ase_auto_build` is outside the scope of training work. It may
+Integration back into `vasp_auto` is outside the scope of training work. It may
 only happen after the user explicitly requests integration and approves the
 reviewed diff or patch in a separate task.
 

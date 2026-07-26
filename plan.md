@@ -1,10 +1,10 @@
-# Plan: a production-grade LLM controller for ASE inside `ase_auto_build`
+# Plan: a production-grade LLM controller for ASE inside `vasp_auto`
 
 ## Outcome
 
-Build a reliable, conversational structure-building agent in `ase_auto_build` that
+Build a reliable, conversational structure-building agent in `vasp_auto` that
 turns natural-language requests into typed, deterministic ASE operations. The
-model plans and selects tools; `ase_auto_build` owns geometry, validation, provenance,
+model plans and selects tools; `vasp_auto` owns geometry, validation, provenance,
 filesystem access, and calculation execution.
 
 The finished system should handle requests such as:
@@ -24,7 +24,7 @@ work cannot start without authorization.
 
 ## Existing foundation to preserve
 
-`ase_auto_build` already contains most of the deterministic substrate:
+`vasp_auto` already contains most of the deterministic substrate:
 
 - `nl_agent.py`: OpenAI-compatible tool-calling loop and named workspace.
 - `nl_builder.py`: single-command quick builder and ASE-backed base builders.
@@ -55,7 +55,7 @@ extras.
 3. **Every edit is transactional.** Execute on a copy, validate, then commit a
    new revision. Errors leave the prior revision untouched.
 4. **Planning and execution are separate.** The model may propose multiple
-   steps. `ase_auto_build` validates each call and decides whether it is safe to run,
+   steps. `vasp_auto` validates each call and decides whether it is safe to run,
    requires confirmation, or is forbidden.
 5. **Structure edits are cheap; calculations are jobs.** Geometry operations may
    execute interactively. Optimization, MD, ML potentials, VASP, and QE go
@@ -655,5 +655,5 @@ an LLM, apply a chosen revision to the current editor, and optionally prepare an
 approved ASE/VASP/QE calculation through existing job paths. Invalid or
 unauthorized operations must produce clear errors without changing structures,
 writing outside configured roots, or starting processes. The golden evaluation
-set and full `ase_auto_build` regression suite must pass before the old worker mode is
+set and full `vasp_auto` regression suite must pass before the old worker mode is
 retired.

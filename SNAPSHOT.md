@@ -5,17 +5,17 @@ LLM-controlled ASE structure builder described in `plan.md`.
 
 ## Isolation rule
 
-Treat `/home/vv/ase_auto_build` as read-only reference material. All new agent code,
+Treat `/home/vv/vasp_auto` as read-only reference material. All new agent code,
 training utilities, datasets, experiments, tests, generated artifacts, and
 configuration belong under `/home/vv/Structure_building`.
 
 When the design is complete and validated here, integration back into
-`ase_auto_build` should happen only as a separate, explicit task after reviewing a
+`vasp_auto` should happen only as a separate, explicit task after reviewing a
 diff or patch. Training must never write into the original repository.
 
 ## Snapshot source
 
-- Source: `/home/vv/ase_auto_build`
+- Source: `/home/vv/vasp_auto`
 - Snapshot date: 2026-07-24
 - Package source: `src/ase_auto_build`, `src/vasp_auto_ui`
 - Supporting material: tests, docs, examples, packaging metadata, README, and
@@ -47,7 +47,7 @@ python3 -m venv .venv
 .venv/bin/python -m pytest -q
 ```
 
-The copied package still imports as `ase_auto_build` so its existing relative imports
+The copied package was renamed and now imports as `ase_auto_build`; its relative imports
 and tests work. Run commands from this directory or its virtual environment to
 avoid accidentally importing the original checkout.
 
@@ -76,5 +76,5 @@ training/
 ```
 
 Do not add training frameworks or large model dependencies to the core
-`ase_auto_build` runtime dependency list. Keep them in an isolated training extra or
+`vasp_auto` runtime dependency list. Keep them in an isolated training extra or
 training-specific environment.
