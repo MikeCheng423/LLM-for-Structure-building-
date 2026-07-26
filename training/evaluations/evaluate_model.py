@@ -13,13 +13,13 @@ from typing import Any
 
 import torch
 
-from vasp_auto.ase_agent import ASEWorkspace, AgentController, AgentPolicy, ControllerState, create_default_registry
-from vasp_auto.ase_agent.validation import atoms_hash
+from ase_auto_build.ase_agent import ASEWorkspace, AgentController, AgentPolicy, ControllerState, create_default_registry
+from ase_auto_build.ase_agent.validation import atoms_hash
 
 # Decoding, tool-call parsing, and quantized loading live in the runtime module
 # so the promotion gate and the user entry point are byte-for-byte the same path.
 # Re-exported here because this module's public names are part of the harness.
-from vasp_auto.ase_agent.llm_local import (  # noqa: F401
+from ase_auto_build.ase_agent.llm_local import (  # noqa: F401
     TOOL_CALL_RE,
     LocalModelChat,
     _constrained_count,

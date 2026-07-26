@@ -11,10 +11,10 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Iterable
 
-from vasp_auto.ase_agent import ASEWorkspace, create_default_registry
-from vasp_auto.ase_agent.controller import SYSTEM_PROMPT
-from vasp_auto.ase_agent.tool_router import route_tools
-from vasp_auto.ase_agent.validation import atoms_hash
+from ase_auto_build.ase_agent import ASEWorkspace, create_default_registry
+from ase_auto_build.ase_agent.controller import SYSTEM_PROMPT
+from ase_auto_build.ase_agent.tool_router import route_tools
+from ase_auto_build.ase_agent.validation import atoms_hash
 
 from training.dataset_contract import SCHEMA_VERSION, validate_record
 from training.generators.request_rule import missing_slots, slot_values

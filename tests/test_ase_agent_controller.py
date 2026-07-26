@@ -6,7 +6,7 @@ import pytest
 
 pytest.importorskip("ase")
 
-from vasp_auto.ase_agent import (
+from ase_auto_build.ase_agent import (
     ASEWorkspace,
     AgentController,
     ControllerState,

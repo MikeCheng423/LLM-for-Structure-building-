@@ -42,11 +42,11 @@ vaspout.h5
 
 # VASP/QE calculation code — kept on disk for local use, but this repository
 # publishes only ASE_auto_build. See README "Repository layout".
-/src/vasp_auto/*.py
-!/src/vasp_auto/__init__.py
-!/src/vasp_auto/structure.py
-!/src/vasp_auto/target_utils.py
-!/src/vasp_auto/ase_tools.py
+/src/ase_auto_build/*.py
+!/src/ase_auto_build/__init__.py
+!/src/ase_auto_build/structure.py
+!/src/ase_auto_build/target_utils.py
+!/src/ase_auto_build/ase_tools.py
 /src/vasp_auto_ui/
 /example/
 /config.yaml.example

@@ -34,8 +34,8 @@ dev = ["pytest"]
 # Natural-language front door: a plain-language description in, a ready-to-run
 # case directory out. Needs the fine-tuned local model — see the `agent`
 # extra — but its argument handling imports without it.
-ASE_auto_build = "vasp_auto.ase_agent.cli:main"
+ASE_auto_build = "ase_auto_build.ase_agent.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
-include = ["vasp_auto*"]
+include = ["ase_auto_build*"]

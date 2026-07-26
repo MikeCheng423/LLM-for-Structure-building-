@@ -922,7 +922,7 @@ def add_adsorbate(struct: dict, element: str, anchor_index: int, height: float) 
     if element in COVALENT_RADII:            # single atom — no ASE needed
         symbols, offsets = [element], [[0.0, 0.0, 0.0]]
     else:                                    # molecule (CO2, H2O, …) via ASE
-        from vasp_auto.ase_tools import molecule_positions
+        from ase_auto_build.ase_tools import molecule_positions
         symbols, offsets = molecule_positions(element)
 
     inv = None if struct["cartesian"] else _invert3(lattice)

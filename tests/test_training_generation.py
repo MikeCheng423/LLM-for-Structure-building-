@@ -97,8 +97,8 @@ def test_every_case_prompt_routes_to_its_recipe_tools() -> None:
     from pathlib import Path
 
     from training.generators.generate_corpus import case_prompts, load_templates
-    from vasp_auto.ase_agent import create_default_registry
-    from vasp_auto.ase_agent.tool_router import route_tools
+    from ase_auto_build.ase_agent import create_default_registry
+    from ase_auto_build.ase_agent.tool_router import route_tools
 
     registry = create_default_registry()
     templates = load_templates(Path("training/generators/paraphrase_templates"))
@@ -112,8 +112,8 @@ def test_every_case_prompt_routes_to_its_recipe_tools() -> None:
 
 
 def test_router_fails_closed_on_unsupported_request() -> None:
-    from vasp_auto.ase_agent import create_default_registry
-    from vasp_auto.ase_agent.tool_router import route_tools
+    from ase_auto_build.ase_agent import create_default_registry
+    from ase_auto_build.ase_agent.tool_router import route_tools
 
     registry = create_default_registry()
     with pytest.raises(ValueError, match="unsupported"):

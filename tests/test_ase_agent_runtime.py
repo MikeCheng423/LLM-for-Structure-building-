@@ -4,10 +4,10 @@ import pytest
 
 pytest.importorskip("ase")
 
-from vasp_auto.ase_agent import ASEWorkspace, AgentPolicy, create_default_registry
-from vasp_auto.ase_agent.registry import SchemaValidationError
-from vasp_auto.ase_agent.selectors import geometric_layers, select_atoms
-from vasp_auto.ase_agent.validation import atoms_hash
+from ase_auto_build.ase_agent import ASEWorkspace, AgentPolicy, create_default_registry
+from ase_auto_build.ase_agent.registry import SchemaValidationError
+from ase_auto_build.ase_agent.selectors import geometric_layers, select_atoms
+from ase_auto_build.ase_agent.validation import atoms_hash
 
 
 def workspace() -> ASEWorkspace:

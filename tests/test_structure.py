@@ -1,6 +1,6 @@
 import pytest
 
-from vasp_auto.structure import (
+from ase_auto_build.structure import (
     make_supercell,
     make_vacancy,
     per_atom_symbols,
@@ -62,7 +62,7 @@ def test_substitute(scf_case):
 
 # --------------------------------------------------- builder operations
 
-from vasp_auto.structure import (  # noqa: E402
+from ase_auto_build.structure import (  # noqa: E402
     build_struct,
     cell_from_parameters,
     cell_parameters,
@@ -134,7 +134,7 @@ def test_delete_atoms():
 
 
 def test_rotate_atoms():
-    from vasp_auto.structure import rotate_atoms
+    from ase_auto_build.structure import rotate_atoms
     cube = [[10, 0, 0], [0, 10, 0], [0, 0, 10]]
     struct = build_struct("t", cube, ["H", "H", "He"],
                           [[0.5, 0.5, 0.5], [0.7, 0.5, 0.5], [0.1, 0.1, 0.1]])

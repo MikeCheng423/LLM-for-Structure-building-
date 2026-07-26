@@ -1,6 +1,6 @@
 import pytest
 
-from vasp_auto.target_utils import filter_case_dirs, get_case_type, inspect_target
+from ase_auto_build.target_utils import filter_case_dirs, get_case_type, inspect_target
 
 
 def test_get_case_type_scf(scf_case):

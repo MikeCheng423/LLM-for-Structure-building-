@@ -4,11 +4,11 @@ This is the single source of truth for *how the fine-tuned adapter is driven*:
 quantization, greedy decoding, and the Qwen ``<tool_call>`` parsing that turns a
 generated turn into the controller's ``tool_calls``. Both the promotion gate
 (``training/evaluations/evaluate_model.py``) and the user entry point
-(``vasp_auto.ase_agent.cli``) import from here, so the numbers measured during
+(``ase_auto_build.ase_agent.cli``) import from here, so the numbers measured during
 promotion describe what a user actually gets.
 
 Importing this module pulls in torch/transformers/peft. Keep it out of
-``vasp_auto.ase_agent.__init__`` and import it lazily, so the GPU-free parts of
+``ase_auto_build.ase_agent.__init__`` and import it lazily, so the GPU-free parts of
 the runtime (workspace, controller, CLI argument handling) stay importable on a
 machine with no deep-learning stack installed.
 """

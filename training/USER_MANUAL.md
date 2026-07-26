@@ -28,7 +28,7 @@ the workspace validates and executes every call.
 
 ## 2. Quick start
 
-The entry point is `ASE_auto_build` (`vasp_auto.ase_agent.cli`). For a
+The entry point is `ASE_auto_build` (`ase_auto_build.ase_agent.cli`). For a
 step-by-step walkthrough — installation, activation, and feeding the result into
 a DFT run — see **[docs/TUTORIAL_ASE_AGENT.md](../docs/TUTORIAL_ASE_AGENT.md)**;
 this manual is the reference for *what to say* to the model.
@@ -37,13 +37,13 @@ Interactive REPL (loads the model once, then answers requests until you quit):
 
 ```bash
 cd /home/tlclab/Structure_building
-PYTHONPATH=src:. .venv/bin/python -m vasp_auto.ase_agent.cli
+PYTHONPATH=src:. .venv/bin/python -m ase_auto_build.ase_agent.cli
 ```
 
 One-shot, and the same command once installed with `pip install -e ".[agent]"`:
 
 ```bash
-… .venv/bin/python -m vasp_auto.ase_agent.cli \
+… .venv/bin/python -m ase_auto_build.ase_agent.cli \
   --prompt "Build a 4-layer 2x2 Cu(111) slab with 12 Å vacuum"
 
 ASE_auto_build "Build a 4-layer 2x2 Cu(111) slab with 12 Å vacuum"

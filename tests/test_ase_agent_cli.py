@@ -15,9 +15,9 @@ import pytest
 
 pytest.importorskip("ase")
 
-from vasp_auto.ase_agent import cli, export as export_mod
-from vasp_auto.ase_agent import request_check
-from vasp_auto.ase_agent.controller import ControllerState
+from ase_auto_build.ase_agent import cli, export as export_mod
+from ase_auto_build.ase_agent import request_check
+from ase_auto_build.ase_agent.controller import ControllerState
 
 
 # --------------------------------------------------------------------------- #
@@ -346,8 +346,8 @@ def _finished_outcome(tmp_path, *, formats=(), request=SLAB_REQUEST, script=None
     )
 
 
-def test_successful_build_writes_a_valid_vasp_auto_case(tmp_path) -> None:
-    from vasp_auto.target_utils import get_case_type
+def test_successful_build_writes_a_valid_ase_auto_build_case(tmp_path) -> None:
+    from ase_auto_build.target_utils import get_case_type
 
     outcome = _finished_outcome(tmp_path)
     assert outcome.state == ControllerState.FINISHED.value
@@ -359,8 +359,8 @@ def test_successful_build_writes_a_valid_vasp_auto_case(tmp_path) -> None:
     assert get_case_type(case_dir) == "scf"
 
 
-def test_written_poscar_round_trips_through_the_vasp_auto_reader(tmp_path) -> None:
-    from vasp_auto.structure import read_poscar
+def test_written_poscar_round_trips_through_the_ase_auto_build_reader(tmp_path) -> None:
+    from ase_auto_build.structure import read_poscar
 
     outcome = _finished_outcome(tmp_path)
     struct = read_poscar(outcome.export.poscar)
@@ -398,8 +398,8 @@ def test_sidecar_carries_recipe_hashes_invariants_and_request(tmp_path) -> None:
 
 def test_sidecar_recipe_replays_to_the_same_structure(tmp_path) -> None:
     """The recipe is the reproducibility guarantee; check it actually replays."""
-    from vasp_auto.ase_agent import ASEWorkspace, create_default_registry
-    from vasp_auto.ase_agent.validation import atoms_hash
+    from ase_auto_build.ase_agent import ASEWorkspace, create_default_registry
+    from ase_auto_build.ase_agent.validation import atoms_hash
 
     outcome = _finished_outcome(tmp_path)
     payload = json.loads(outcome.export.sidecar.read_text(encoding="utf-8"))
@@ -803,7 +803,7 @@ def test_out_env_var_supplies_the_default_output_directory(monkeypatch) -> None:
 
 
 def test_base_model_defaults_match_the_training_script() -> None:
-    from vasp_auto.ase_agent.llm_defaults import DEFAULT_MODEL, DEFAULT_REVISION
+    from ase_auto_build.ase_agent.llm_defaults import DEFAULT_MODEL, DEFAULT_REVISION
 
     train = pytest.importorskip("training.train_qlora")
     assert DEFAULT_MODEL == train.DEFAULT_MODEL
@@ -816,7 +816,7 @@ def test_evaluation_harness_and_entry_point_share_one_decoder() -> None:
     pytest.importorskip("peft")
     pytest.importorskip("transformers")
 
-    from vasp_auto.ase_agent import llm_local
+    from ase_auto_build.ase_agent import llm_local
     import training.evaluations.evaluate_model as em
 
     assert em.LocalModelChat is llm_local.LocalModelChat

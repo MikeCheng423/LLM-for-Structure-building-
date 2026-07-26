@@ -21,7 +21,7 @@ request and *fails closed* on anything it cannot route, before a single tool run
 Output paths are chosen by the user and this module, never by the model.
 
 Decoding parity: the model is loaded and its tool calls parsed by
-``vasp_auto.ase_agent.llm_local``, the same module the promotion gate
+``ase_auto_build.ase_agent.llm_local``, the same module the promotion gate
 (``training/evaluations/evaluate_model.py``) uses -- so the measured exact-match
 rate describes what this command does.
 
@@ -433,7 +433,7 @@ def print_outcome(outcome: BuildOutcome, stream=None, *, verbose: bool = False) 
 
 
 def repo_root() -> Path:
-    """The checkout this package was imported from (src/vasp_auto/ase_agent -> root)."""
+    """The checkout this package was imported from (src/ase_auto_build/ase_agent -> root)."""
     return Path(__file__).resolve().parents[3]
 
 

@@ -104,17 +104,19 @@ incumbent on a held-out exact-match gate (`training/evaluations/`).
 ## Repository layout
 
 ```
-src/vasp_auto/ase_agent/   the agent: CLI, controller, tool registry, validation, export
-src/vasp_auto/             deterministic builders the agent's tools call into
-training/                  corpus generation, QLoRA fine-tuning, evaluation, promotion
-tests/                     GPU-free unit tests
-docs/                      tutorial
+src/ase_auto_build/ase_agent/   the agent: CLI, controller, tool registry, validation, export
+src/ase_auto_build/             deterministic builders the agent's tools call into
+training/                       corpus generation, QLoRA fine-tuning, evaluation, promotion
+tests/                          GPU-free unit tests
+docs/                           tutorial
 ```
 
-> **Note on the import path:** the Python package is still importable as
-> `vasp_auto` for historical reasons — this project began inside a VASP
-> automation codebase. The command, the distribution, and the project are named
-> `ASE_auto_build`.
+The command, the distribution, and the import package are all named
+`ase_auto_build`:
+
+```python
+from ase_auto_build.ase_agent import ASEWorkspace, create_default_registry
+```
 
 ## Development
 

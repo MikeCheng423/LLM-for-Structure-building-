@@ -3,7 +3,7 @@
 The bridge from "the model built something" to "I can run DFT on it". Every
 successful build writes **one directory that is already a valid ``vasp-auto``
 SCF case**: a VASP ``POSCAR`` plus a JSON sidecar. That layout is deliberate --
-``vasp_auto.target_utils.get_case_type`` calls any directory containing a
+``ase_auto_build.target_utils.get_case_type`` calls any directory containing a
 ``POSCAR`` file an ``scf`` case, so::
 
     vasp-auto <out-dir>/<case> --prepare

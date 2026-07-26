@@ -10,9 +10,9 @@ from collections import Counter
 from pathlib import Path
 from typing import Any
 
-from vasp_auto.ase_agent import ASEWorkspace, create_default_registry
-from vasp_auto.ase_agent.recipe import recipe_hash
-from vasp_auto.ase_agent.validation import atoms_hash
+from ase_auto_build.ase_agent import ASEWorkspace, create_default_registry
+from ase_auto_build.ase_agent.recipe import recipe_hash
+from ase_auto_build.ase_agent.validation import atoms_hash
 
 from training.dataset_contract import load_jsonl
 

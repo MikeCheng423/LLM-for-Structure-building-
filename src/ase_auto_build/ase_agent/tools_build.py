@@ -10,7 +10,7 @@ from ase.build import bulk, molecule, nanotube, surface
 from ase.constraints import FixAtoms, FixCartesian
 from ase.spacegroup import crystal
 
-from vasp_auto.structure import make_prototype
+from ase_auto_build.structure import make_prototype
 
 from .registry import ToolRegistry
 from .schemas import ToolOutcome, ToolSpec

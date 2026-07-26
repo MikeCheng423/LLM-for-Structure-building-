@@ -1,6 +1,6 @@
 # Training environment
 
-Training is isolated from the original `vasp_auto` checkout. On the `tlclab`
+Training is isolated from the original `ase_auto_build` checkout. On the `tlclab`
 WSL host the workspace lives at `/home/tlclab/Structure_building` and its Python
 environment lives at `/home/tlclab/Structure_building/.venv`.
 

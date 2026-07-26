@@ -81,7 +81,7 @@ can always run the module directly, which is what the rest of this tutorial
 does so the examples work in a bare checkout:
 
 ```bash
-PYTHONPATH=src:. .venv/bin/python -m vasp_auto.ase_agent.cli --help
+PYTHONPATH=src:. .venv/bin/python -m ase_auto_build.ase_agent.cli --help
 ```
 
 ### 2.3 Point it at the adapter
@@ -349,8 +349,8 @@ hashes, the pre-flight advisory, and any `value_mismatches`.
 **Reproducibility.** The sidecar's `recipe` replays without the model at all:
 
 ```python
-from vasp_auto.ase_agent import ASEWorkspace, create_default_registry
-from vasp_auto.ase_agent.validation import atoms_hash
+from ase_auto_build.ase_agent import ASEWorkspace, create_default_registry
+from ase_auto_build.ase_agent.validation import atoms_hash
 import json
 
 payload = json.load(open("structures/Cu16-b6a1d8b0/structure.json"))
