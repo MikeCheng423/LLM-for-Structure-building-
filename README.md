@@ -114,6 +114,23 @@ Each run is written to a **numbered job folder** (`jobs/<project>/0001_Fe`,
 `0002_Si`, …) using one global counter, so re-running never overwrites an earlier
 result. `--retry-failed` and `--parse-only` act on the latest numbered run.
 
+### Describe a structure in plain language
+
+A fine-tuned local model (no API key, no network) turns a plain-language
+description into a validated structure and writes a ready-to-run case:
+
+```bash
+pip install -e ".[agent]"                   # needs a CUDA GPU; install torch first
+vasp-auto-build "Build a 2x2 Cu(100) slab with 4 layers and 12 A vacuum, then freeze the bottom 2 layers."
+# -> structures/Cu16-b6a1d8b0/{POSCAR,structure.json}
+vasp-auto structures/Cu16-b6a1d8b0 --prepare --kmesh 5x5x1
+```
+
+The model only ever selects deterministic ASE tools and fills their arguments —
+it never emits coordinates, runs code, or touches your files, and out-of-scope
+requests fail closed before any tool runs. Start with
+**[docs/TUTORIAL_ASE_AGENT.md](docs/TUTORIAL_ASE_AGENT.md)**.
+
 ### Automatic SCF convergence
 
 Scan `NELM`, then `KPOINTS` using the best `NELM`:

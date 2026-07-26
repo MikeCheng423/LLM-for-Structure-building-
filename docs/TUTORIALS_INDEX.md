@@ -33,6 +33,7 @@ directly to the topic they need.
 | [TUTORIAL_CATALYSIS.md](TUTORIAL_CATALYSIS.md) | Full catalysis study (HER on Pt): adsorption energies, CHE free-energy diagrams, DOS/d-band, charge-density difference, Bader, work function, optical absorption, NEB barriers — all chained. |
 | [TUTORIAL_HETEROSTRUCTURE.md](TUTORIAL_HETEROSTRUCTURE.md) | Combining two materials with mismatched unit cells (TiO₂(111) on graphene): `--build-prototype`, `--match-cells`, `--combine`. |
 | [TUTORIAL_CEO2_GRAPHENE_CO2.md](TUTORIAL_CEO2_GRAPHENE_CO2.md) | CO₂ adsorption on a CeO₂/graphene heterostructure — the same workflow executed interactively through the web UI (`vasp-auto-ui`). |
+| [TUTORIAL_ASE_AGENT.md](TUTORIAL_ASE_AGENT.md) | Build structures by describing them in plain language with the fine-tuned local LLM (`vasp-auto-build`): activation, the request rule, checking the model, and feeding the result into `--prepare`. |
 
 ---
 
@@ -61,3 +62,6 @@ TUTORIAL_HETEROSTRUCTURE.md → 08 → TUTORIAL_CEO2_GRAPHENE_CO2.md
 
 **Finite-temperature dynamics**
 01 → 12
+
+**Building structures by describing them (local LLM)**
+TUTORIAL_ASE_AGENT.md → 01 → 08

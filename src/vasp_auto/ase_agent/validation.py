@@ -5,6 +5,7 @@ from __future__ import annotations
 import hashlib
 import json
 import math
+from collections import Counter
 from typing import Any
 
 import numpy as np
@@ -61,6 +62,38 @@ def atoms_payload(atoms: Atoms) -> dict[str, Any]:
 def atoms_hash(atoms: Atoms) -> str:
     raw = json.dumps(atoms_payload(atoms), sort_keys=True, separators=(",", ":"))
     return hashlib.sha256(raw.encode("utf-8")).hexdigest()
+
+
+def _constrained_count(atoms: Atoms) -> int:
+    """Order-independent count of atoms touched by any constraint."""
+    indices: set[int] = set()
+    for constraint in atoms.constraints:
+        getter = getattr(constraint, "get_indices", None)
+        if getter is None:
+            continue
+        try:
+            indices.update(int(i) for i in getter())
+        except Exception:
+            continue
+    return len(indices)
+
+
+def structure_invariants(atoms: Atoms) -> dict[str, Any]:
+    """Physical invariants that survive equivalent-but-different atom orderings.
+
+    Unlike ``atoms_hash`` these ignore atom order and tolerate harmless
+    floating-point drift, giving a semantic pass/fail alongside the exact hash.
+    Lives here (not in ``llm_local``) so the export path needs no torch.
+    """
+    a, b, c, alpha, beta, gamma = (float(v) for v in atoms.cell.cellpar())
+    return {
+        "formula": dict(sorted(Counter(atoms.get_chemical_symbols()).items())),
+        "natoms": len(atoms),
+        "pbc": [bool(v) for v in atoms.pbc],
+        "cell_lengths": [round(a, 3), round(b, 3), round(c, 3)],
+        "cell_angles": [round(alpha, 2), round(beta, 2), round(gamma, 2)],
+        "constrained_atoms": _constrained_count(atoms),
+    }
 
 
 def _minimum_pair(atoms: Atoms) -> tuple[float, int, int] | None:

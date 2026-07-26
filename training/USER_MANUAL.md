@@ -28,30 +28,42 @@ the workspace validates and executes every call.
 
 ## 2. Quick start
 
+The entry point is `vasp-auto-build` (`vasp_auto.ase_agent.cli`). For a
+step-by-step walkthrough — installation, activation, and feeding the result into
+a DFT run — see **[docs/TUTORIAL_ASE_AGENT.md](../docs/TUTORIAL_ASE_AGENT.md)**;
+this manual is the reference for *what to say* to the model.
+
 Interactive REPL (loads the model once, then answers requests until you quit):
 
 ```bash
 cd /home/tlclab/Structure_building
-PYTHONPATH=src:. PATH=/usr/lib/wsl/lib:$PATH \
-  HF_HOME=training/cache/huggingface HF_HUB_DISABLE_XET=1 HF_HUB_OFFLINE=1 \
-  .venv/bin/python training/chat_agent.py
+PYTHONPATH=src:. .venv/bin/python -m vasp_auto.ase_agent.cli
 ```
 
-One-shot:
+One-shot, and the same command once installed with `pip install -e ".[agent]"`:
 
 ```bash
-… .venv/bin/python training/chat_agent.py \
+… .venv/bin/python -m vasp_auto.ase_agent.cli \
   --prompt "Build a 4-layer 2x2 Cu(111) slab with 12 Å vacuum"
+
+vasp-auto-build "Build a 4-layer 2x2 Cu(111) slab with 12 Å vacuum"
 ```
 
 Useful flags: `--base-only` (talk to the frozen base model without the adapter,
-for an A/B feel), `--adapter <dir>` (evaluate a different run), `--max-turns`,
-`--max-new-tokens`. Model load takes a minute or two (4-bit quantization); each
-request then answers in seconds.
+for an A/B feel), `--adapter <dir>` (evaluate a different run), `--strict`
+(§7), `--json`, `--no-write`, `--max-turns`, `--max-new-tokens`. Model load
+takes a minute or two (4-bit quantization); each request then answers in
+seconds. `--adapter`, `HF_HOME`, `HF_HUB_OFFLINE`, and the WSL CUDA `PATH` are
+resolved for you when you run from the repo root.
 
-The entry point prints, per request: the model's raw tool-call turns, each
-executed call with a pass/fail flag, and the final structure's formula, atom
-count, cell, periodicity, constrained-atom count, and content hash.
+The entry point prints, per request: an advisory slot-coverage hint, each
+executed call with a pass/fail flag, the final structure's formula, atom count,
+cell, periodicity, constrained-atom count, and content hash — and writes a
+`POSCAR` plus a `structure.json` provenance sidecar to `structures/<case>/`,
+which is directly usable as `vasp-auto structures/<case> --prepare`.
+
+`training/chat_agent.py` still works as a thin deprecated shim over the same
+CLI.
 
 ---
 
@@ -195,6 +207,20 @@ Other disambiguation tips:
   answer in the REPL at the `clarify>` prompt, e.g. you say "an iron surface" and
   it asks which facet.
 
+- **A stated number the model drops** → the entry point runs a deterministic
+  post-build check comparing the numbers your request stated (`layers`,
+  `vacuum`, `box`, `height`) against the calls actually executed, and warns:
+
+  ```
+  [warn] you asked for height 2.5, but the structure uses 1.8 -- the model
+  omitted 'height', so add_atomic_adsorbate used its default.
+  ```
+
+  `--strict` turns that warning into exit code 7 so a batch script fails rather
+  than quietly producing wrong DFT inputs. The known instance on r5: an
+  adsorption height phrased as `2.5 Å above the ontop site` is dropped, while
+  `at a height of 2.5 Å` is honoured. Put the number next to the word "height".
+
 ---
 
 ## 8. What "correct" means
@@ -222,4 +248,5 @@ exact hash is the reproducibility guarantee.
 | Model asks a question | You omitted exactly one required slot | Answer at `clarify>` |
 | Slab too thin/thick, or squished | Missing `layers` or `vacuum` | State both explicitly |
 | Adsorbate in the wrong place | Missing `site`/`height` (or `anchor` for a molecule) | Name the site, height, and anchor |
+| Adsorbate at 1.8 Å when you asked for another height | The model dropped `height` (§7) | Phrase it `at a height of N Å`; run with `--strict` |
 | Model load is slow | 4-bit base model load (~1–2 min) | One-time per session; the REPL reuses it |

@@ -24,6 +24,8 @@ remotes.json
 # Calculation inputs, outputs, and proprietary data
 jobs/
 inputs/
+# Default --out of `vasp-auto-build`: generated POSCAR cases.
+structures/
 ui_logs/
 vasp_auto_background_logs/
 POTCAR/

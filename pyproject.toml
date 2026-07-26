@@ -33,6 +33,9 @@ builder = ["ase"]
 local = ["pandas", "openpyxl", "ase"]
 # ML pre-relax (OMat24 / UMA) before VASP.
 ml = ["ase", "fairchem-core"]
+# Local fine-tuned structure agent (`vasp-auto-build`). torch must match the
+# machine's CUDA build, so it is not pinned here; install it first.
+agent = ["ase", "torch", "transformers", "peft", "bitsandbytes", "accelerate"]
 # Development: run the whole test suite (needs the heavy deps too).
 dev = ["pytest", "pandas", "openpyxl", "ase"]
 # Back-compat alias for the old `[ase]` extra.
@@ -42,6 +45,10 @@ ase = ["ase"]
 vasp-auto = "vasp_auto.cli:main"
 vasp-auto-ui = "vasp_auto_ui.server:main"
 vasp-auto-setup-remote = "vasp_auto.remote_setup:main"
+# Natural-language front door: a plain-language description in, a ready-to-run
+# vasp-auto case directory out. Needs the fine-tuned local model — see the
+# `agent` extra — but its argument handling imports without it.
+vasp-auto-build = "vasp_auto.ase_agent.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

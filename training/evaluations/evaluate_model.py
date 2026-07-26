@@ -4,81 +4,33 @@
 from __future__ import annotations
 
 import argparse
-import copy
 import hashlib
 import json
-import re
 import time
 from collections import Counter
 from pathlib import Path
 from typing import Any
 
 import torch
-from peft import PeftModel
-from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 
 from vasp_auto.ase_agent import ASEWorkspace, AgentController, AgentPolicy, ControllerState, create_default_registry
 from vasp_auto.ase_agent.validation import atoms_hash
 
+# Decoding, tool-call parsing, and quantized loading live in the runtime module
+# so the promotion gate and the user entry point are byte-for-byte the same path.
+# Re-exported here because this module's public names are part of the harness.
+from vasp_auto.ase_agent.llm_local import (  # noqa: F401
+    TOOL_CALL_RE,
+    LocalModelChat,
+    _constrained_count,
+    _load_model,
+    first_tool_call_turn,
+    parse_tool_calls,
+    structure_invariants,
+)
+
 from training.dataset_contract import load_jsonl
 from training.train_qlora import DEFAULT_MODEL, DEFAULT_REVISION
-
-
-TOOL_CALL_RE = re.compile(r"<tool_call>\s*(\{.*?\})\s*</tool_call>", re.DOTALL)
-
-
-def parse_tool_calls(text: str) -> list[dict[str, Any]]:
-    calls: list[dict[str, Any]] = []
-    for number, match in enumerate(TOOL_CALL_RE.finditer(text), start=1):
-        value = json.loads(match.group(1))
-        if not isinstance(value, dict) or not isinstance(value.get("name"), str):
-            raise ValueError("tool call must contain a string name")
-        arguments = value.get("arguments", {})
-        if not isinstance(arguments, dict):
-            raise ValueError("tool call arguments must be an object")
-        calls.append({
-            "id": f"generated_{number}",
-            "type": "function",
-            "function": {"name": value["name"], "arguments": arguments},
-        })
-    return calls
-
-
-def first_tool_call_turn(text: str) -> str:
-    """Enforce the controller's one sequential tool call per model turn."""
-    match = TOOL_CALL_RE.search(text)
-    return text[: match.end()] if match is not None else text
-
-
-def _constrained_count(atoms) -> int:
-    """Order-independent count of atoms touched by any constraint."""
-    indices: set[int] = set()
-    for constraint in atoms.constraints:
-        getter = getattr(constraint, "get_indices", None)
-        if getter is None:
-            continue
-        try:
-            indices.update(int(i) for i in getter())
-        except Exception:
-            continue
-    return len(indices)
-
-
-def structure_invariants(atoms) -> dict[str, Any]:
-    """Physical invariants that survive equivalent-but-different atom orderings.
-
-    Unlike ``atoms_hash`` these ignore atom order and tolerate harmless
-    floating-point drift, giving a semantic pass/fail alongside the exact hash.
-    """
-    a, b, c, alpha, beta, gamma = (float(v) for v in atoms.cell.cellpar())
-    return {
-        "formula": dict(sorted(Counter(atoms.get_chemical_symbols()).items())),
-        "natoms": len(atoms),
-        "pbc": [bool(v) for v in atoms.pbc],
-        "cell_lengths": [round(a, 3), round(b, 3), round(c, 3)],
-        "cell_angles": [round(alpha, 2), round(beta, 2), round(gamma, 2)],
-        "constrained_atoms": _constrained_count(atoms),
-    }
 
 
 def invariants_match(model_inv, ref_inv, *, length_tol=0.05, angle_tol=1.0) -> bool:
@@ -102,89 +54,6 @@ def _reference_atoms(record, registry):
     for step in record["recipe"]["steps"]:
         workspace.execute_or_raise(step["tool"], step["args"])
     return workspace.final_atoms()
-
-
-class LocalModelChat:
-    def __init__(
-        self,
-        model,
-        tokenizer,
-        *,
-        tool_override: list[dict[str, Any]] | None,
-        max_new_tokens: int,
-    ) -> None:
-        self.model = model
-        self.tokenizer = tokenizer
-        self.tool_override = tool_override
-        self.max_new_tokens = max_new_tokens
-        self.generated_tokens = 0
-        self.generated_texts: list[str] = []
-
-    def __call__(self, messages, tools):
-        selected_tools = self.tool_override if self.tool_override is not None else tools
-        rendered = self.tokenizer.apply_chat_template(
-            messages,
-            tools=selected_tools,
-            tokenize=False,
-            add_generation_prompt=True,
-        )
-        inputs = self.tokenizer(rendered, return_tensors="pt", add_special_tokens=False)
-        inputs = {key: value.to(self.model.device) for key, value in inputs.items()}
-        generation_config = copy.deepcopy(self.model.generation_config)
-        generation_config.do_sample = False
-        generation_config.temperature = None
-        generation_config.top_p = None
-        generation_config.top_k = None
-        with torch.inference_mode():
-            output = self.model.generate(
-                **inputs,
-                generation_config=generation_config,
-                max_new_tokens=self.max_new_tokens,
-                do_sample=False,
-                pad_token_id=self.tokenizer.pad_token_id,
-                eos_token_id=self.tokenizer.eos_token_id,
-            )
-        generated = output[0, inputs["input_ids"].shape[1] :]
-        self.generated_tokens += int(generated.shape[0])
-        text = first_tool_call_turn(
-            self.tokenizer.decode(generated, skip_special_tokens=True)
-        )
-        self.generated_texts.append(text)
-        try:
-            calls = parse_tool_calls(text)
-        except Exception:
-            calls = []
-        return {"role": "assistant", "content": text, "tool_calls": calls}
-
-
-def _load_model(args):
-    dtype = torch.bfloat16 if torch.cuda.is_bf16_supported() else torch.float16
-    quantization = BitsAndBytesConfig(
-        load_in_4bit=True,
-        bnb_4bit_quant_type="nf4",
-        bnb_4bit_compute_dtype=dtype,
-        bnb_4bit_use_double_quant=True,
-    )
-    tokenizer = AutoTokenizer.from_pretrained(
-        args.model,
-        revision=args.revision,
-        cache_dir=args.cache_dir,
-    )
-    if tokenizer.pad_token_id is None:
-        tokenizer.pad_token = tokenizer.eos_token
-    model = AutoModelForCausalLM.from_pretrained(
-        args.model,
-        revision=args.revision,
-        cache_dir=args.cache_dir,
-        quantization_config=quantization,
-        device_map={"": 0},
-        torch_dtype=dtype,
-        attn_implementation="sdpa",
-    )
-    if args.adapter:
-        model = PeftModel.from_pretrained(model, args.adapter)
-    model.eval()
-    return model, tokenizer
 
 
 def _assistant_calls(messages: tuple[dict[str, Any], ...]) -> list[str]:
