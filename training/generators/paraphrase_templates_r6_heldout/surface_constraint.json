@@ -1,0 +1,10 @@
+[
+  "Cleave a {suffix} {element}({facet}) slab, {layers} layers, {vacuum} Å vacuum, and immobilize the {freeze_count} {freeze_side} layers.",
+  "Build {element}({facet}) as a {suffix} slab ({layers} layers, {vacuum} angstrom vacuum) and hold the {freeze_side} {freeze_count} layers fixed.",
+  "A {layers}-layer {suffix} {element}({facet}) surface with {vacuum} Å vacuum — pin its {freeze_count} {freeze_side} layers.",
+  "Set up {element}({facet}), {suffix}, {layers} layers, {vacuum} A vacuum, then lock the {freeze_count} layers at the {freeze_side}.",
+  "Prepare a constrained {suffix} {element}({facet}) slab of {layers} layers with {vacuum} Å vacuum, freezing the {freeze_side} {freeze_count} layers.",
+  "Make {element}({facet}) with {layers} layers, {suffix} cell, {vacuum} angstrom vacuum, and clamp the {freeze_count} {freeze_side} layers.",
+  "I want a {suffix} {element}({facet}) slab ({layers} layers, {vacuum} Å vacuum) whose {freeze_count} {freeze_side} layers are frozen.",
+  "Cleave {element}({facet}) into a {suffix}, {layers}-layer slab with {vacuum} A vacuum and constrain its {freeze_side} {freeze_count} layers."
+]

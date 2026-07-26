@@ -1,0 +1,10 @@
+[
+  "Cleave a {suffix} {element}({facet}) surface {layers} layers deep with {vacuum} Å of vacuum.",
+  "Slab out {element} along ({facet}): {layers} layers, {suffix} in plane, {vacuum} angstrom vacuum.",
+  "I need a {element}({facet}) slab — {layers} atomic layers, {suffix} lateral cell, {vacuum} Å vacuum spacing.",
+  "Terminate {element} on its ({facet}) face as a {suffix} slab of {layers} layers under {vacuum} A vacuum.",
+  "Construct a {suffix}, {layers}-layer {element}({facet}) surface separated by {vacuum} angstrom of vacuum.",
+  "Prepare {element}({facet}), {layers} layers thick, {suffix} supercell, capped with {vacuum} Å vacuum.",
+  "Give me a {vacuum}-angstrom-vacuum {element}({facet}) slab, {layers} layers, repeated {suffix}.",
+  "Set up the ({facet}) surface of {element} with {layers} layers, {suffix} periodicity, and {vacuum} Å vacuum."
+]

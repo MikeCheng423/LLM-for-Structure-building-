@@ -1,0 +1,10 @@
+[
+  "Roll a {chirality} carbon nanotube extending {length} unit cells.",
+  "Generate a single-walled CNT of chirality {chirality}, length {length} unit cells.",
+  "I want a {chirality} nanotube that runs {length} unit cells long.",
+  "Build a carbon nanotube, chirality {chirality}, spanning {length} repeat cells.",
+  "Make a {length}-unit-cell {chirality} single-walled carbon nanotube.",
+  "Produce a {chirality} CNT with an axial length of {length} unit cells.",
+  "Assemble tube chirality {chirality}, {length} unit cells in length.",
+  "Construct a {chirality} carbon nanotube {length} cells long."
+]

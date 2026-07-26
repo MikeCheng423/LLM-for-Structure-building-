@@ -51,7 +51,12 @@ def _routable(prompt: str, recipe_tools: set[str], registry) -> bool:
     return recipe_tools <= routed
 
 
-def case_prompts(case: RecipeCase, templates: dict[str, list[str]], registry) -> list[str]:
+def case_prompts(
+    case: RecipeCase,
+    templates: dict[str, list[str]],
+    registry,
+    max_prompts: int = MAX_PROMPTS_PER_CASE,
+) -> list[str]:
     """Rule-conforming, router-deployable prompts: filled agent templates, else canonical."""
     steps = [{"tool": s["tool"], "args": s["args"]} for s in case.steps]
     recipe_tools = {s["tool"] for s in case.steps}
@@ -69,7 +74,7 @@ def case_prompts(case: RecipeCase, templates: dict[str, list[str]], registry) ->
         raise RuntimeError(
             f"{case.case_id}: no rule-conforming, router-deployable prompt available"
         )
-    return routable[:MAX_PROMPTS_PER_CASE]
+    return routable[:max_prompts]
 
 
 @dataclass(frozen=True)
@@ -474,7 +479,15 @@ def main() -> int:
         default=Path("training/generators/paraphrase_templates"),
         help="Directory of agent-authored <family>.json prompt-template lists.",
     )
+    parser.add_argument(
+        "--max-prompts-per-case",
+        type=int,
+        default=MAX_PROMPTS_PER_CASE,
+        help="Cap on rule-conforming paraphrases kept per case (default preserves r5).",
+    )
     args = parser.parse_args()
+    if args.max_prompts_per_case < 1:
+        raise SystemExit("--max-prompts-per-case must be positive")
 
     templates = load_templates(args.templates_dir)
     routing_registry = create_default_registry()
@@ -482,7 +495,9 @@ def main() -> int:
     records: list[dict[str, Any]] = []
     failures: list[dict[str, str]] = []
     for case in cases():
-        for paraphrase_index, prompt in enumerate(case_prompts(case, templates, routing_registry)):
+        for paraphrase_index, prompt in enumerate(
+            case_prompts(case, templates, routing_registry, args.max_prompts_per_case)
+        ):
             if args.max_records and len(records) >= args.max_records:
                 break
             try:
@@ -512,6 +527,8 @@ def main() -> int:
         "schema_version": SCHEMA_VERSION,
         "registry_version": f"phase1-{registry.fingerprint()[:16]}",
         "split_strategy": "stratified_family_coverage_grouped_by_output_hash/v1",
+        "templates_dir": str(args.templates_dir),
+        "max_prompts_per_case": args.max_prompts_per_case,
         "record_count": len(records),
         "split_counts": {name: len(values) for name, values in split_records.items()},
         "split_sha256": hashes,
