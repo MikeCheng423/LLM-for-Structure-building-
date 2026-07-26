@@ -1,0 +1,113 @@
+{
+  "dataset_manifest_sha256": "1921440a12b45eaa494dba80e9b9c025b4cc1ba51baa252041a2a2352029551e",
+  "errors": [],
+  "execution_success_rate": 1.0,
+  "failed_replays": 0,
+  "family_counts": {
+    "atomic_adsorption": 1440,
+    "bulk": 240,
+    "clarification": 7,
+    "error_recovery": 12,
+    "molecular_adsorption": 360,
+    "molecule": 240,
+    "nanotube": 220,
+    "prototype": 50,
+    "substitution": 160,
+    "surface": 720,
+    "surface_constraint": 720,
+    "vacancy": 160
+  },
+  "family_split_counts": {
+    "atomic_adsorption": {
+      "test": 110,
+      "train": 1230,
+      "validation": 100
+    },
+    "bulk": {
+      "test": 40,
+      "train": 180,
+      "validation": 20
+    },
+    "clarification": {
+      "test": 3,
+      "train": 2,
+      "validation": 2
+    },
+    "error_recovery": {
+      "test": 3,
+      "train": 6,
+      "validation": 3
+    },
+    "molecular_adsorption": {
+      "test": 50,
+      "train": 290,
+      "validation": 20
+    },
+    "molecule": {
+      "test": 20,
+      "train": 180,
+      "validation": 40
+    },
+    "nanotube": {
+      "test": 40,
+      "train": 160,
+      "validation": 20
+    },
+    "prototype": {
+      "test": 10,
+      "train": 30,
+      "validation": 10
+    },
+    "substitution": {
+      "test": 20,
+      "train": 130,
+      "validation": 10
+    },
+    "surface": {
+      "test": 100,
+      "train": 560,
+      "validation": 60
+    },
+    "surface_constraint": {
+      "test": 80,
+      "train": 540,
+      "validation": 100
+    },
+    "vacancy": {
+      "test": 10,
+      "train": 130,
+      "validation": 20
+    }
+  },
+  "family_split_gaps": {},
+  "forbidden_action_rate": 0.0,
+  "maximum_atoms": 776,
+  "maximum_tool_calls": 4,
+  "output_hash_overlap": {
+    "train_test": [],
+    "train_validation": [],
+    "validation_test": []
+  },
+  "passed": true,
+  "recipe_hash_overlap": {
+    "train_test": [],
+    "train_validation": [],
+    "validation_test": []
+  },
+  "record_count": 4329,
+  "records_on_current_registry": 4329,
+  "registry_versions": {
+    "phase1-e8c88309b7ecc67c": 4329
+  },
+  "split_counts": {
+    "test": 486,
+    "train": 3438,
+    "validation": 405
+  },
+  "split_group_overlap": {
+    "train_test": [],
+    "train_validation": [],
+    "validation_test": []
+  },
+  "successful_replays": 4329
+}

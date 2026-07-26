@@ -82,6 +82,28 @@ def _num(value: Any) -> str:
     return str(int(number)) if number.is_integer() else f"{number:g}"
 
 
+# Spoken forms for the anchor atom. Anything unlisted falls back to its symbol.
+_ELEMENT_WORDS = {"H": "hydrogen", "C": "carbon", "N": "nitrogen", "O": "oxygen", "S": "sulfur"}
+
+
+def _anchor_word(species: str, anchor: int) -> str:
+    """Name the anchor atom from ASE's real atom ordering for `species`.
+
+    ``anchor`` is 1-based over ``ase.build.molecule(species)``, whose ordering is
+    per-species and not alphabetical -- CO is stored as (O, C), so atom 1 is the
+    oxygen. Resolving the word here keeps the prompt honest about which atom the
+    recipe actually anchors instead of assuming a fixed element.
+    """
+    from ase.build import molecule
+
+    symbols = molecule(species).get_chemical_symbols()
+    index = int(anchor) - 1
+    if not 0 <= index < len(symbols):
+        raise ValueError(f"anchor {anchor} out of range for {species} ({len(symbols)} atoms)")
+    symbol = symbols[index]
+    return _ELEMENT_WORDS.get(symbol, symbol)
+
+
 def format_dict(slots: dict[str, Any]) -> dict[str, str]:
     """Clean placeholder -> surface-form strings for str.format substitution."""
     d: dict[str, str] = {}
@@ -133,8 +155,7 @@ def format_dict(slots: dict[str, Any]) -> dict[str, str]:
         d["freeze_side"] = side
         d["freeze_count"] = str(count)
     if slots.get("anchor") is not None:
-        # Only CO is used as a molecular adsorbate; atom 1 is its carbon.
-        d["anchor"] = "carbon"
+        d["anchor"] = _anchor_word(slots["adsorbate"], slots["anchor"])
     return d
 
 

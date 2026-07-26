@@ -29,6 +29,40 @@ CANONICAL_ONLY = {"clarification", "error_recovery"}
 MAX_PROMPTS_PER_CASE = 6
 
 
+# Fraction of the summed covalent radii below which a contact is treated as an
+# unphysical overlap. Real bonds sit near 1.0x; 0.75x clears every bonded pair the
+# corpus builds (CO 1.15 A vs 1.07 floor, C-H 1.09 vs 0.80, graphene 1.42 vs 1.14)
+# while catching adsorbates placed into the surface.
+OVERLAP_TOLERANCE = 0.75
+
+
+def _reject_atomic_overlaps(case_id: str, atoms, tolerance: float = OVERLAP_TOLERANCE) -> None:
+    """Fail closed when any atom pair is closer than a covalent-radius floor.
+
+    The replay and recipe-hash gates only prove a structure is reproducible, not
+    that it is physical: a mis-indexed adsorbate anchor reproduces its own bad
+    geometry perfectly. This checks each pair against its own radii rather than
+    thresholding the reported ``minimum_distance``, whose smallest value in a
+    correct molecular adsorption is the intramolecular bond itself.
+    """
+    import numpy as np
+    from ase.data import covalent_radii
+
+    if len(atoms) < 2:
+        return
+    distances = atoms.get_all_distances(mic=True)
+    radii = covalent_radii[atoms.numbers]
+    floors = tolerance * (radii[:, None] + radii[None, :])
+    offenders = np.argwhere(np.triu(distances < floors, k=1))
+    if offenders.size:
+        symbols = atoms.get_chemical_symbols()
+        detail = ", ".join(
+            f"{symbols[i]}{i + 1}-{symbols[j]}{j + 1} {distances[i, j]:.4f} A < {floors[i, j]:.4f} A"
+            for i, j in offenders[:5]
+        )
+        raise RuntimeError(f"{case_id}: unphysical atomic overlap ({len(offenders)} pairs): {detail}")
+
+
 def load_templates(templates_dir: Path) -> dict[str, list[str]]:
     """Load agent-authored `<family>.json` template lists, if present."""
     templates: dict[str, list[str]] = {}
@@ -193,10 +227,13 @@ def _surface_cases() -> Iterable[RecipeCase]:
                 f"{element.lower()}-{face}-{layers}-{suffix}-co", "molecular_adsorption", f"{element}-CO",
                 (
                     f"Adsorb CO at the first ontop site of a {suffix} {element}({face}) {layers}-layer slab with 12 A vacuum, carbon anchored 1.9 A high.",
-                    f"Build a {suffix} {layers}-layer {element} ({face}) surface with 12 A vacuum and place a CO molecule ontop through atom 1 at 1.9 A.",
+                    f"Build a {suffix} {layers}-layer {element} ({face}) surface with 12 A vacuum and place a CO molecule ontop through its carbon at 1.9 A.",
                     f"Prepare CO on a {suffix} {element}({face}) {layers}-layer slab with 12 A vacuum, anchored through carbon at the first ontop site 1.9 A high.",
                 ),
-                (build, _step("add_molecular_adsorbate", name="slab", species="CO", anchor=1, site="ontop", height=1.9), _step("finish", name="slab")),
+                # anchor is 1-based over ASE's g2 ordering, which for CO is (O, C):
+                # carbon is atom 2. Anchoring atom 1 would place O at `height` and
+                # bury C at height - 1.15 A. `_reject_atomic_overlaps` guards this.
+                (build, _step("add_molecular_adsorbate", name="slab", species="CO", anchor=2, site="ontop", height=1.9), _step("finish", name="slab")),
             )
 
 
@@ -422,7 +459,9 @@ def execute_case(case: RecipeCase, prompt: str, paraphrase_index: int) -> dict[s
             messages.append({"role": "user", "content": step["followup_user"]})
     messages.append({"role": "assistant", "content": "The requested structure is complete and validated."})
 
-    final_hash = atoms_hash(workspace.final_atoms())
+    final_atoms = workspace.final_atoms()
+    _reject_atomic_overlaps(case.case_id, final_atoms)
+    final_hash = atoms_hash(final_atoms)
     replay = ASEWorkspace(registry, session_id=f"replay-{case.case_id}")
     for step in workspace.recipe()["steps"]:
         replay.execute_or_raise(step["tool"], step["args"])
