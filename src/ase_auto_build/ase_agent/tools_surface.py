@@ -96,6 +96,17 @@ def _site_fields() -> dict[str, Any]:
     }
 
 
+# ``_choose_site`` short-circuits on ``xy`` before it consults ``site``/``site_index``,
+# so passing both silently discards the named site and places the adsorbate somewhere
+# else entirely. Reject that combination instead of building the wrong structure.
+_SITE_SELECTOR_EXCLUSIONS = [["site", "xy"], ["site_index", "xy"]]
+
+_SITE_SELECTION_DOC = (
+    " Choose the site either by name (site, optionally site_index) or by explicit xy"
+    " coordinates, never both."
+)
+
+
 def register(registry: ToolRegistry) -> None:
     registry.register(ToolSpec("list_layers", "List geometric z layers.", _object({
         "name": NAME, "tolerance": {"type": "number", "exclusiveMinimum": 0.0},
@@ -103,11 +114,11 @@ def register(registry: ToolRegistry) -> None:
     registry.register(ToolSpec("list_adsorption_sites", "List deterministic ontop, bridge, and hollow sites.", _object({
         "name": NAME, "tolerance": {"type": "number", "exclusiveMinimum": 0.0},
     }, ["name"]), "read_only", _list_sites))
-    registry.register(ToolSpec("add_atomic_adsorbate", "Place one atomic adsorbate at a bounded surface site.", _object({
+    registry.register(ToolSpec("add_atomic_adsorbate", "Place one atomic adsorbate at a bounded surface site." + _SITE_SELECTION_DOC, _object({
         "name": NAME, "element": {"type": "string", "minLength": 1, "maxLength": 3}, **_site_fields(),
-    }, ["name", "element"]), "mutates_structure", lambda ws, args: _add(ws, args, molecular=False)))
-    registry.register(ToolSpec("add_molecular_adsorbate", "Place an ASE molecule using a chosen anchor atom.", _object({
+    }, ["name", "element"], _SITE_SELECTOR_EXCLUSIONS), "mutates_structure", lambda ws, args: _add(ws, args, molecular=False)))
+    registry.register(ToolSpec("add_molecular_adsorbate", "Place an ASE molecule using a chosen anchor atom." + _SITE_SELECTION_DOC, _object({
         "name": NAME, "species": {"type": "string", "minLength": 1, "maxLength": 32},
         "anchor": {"type": "integer", "minimum": 1, "maximum": 100}, **_site_fields(),
-    }, ["name", "species"]), "mutates_structure", lambda ws, args: _add(ws, args, molecular=True)))
+    }, ["name", "species"], _SITE_SELECTOR_EXCLUSIONS), "mutates_structure", lambda ws, args: _add(ws, args, molecular=True)))
 

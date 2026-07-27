@@ -53,6 +53,12 @@ def _validate(value: Any, schema: dict[str, Any], path: str) -> None:
             extra = sorted(set(value) - set(properties))
             if extra:
                 raise SchemaValidationError(f"{path} has unknown fields {extra}")
+        for group in schema.get("mutuallyExclusive", []):
+            present = sorted(key for key in group if key in value)
+            if len(present) > 1:
+                raise SchemaValidationError(
+                    f"{path} sets mutually exclusive fields {present}; give exactly one of {sorted(group)}"
+                )
         for key, item in value.items():
             if key in properties:
                 _validate(item, properties[key], f"{path}.{key}")

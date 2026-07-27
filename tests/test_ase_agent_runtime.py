@@ -63,6 +63,26 @@ def test_recipe_replay_is_hash_equivalent() -> None:
     assert atoms_hash(replay.final_atoms()) == expected_hash
 
 
+def test_adsorbate_site_selectors_are_mutually_exclusive() -> None:
+    """``xy`` overrides ``site``/``site_index`` silently, so reject the combination.
+
+    Passing both used to build a valid structure at the wrong place: the r7 adapter
+    emitted the correct call plus a spurious ``xy``, displacing CO ~4 A laterally
+    while invariants still passed.
+    """
+    registry = create_default_registry()
+    for tool, base in (
+        ("add_atomic_adsorbate", {"name": "slab", "element": "O"}),
+        ("add_molecular_adsorbate", {"name": "slab", "species": "CO", "anchor": 2}),
+    ):
+        # Either selector alone stays valid.
+        registry.validate_arguments(tool, {**base, "site": "ontop", "site_index": 1})
+        registry.validate_arguments(tool, {**base, "xy": [1.0, 2.0]})
+        for conflicting in ({"site": "ontop"}, {"site_index": 1}):
+            with pytest.raises(SchemaValidationError, match="mutually exclusive"):
+                registry.validate_arguments(tool, {**base, "xy": [0.0, 0.0], **conflicting})
+
+
 def test_surface_adsorbate_and_bottom_layer_constraint() -> None:
     ws = workspace()
     ws.execute_or_raise("build_surface", {

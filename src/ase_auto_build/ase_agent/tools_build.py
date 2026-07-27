@@ -25,13 +25,20 @@ REPEAT = {
 }
 
 
-def _object(properties: dict[str, Any], required: list[str]) -> dict[str, Any]:
-    return {
+def _object(
+    properties: dict[str, Any],
+    required: list[str],
+    mutually_exclusive: list[list[str]] | None = None,
+) -> dict[str, Any]:
+    schema = {
         "type": "object",
         "properties": properties,
         "required": required,
         "additionalProperties": False,
     }
+    if mutually_exclusive:
+        schema["mutuallyExclusive"] = mutually_exclusive
+    return schema
 
 
 def _metadata(atoms: Atoms, **values: Any) -> Atoms:
