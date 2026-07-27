@@ -91,12 +91,20 @@ def _build_bulk(workspace, args: dict[str, Any]) -> ToolOutcome:
 
 
 def _build_surface(workspace, args: dict[str, Any]) -> ToolOutcome:
-    kwargs: dict[str, Any] = {}
-    if "crystal" in args:
-        kwargs["crystalstructure"] = args["crystal"]
-    if "a" in args:
-        kwargs["a"] = float(args["a"])
-    base = bulk(args["element"], **kwargs)
+    if "source" in args:
+        # Cut the facet from an already-built structure, so compounds reachable
+        # only through build_prototype/build_crystal (oxides, sulfides) can have
+        # surfaces too. ``ase.build.surface`` accepts any Atoms as the lattice.
+        base = workspace.require_atoms(args["source"])
+    elif "element" in args:
+        kwargs: dict[str, Any] = {}
+        if "crystal" in args:
+            kwargs["crystalstructure"] = args["crystal"]
+        if "a" in args:
+            kwargs["a"] = float(args["a"])
+        base = bulk(args["element"], **kwargs)
+    else:
+        raise ValueError("build_surface needs either 'element' or 'source'")
     miller = tuple(int(value) for value in args["miller"])
     layers = int(args.get("layers", 4))
     repeats = args.get("repeat", [1, 1, 1])
@@ -182,14 +190,16 @@ def register(registry: ToolRegistry) -> None:
         "c": {"type": "number", "exclusiveMinimum": 0.0},
         "cubic": {"type": "boolean"}, "repeat": REPEAT,
     }, ["name", "element"]), "mutates_structure", _build_bulk))
-    registry.register(ToolSpec("build_surface", "Build an elemental surface slab.", _object({
+    registry.register(ToolSpec("build_surface", "Build a surface slab. Give 'element' for an elemental metal or semiconductor, or 'source' to cut the facet from a structure already built with build_prototype or build_crystal -- that is how compound surfaces such as rutile TiO2(110) or CeO2(111) are made.", _object({
         "name": NAME, "element": {"type": "string", "minLength": 1, "maxLength": 3},
+        "source": NAME,
         "miller": {"type": "array", "items": {"type": "integer"}, "minItems": 3, "maxItems": 3},
         "layers": {"type": "integer", "minimum": 1, "maximum": 40},
         "vacuum": {"type": "number", "minimum": 3.0, "maximum": 100.0},
         "crystal": {"type": "string", "enum": ["fcc", "bcc", "hcp", "diamond", "sc"]},
         "a": {"type": "number", "exclusiveMinimum": 0.0}, "repeat": REPEAT,
-    }, ["name", "element", "miller"]), "mutates_structure", _build_surface))
+    }, ["name", "miller"], [["element", "source"], ["crystal", "source"], ["a", "source"]]),
+        "mutates_structure", _build_surface))
     registry.register(ToolSpec("build_molecule", "Build an ASE molecule in an isolated box.", _object({
         "name": NAME, "species": {"type": "string", "minLength": 1, "maxLength": 32},
         "box": {"type": "number", "minimum": 3.0, "maximum": 100.0},

@@ -63,6 +63,35 @@ def test_recipe_replay_is_hash_equivalent() -> None:
     assert atoms_hash(replay.final_atoms()) == expected_hash
 
 
+def test_build_surface_cuts_a_facet_from_a_compound_source() -> None:
+    """Oxide facets are only reachable by cutting from a prototype, not from `bulk()`.
+
+    `element` is capped at 3 characters and `ase.build.bulk` has no reference data
+    for compounds, so rutile TiO2(110) -- the model photocatalytic surface -- had
+    no expressible recipe before `source`.
+    """
+    ws = workspace()
+    ws.execute_or_raise("build_prototype", {"name": "bulk_tio2", "prototype": "rutile-TiO2"})
+    ws.execute_or_raise("build_surface", {
+        "name": "slab", "source": "bulk_tio2", "miller": [1, 1, 0],
+        "layers": 4, "vacuum": 15.0,
+    })
+    slab = ws.require_atoms("slab")
+    assert slab.get_chemical_symbols().count("Ti") > 0
+    assert slab.get_chemical_symbols().count("O") == 2 * slab.get_chemical_symbols().count("Ti")
+    assert tuple(bool(flag) for flag in slab.pbc) == (True, True, False)
+
+    registry = create_default_registry()
+    # `element` and `source` are two ways to say the same thing; refuse both.
+    with pytest.raises(SchemaValidationError, match="mutually exclusive"):
+        registry.validate_arguments("build_surface", {
+            "name": "slab", "source": "bulk_tio2", "element": "Ti", "miller": [1, 1, 0],
+        })
+    failed = ws.execute("build_surface", {"name": "other", "miller": [1, 1, 0]})
+    assert not failed.success
+    assert "element" in failed.error["message"] and "source" in failed.error["message"]
+
+
 def test_adsorbate_site_selectors_are_mutually_exclusive() -> None:
     """``xy`` overrides ``site``/``site_index`` silently, so reject the combination.
 
