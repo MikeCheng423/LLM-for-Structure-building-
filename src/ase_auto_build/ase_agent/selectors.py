@@ -46,6 +46,11 @@ SELECTOR_SCHEMA: dict[str, Any] = {
             "required": ["side", "count"],
             "additionalProperties": False,
         },
+        "ordinal": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "One-based position after all other selector filters.",
+        },
     },
     "additionalProperties": False,
 }
@@ -120,5 +125,11 @@ def select_atoms(atoms: Atoms, selector: dict[str, Any]) -> list[int]:
     result = sorted(selected)
     if not result:
         raise ValueError("selector matched no atoms")
+    if "ordinal" in selector:
+        ordinal = int(selector["ordinal"])
+        if ordinal > len(result):
+            raise IndexError(
+                f"selector ordinal {ordinal} exceeds {len(result)} matched atoms"
+            )
+        result = [result[ordinal - 1]]
     return result
-

@@ -1,0 +1,83 @@
+{
+  "dataset_manifest_sha256": "33ae6f7e85ba991919fc192850bf12ab089052f58112bce3507064c96f131109",
+  "errors": [],
+  "execution_success_rate": 1.0,
+  "failed_replays": 0,
+  "family_counts": {
+    "catalyst_adsorption_site": 8,
+    "catalyst_high_index": 6,
+    "catalyst_nanoparticle": 3,
+    "catalyst_oxide_surface": 5,
+    "catalyst_supported_cluster": 3,
+    "catalyst_surface_substitution": 3,
+    "catalyst_surface_vacancy": 4
+  },
+  "family_split_counts": {
+    "catalyst_adsorption_site": {
+      "test": 2,
+      "train": 4,
+      "validation": 2
+    },
+    "catalyst_high_index": {
+      "test": 1,
+      "train": 4,
+      "validation": 1
+    },
+    "catalyst_nanoparticle": {
+      "test": 1,
+      "train": 1,
+      "validation": 1
+    },
+    "catalyst_oxide_surface": {
+      "test": 1,
+      "train": 3,
+      "validation": 1
+    },
+    "catalyst_supported_cluster": {
+      "test": 1,
+      "train": 1,
+      "validation": 1
+    },
+    "catalyst_surface_substitution": {
+      "test": 1,
+      "train": 1,
+      "validation": 1
+    },
+    "catalyst_surface_vacancy": {
+      "test": 1,
+      "train": 2,
+      "validation": 1
+    }
+  },
+  "family_split_gaps": {},
+  "forbidden_action_rate": 0.0,
+  "maximum_atoms": 205,
+  "maximum_tool_calls": 4,
+  "output_hash_overlap": {
+    "train_test": [],
+    "train_validation": [],
+    "validation_test": []
+  },
+  "passed": true,
+  "recipe_hash_overlap": {
+    "train_test": [],
+    "train_validation": [],
+    "validation_test": []
+  },
+  "record_count": 32,
+  "records_on_current_registry": 32,
+  "registry_versions": {
+    "phase1-f6f5dcb756b74fb7": 32
+  },
+  "split_counts": {
+    "test": 8,
+    "train": 16,
+    "validation": 8
+  },
+  "split_group_overlap": {
+    "train_test": [],
+    "train_validation": [],
+    "validation_test": []
+  },
+  "successful_replays": 32
+}
