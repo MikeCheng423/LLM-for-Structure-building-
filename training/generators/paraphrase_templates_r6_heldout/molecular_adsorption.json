@@ -1,0 +1,10 @@
+[
+  "Dock {adsorbate} at the {site} site of a {suffix} {element}({facet}) slab ({layers} layers, {vacuum} Å vacuum), tethered through its {anchor} {height} Å above the surface.",
+  "On a {layers}-layer {suffix} {element}({facet}) slab with {vacuum} angstrom vacuum, bind {adsorbate} at the {site} site via its {anchor}, {height} angstrom up.",
+  "Attach {adsorbate} to a {suffix} {element}({facet}) surface ({layers} layers, {vacuum} Å vacuum) at the {site} site, its {anchor} anchored {height} Å high.",
+  "Build {element}({facet}), {suffix}, {layers} layers, {vacuum} A vacuum, then seat {adsorbate} at the {site} site through the {anchor} atom {height} A above.",
+  "Place the {adsorbate} molecule at the {site} site of a {suffix} {element}({facet}) slab of {layers} layers with {vacuum} Å vacuum, anchored via {anchor} {height} Å over the top layer.",
+  "I want {adsorbate} chemisorbed at the {site} site of a {suffix} {element}({facet}) slab ({layers} layers, {vacuum} angstrom vacuum), its {anchor} {height} angstrom above.",
+  "Adsorb {adsorbate} through {anchor} at the {site} site, {height} Å above a {layers}-layer {suffix} {element}({facet}) surface with {vacuum} Å vacuum.",
+  "For a {suffix} {element}({facet}) slab ({layers} layers, {vacuum} A vacuum), coordinate {adsorbate} at the {site} site with the {anchor} atom held {height} A above."
+]

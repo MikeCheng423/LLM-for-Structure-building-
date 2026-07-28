@@ -1,5 +1,38 @@
 # Training status — 2026-07-25 19:13 Asia/Taipei
 
+## r6 evaluated — regressed, NOT promoted (2026-07-26)
+
+r6 tested the one open question against r5: does the promoted adapter generalize to
+**genuinely novel phrasing**? A held-out phrasing pool
+(`training/generators/paraphrase_templates_r6_heldout/`, 8 new templates/family,
+provably disjoint from training) generated `training/datasets/pilot_r6_novel`, from
+which `heldout_eval.jsonl` (3,218 records) keeps only prompts absent from *all*
+training — novel phrasing over structures the model did train on. Base, the promoted
+r5 adapter, and the new r6 adapter were scored on an identical 120-record sample
+(`evaluation_ids_sha256` matched across all three).
+
+| exact_structure_rate | frozen base | r5 adapter | r6 adapter |
+| --- | ---: | ---: | ---: |
+| SEEN phrasing (`pilot_r6/test`) | 13.3% | — | 50.0% |
+| **NOVEL phrasing (held-out)** | 12.5% | **99.2%** | 55.8% |
+
+- **Limitation #1 is resolved, and was never a real deficiency: r5 scores 99.2%
+  exact on phrasing it never saw** (finish 100%, invariants 99.2%, schema 97.1%).
+  Shared train/test phrasing was not inflating r5. **r5 stays the production
+  adapter.**
+- **r6 regressed and is NOT promotable.** Despite a lower best `eval_loss`
+  (0.00261 vs r5 0.00549), `promote_adapter.py` returned `promoted: false` (6 checks
+  failed). Root cause (from `generated_calls`): r6 hallucinates a spurious `"a"`
+  lattice arg on `build_surface` and a wrong `"bond"` on `build_nanotube`, the call
+  fails validation, and r6 retries to the 6-turn budget → `BUDGET_EXHAUSTED`. The
+  break is confined to surface / nanotube / molecular_adsorption; molecule /
+  prototype / substitution / vacancy stay 83–100%. Adversarial safety 5/5, zero
+  forbidden executions.
+- Recipe caution for the next run: r6 used `--max-prompts-per-case 10` and 300
+  steps; the regression is in families the geometry work does not touch, so the
+  cap/step recipe is the suspect lever. Reports: `training/evaluations/*-r6-*-pf6-s120.json`;
+  tables via `training/evaluations/tabulate_r6.py`.
+
 ## r5 promoted — `production_ready` flipped (2026-07-25)
 
 The r5 adapter passed the fail-closed full-registry promotion gate and was
@@ -94,7 +127,7 @@ adapter completed the full promotion pipeline and passed every gate:
 4. `promote_adapter.py` → `promoted: true`, all 23 checks green.
 5. `production_ready` flipped to `true` in the r5 manifest (recorded above).
 
-Open follow-ups (not promotion blockers): test novel-phrasing generalization
-(train/test still share phrasing templates); retrain r6 with more steps (r5
-validation loss was still dropping at step 200); fix the one 0.65 Å
-adsorbate-overlap geometry case in the generator.
+Open follow-ups (not promotion blockers): novel-phrasing generalization is now
+**tested and passing for r5 (99.2%, see the r6 section above)**; the r6 "more
+steps + richer phrasing" retrain regressed and was rejected. Remaining: the
+adsorbate-overlap geometry fix (tracked separately on the r7 branch).

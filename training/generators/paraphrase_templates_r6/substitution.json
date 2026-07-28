@@ -1,0 +1,16 @@
+[
+  "Substitute {dopant} for the {defect_ordinal} atom in {repeat3} {crystalline} {element}.",
+  "Replace the {defect_ordinal} atom of a {repeat3} {crystalline} {element} supercell with {dopant}.",
+  "Dope a {repeat3} {crystalline} {element} block, putting {dopant} at the {defect_ordinal} atom.",
+  "Turn the {defect_ordinal} atom of {repeat3} {crystalline} {element} into a {dopant} atom.",
+  "Build a {repeat3} {crystalline} {element} supercell and replace the {defect_ordinal} atom with {dopant}.",
+  "Starting from bulk {crystalline} {element}, create a {repeat3} supercell, then substitute the {defect_ordinal} atom with a {dopant} atom.",
+  "Generate a {crystalline} {element} cell repeated {repeat3} and swap out the {defect_ordinal} atom for {dopant}.",
+  "I need a {repeat3} supercell of {crystalline} {element} with the {defect_ordinal} atom substituted by {dopant}.",
+  "Construct a {element} {crystalline} lattice, expand it {repeat3}, and dope it by putting {dopant} in place of the {defect_ordinal} atom.",
+  "Please set up a {repeat3} {crystalline}-phase {element} supercell before substituting the {defect_ordinal} atom with {dopant}.",
+  "Can you make a {repeat3} block of {crystalline} {element} and turn the {defect_ordinal} atom into {dopant}?",
+  "Using {crystalline} {element}, build a {repeat3} supercell and replace its {defect_ordinal} atom with a {dopant} dopant.",
+  "For this substitutional defect study, tile {crystalline} {element} into a {repeat3} supercell and place {dopant} at the {defect_ordinal} atomic site.",
+  "After building a {repeat3} {crystalline} {element} supercell, exchange the {defect_ordinal} atom for {dopant}."
+]

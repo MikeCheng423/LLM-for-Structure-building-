@@ -1,0 +1,10 @@
+[
+  "Swap the {defect_ordinal} atom of {repeat3} {crystalline} {element} for a {dopant} atom.",
+  "In {repeat3} {crystalline} {element}, put {dopant} where the {defect_ordinal} atom sits.",
+  "Dope {crystalline} {element} (tiled {repeat3}) by replacing its {defect_ordinal} atom with {dopant}.",
+  "Build {repeat3} {crystalline} {element} and convert the {defect_ordinal} atom into {dopant}.",
+  "Introduce a {dopant} substituent at the {defect_ordinal} site of a {repeat3} {crystalline} {element} supercell.",
+  "Make {repeat3} {crystalline} {element}, then trade the {defect_ordinal} atom for {dopant}.",
+  "Replace the very {defect_ordinal} atom of {repeat3} {crystalline} {element} with {dopant}.",
+  "Prepare a {dopant}-doped {repeat3} {crystalline} {element} cell where the {defect_ordinal} atom becomes {dopant}."
+]

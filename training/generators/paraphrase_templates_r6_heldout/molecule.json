@@ -1,0 +1,10 @@
+[
+  "Isolate a {species} molecule inside a cubic {box} Å box.",
+  "Drop one {species} molecule into a {box}-angstrom cubic cell.",
+  "Model gas-phase {species} in a cube measuring {box} Å per edge.",
+  "Enclose a single {species} molecule in a {box} angstrom cubic box.",
+  "Set {species} alone at the center of a {box} Å cubic cell.",
+  "I need isolated {species} within a cubic simulation box of {box} angstrom.",
+  "Build one {species} molecule surrounded by vacuum in a {box} Å cube cell.",
+  "Put {species} by itself in a {box}-Å cubic box."
+]
