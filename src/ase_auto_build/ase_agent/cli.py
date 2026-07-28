@@ -52,9 +52,16 @@ from pathlib import Path
 from typing import Any, Callable, Iterable, Sequence
 
 from . import export as export_mod
+from . import guided as guided_mod
 from .controller import AgentController, ControllerResult, ControllerState
 from .policy import AgentPolicy
-from .request_check import RequestAdvisory, ValueMismatch, check_build, check_request
+from .request_check import (
+    RequestAdvisory,
+    ValueMismatch,
+    check_build,
+    check_composition,
+    check_request,
+)
 from .tools import create_default_registry
 from .validation import atoms_hash, structure_invariants
 from .workspace import ASEWorkspace
@@ -215,14 +222,15 @@ def _advisory_json(advisory: RequestAdvisory | None) -> dict[str, Any] | None:
     }
 
 
-def _mismatch_json(mismatches: Iterable[ValueMismatch]) -> list[dict[str, Any]]:
+def _mismatch_json(mismatches: Iterable[Any]) -> list[dict[str, Any]]:
+    """Serialise value and composition mismatches; both share the --strict channel."""
     return [
         {
             "slot": item.slot,
             "tool": item.tool,
             "argument": item.argument,
             "requested": item.requested,
-            "used": item.used,
+            "used": getattr(item, "used", getattr(item, "built", None)),
             "defaulted": item.defaulted,
         }
         for item in mismatches
@@ -308,8 +316,12 @@ def run_request(
     outcome.recipe_hash = digest
     outcome.atoms_hash = atoms_hash(atoms)
     outcome.invariants = structure_invariants(atoms)
-    # Deterministic: did the build use the numbers the request actually stated?
-    outcome.mismatches = check_build(request, outcome.transcript)
+    # Deterministic: did the build use the numbers the request actually stated,
+    # and is it even the compound that was asked for?
+    outcome.mismatches = (
+        check_build(request, outcome.transcript)
+        + check_composition(request, outcome.invariants)
+    )
     if outcome.mismatches and strict:
         outcome.exit_code = EXIT_MISMATCH
     if not write:
@@ -405,8 +417,9 @@ def print_outcome(outcome: BuildOutcome, stream=None, *, verbose: bool = False) 
         print(f"  {mismatch.line()}", file=stream)
     if outcome.mismatches:
         print(
-            "  [warn] restate it as e.g. 'at a height of 2.5 A' and rebuild, or edit "
-            "the POSCAR; nothing was silently corrected.",
+            "  [warn] nothing was silently corrected. Rephrasing is unreliable here -- "
+            f"'{PROGRAM} --guided' composes the wording measured to keep the value; "
+            "otherwise edit the POSCAR.",
             file=stream,
         )
 
@@ -554,10 +567,18 @@ input modes (combined in this order):
   ASE_auto_build --prompt "..." --prompt "..."              one-shot, repeatable
   ASE_auto_build --file requests.txt                        a description file
   echo "..." | ASE_auto_build                               piped stdin
+  ASE_auto_build --guided                                   guided slot-by-slot form
   ASE_auto_build                                            interactive REPL
 
   In a --file or on stdin, '#' lines are comments and a blank line starts a new
   request; a single-line file is simply one request.
+
+guided mode:
+  --guided asks one question per required slot for the region you pick, then
+  composes the request for you, so it cannot be missing a determinant. The
+  wording comes from the corpus phrasing templates the adapter was trained on.
+  In the REPL, type 'guided' at any request> prompt to do the same for one
+  request. Answers accept 'b' to go back a question and 'q' to cancel.
 
 output:
   Each successful build writes one directory that is already a valid vasp-auto
@@ -644,6 +665,19 @@ def build_parser() -> argparse.ArgumentParser:
     output.add_argument(
         "-v", "--verbose", action="store_true",
         help="Also print the model's raw generated turns.",
+    )
+
+    guided = parser.add_argument_group("guided input")
+    guided.add_argument(
+        "--guided", action="store_true",
+        help="Compose the request through a slot-by-slot form instead of typing it, "
+             "so no structural determinant can be left unstated. Runs before the "
+             "model loads; also available as 'guided' inside the REPL.",
+    )
+    guided.add_argument(
+        "--region", default=None, metavar="NAME",
+        help="Skip the region menu in --guided mode, e.g. --region surface_constraint. "
+             f"One of: {', '.join(guided_mod.REGION_ORDER)}.",
     )
 
     check = parser.add_argument_group("advisory pre-flight")
@@ -736,6 +770,36 @@ def _queued_clarify(answers: list[str]):
 # --------------------------------------------------------------------------- #
 
 
+def _validated_region(region: str | None) -> str | None:
+    """Resolve --region, accepting an unambiguous prefix."""
+    if region is None:
+        return None
+    matches = [name for name in guided_mod.REGION_ORDER if name.startswith(region)]
+    if region in guided_mod.REGION_SLOTS:
+        return region
+    if len(matches) == 1:
+        return matches[0]
+    raise EntryPointError(
+        f"unknown --region {region!r}; choose one of "
+        f"{', '.join(guided_mod.REGION_ORDER)}"
+    )
+
+
+def _run_guided(args, *, piped: bool) -> str | None:
+    """Compose one request through the guided form, or None when not asked/cancelled."""
+    if args.region and not args.guided:
+        raise EntryPointError("--region applies to --guided; add --guided")
+    if not args.guided:
+        return None
+    region = _validated_region(args.region)
+    if piped or not sys.stdin.isatty():
+        raise EntryPointError(
+            "--guided needs an interactive terminal (stdin is not a tty). Pipe a "
+            "written request instead, or run --guided without redirecting stdin."
+        )
+    return guided_mod.run_wizard(region=region)
+
+
 def _emit(outcome: BuildOutcome, args) -> None:
     if args.as_json:
         print(json.dumps(outcome.as_json(), indent=2, sort_keys=True))
@@ -752,6 +816,12 @@ def main(argv: Sequence[str] | None = None) -> int:
         formats = export_mod.normalize_formats(args.format)
         stdin_text = read_stdin_if_piped()
         requests = collect_requests(args, stdin_text=stdin_text)
+        # The form runs before the model loads: slot mistakes cost no GPU time.
+        composed = _run_guided(args, piped=stdin_text is not None)
+        if composed is not None:
+            requests.append(composed)
+        elif args.guided and not requests:
+            return EXIT_OK
         if args.name and len(requests) > 1:
             raise EntryPointError("--name applies to a single request; drop it for a batch")
         adapter = resolve_adapter(args)
@@ -803,6 +873,7 @@ def main(argv: Sequence[str] | None = None) -> int:
 def _repl(run, args) -> int:
     print(
         f"{PROGRAM}: interactive mode. Describe a structure; 'quit' or Ctrl-D exits.\n"
+        f"Type 'guided' to be asked for each required slot instead of phrasing it.\n"
         f"Finished structures are written under {args.out}/."
     )
     last = EXIT_OK
@@ -819,6 +890,15 @@ def _repl(run, args) -> int:
             continue
         if request.lower() in {"quit", "exit", ":q"}:
             break
+        if request.lower() in {"guided", "g", "?slots"}:
+            try:
+                composed = guided_mod.run_wizard()
+            except KeyboardInterrupt:
+                print("\n(cancelled)")
+                continue
+            if composed is None:
+                continue
+            request = composed
         try:
             outcome = run(request, _interactive_clarify)
         except KeyboardInterrupt:

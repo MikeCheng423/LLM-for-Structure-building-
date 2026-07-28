@@ -105,6 +105,22 @@ _MOLECULE_WORDS = ("water", "ammonia", "methane", "benzene", "ethylene", "methan
 _NUMBER = r"\d+(?:\.\d+)?"
 _WORD_NUMBERS = r"one|two|three|four|five|six|seven|eight|nine|ten"
 
+# Compound prototype families and compositions, from the same tables the builder
+# and the router use, so a composition added there is recognised here too.
+from ..structure import (  # noqa: E402
+    COMPOUND_FAMILIES,
+    COMPOUND_LATTICE,
+    parse_binary_formula,
+)
+
+_COMPOUND_RE = re.compile(
+    r"\b(?:" + "|".join(sorted(COMPOUND_FAMILIES)) + r")\b|\b(?:"
+    + "|".join(sorted(
+        {f.casefold() for table in COMPOUND_LATTICE.values() for f in table},
+        key=len, reverse=True,
+    )) + r")\b"
+)
+
 
 def _near(text: str, keywords: str, *, number: str = _NUMBER, window: int = 20) -> bool:
     """True when a number and a keyword sit within `window` characters, either order."""
@@ -137,9 +153,13 @@ def _slot_stated(slot: str, raw: str, text: str) -> bool:
     if slot == "element":
         return _has_element(raw, text)
     if slot == "crystalline":
+        # The compound prototype families (rocksalt, zincblende, wurtzite,
+        # fluorite) name a crystal structure just as fcc/bcc do, so a compound
+        # substrate states this slot: 'fluorite-CeO2' needs no separate phase.
         return bool(re.search(r"\b(?:fcc|bcc|hcp|diamond|sc|simple cubic|rocksalt|"
-                              r"zincblende|wurtzite|face[- ]centred|face[- ]centered|"
-                              r"body[- ]centred|body[- ]centered|hexagonal close)\b", text))
+                              r"zincblende|wurtzite|fluorite|face[- ]centred|"
+                              r"face[- ]centered|body[- ]centred|body[- ]centered|"
+                              r"hexagonal close)\b", text))
     if slot == "facet":
         compact = re.sub(r"[ ,\-]", "", text)
         return bool(
@@ -201,8 +221,11 @@ def infer_region(request: str) -> str | None:
         return "molecular_adsorption" if molecular else "atomic_adsorption"
     if re.search(r"\bnanotube\b|\bcnt\b|\bswcnt\b", text):
         return "nanotube"
-    if re.search(r"\b(?:hbn|h-bn|nacl|zincblende|rocksalt|graphene|graphite|rutile|"
-                 r"anatase|prototype)\b", text):
+    # Fixed prototype names only. The *compound* families (rocksalt, wurtzite, ...)
+    # are checked last instead: they combine with every other region -- a
+    # 'rocksalt-MgO(100) slab' is a surface request, not a prototype request --
+    # so matching them here would mask the more specific region.
+    if re.search(r"\b(?:hbn|h-bn|graphene|graphite|rutile|anatase|prototype)\b", text):
         return "prototype"
     if re.search(r"\bvacanc\w*\b|\b(?:remov\w*|delet\w*|knock\s*out)\b[^.]{0,20}\b(?:atom|site)\b",
                  text):
@@ -221,6 +244,8 @@ def infer_region(request: str) -> str | None:
     if re.search(r"\bbulk\b|\bcrystal\b|\bunit cell\b|\bsupercell\b|\blattice\b|"
                  r"\b(?:fcc|bcc|hcp|diamond)\b", text):
         return "bulk"
+    if _COMPOUND_RE.search(text):  # a bare composition, no structure word
+        return "prototype"
     return None
 
 
@@ -343,6 +368,78 @@ def check_build(request: str, transcript) -> tuple[ValueMismatch, ...]:
                 ))
             break
     return tuple(mismatches)
+
+
+@dataclass(frozen=True)
+class CompositionMismatch:
+    """A compound the request named whose elements are not in the structure.
+
+    Shares the `.line()` / `--strict` channel with :class:`ValueMismatch`, because
+    it is the same class of failure: the build silently did something other than
+    what the request said.
+    """
+
+    requested: str
+    missing: tuple[str, ...]
+    built: str
+
+    slot: str = "composition"
+    tool: str = "build_prototype"
+    argument: str = "prototype"
+    defaulted: bool = False
+
+    def line(self) -> str:
+        absent = ", ".join(self.missing)
+        return (
+            f"[warn] you asked for {self.requested}, but the structure is {self.built} "
+            f"-- no {absent}. A different compound was built."
+        )
+
+
+def check_composition(request: str, invariants: dict | None) -> tuple[CompositionMismatch, ...]:
+    """Verify a named compound's elements are actually present in the result.
+
+    Deliberately narrow: only compound prototype names ('rocksalt-NiO', 'CeO2')
+    are checked, not every element symbol in the request. Substitution and
+    vacancy legitimately remove elements a request mentions, so a broader check
+    would cry wolf -- and a missed warning is better than one users learn to
+    ignore. Catches the observed failure where a request for rocksalt-NiO built
+    rocksalt-MgO and still reported FINISHED.
+    """
+    from ..structure import split_compound
+
+    if not invariants:
+        return ()
+    formula = invariants.get("formula") or {}
+    present = {str(symbol) for symbol in formula}
+    if not present:
+        return ()
+
+    built = "".join(f"{el}{n}" for el, n in formula.items())
+    seen: set[str] = set()
+    found: list[CompositionMismatch] = []
+    for token in re.findall(r"[A-Za-z][A-Za-z0-9]*(?:-[A-Za-z][A-Za-z0-9]*)?", request or ""):
+        try:
+            compound = split_compound(token)
+        except ValueError:
+            continue
+        if compound is None:
+            continue
+        family, chemical = compound
+        name = f"{family}-{chemical}"
+        if name in seen:
+            continue
+        seen.add(name)
+        parsed = parse_binary_formula(chemical)
+        if parsed is None:
+            continue
+        wanted = {parsed[0], parsed[2]}
+        absent = tuple(sorted(wanted - present))
+        if absent:
+            found.append(CompositionMismatch(
+                requested=name, missing=absent, built=built,
+            ))
+    return tuple(found)
 
 
 @dataclass(frozen=True)

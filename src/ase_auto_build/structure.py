@@ -6,6 +6,7 @@ Velocities / predictor-corrector blocks after the coordinates are dropped.
 from __future__ import annotations
 
 import math
+import re
 from pathlib import Path
 
 
@@ -654,6 +655,184 @@ _PROTOTYPE_ALIASES = {
 }
 
 
+# --------------------------------------------------------------------------- #
+# Composition-parameterised binary prototypes
+# --------------------------------------------------------------------------- #
+#
+# The entries in PROTOTYPES above are one fixed structure each. A metal oxide or
+# sulfide is better described as a *family* (a Wyckoff pattern) instantiated for a
+# composition: rocksalt + MgO, wurtzite + ZnO. `ase.build.bulk` cannot do this --
+# it takes a single element -- so these are built here, deterministically, the
+# same way the fixed prototypes are.
+#
+# Sites are (species_slot, fractional position), where slot 0 is the first
+# element of the formula and slot 1 the second. `ratio` is the formula unit the
+# site list realises, and is checked against the parsed formula.
+
+_FCC_SHIFTS = ((0.0, 0.0, 0.0), (0.0, 0.5, 0.5), (0.5, 0.0, 0.5), (0.5, 0.5, 0.0))
+
+
+def _fcc_sublattice(slot: int, origin: tuple[float, float, float]):
+    return [
+        (slot, tuple((o + s) % 1.0 for o, s in zip(origin, shift)))
+        for shift in _FCC_SHIFTS
+    ]
+
+
+_WURTZITE_U = 0.3820  # ideal-ish internal parameter; refined per compound below
+
+COMPOUND_FAMILIES: dict[str, dict] = {
+    "rocksalt": {
+        "description": "rocksalt (NaCl-type), Fm-3m conventional cubic cell",
+        "hexagonal": False, "ratio": (1, 1),
+        "sites": _fcc_sublattice(0, (0.0, 0.0, 0.0))
+                 + _fcc_sublattice(1, (0.5, 0.5, 0.5)),
+    },
+    "zincblende": {
+        "description": "zincblende (sphalerite, ZnS-type), F-43m conventional cell",
+        "hexagonal": False, "ratio": (1, 1),
+        "sites": _fcc_sublattice(0, (0.0, 0.0, 0.0))
+                 + _fcc_sublattice(1, (0.25, 0.25, 0.25)),
+    },
+    "fluorite": {
+        "description": "fluorite (CaF2-type), Fm-3m conventional cell",
+        "hexagonal": False, "ratio": (1, 2),
+        "sites": _fcc_sublattice(0, (0.0, 0.0, 0.0))
+                 + _fcc_sublattice(1, (0.25, 0.25, 0.25))
+                 + _fcc_sublattice(1, (0.75, 0.75, 0.75)),
+    },
+    "wurtzite": {
+        "description": "wurtzite (ZnS-2H type), P6_3mc conventional cell",
+        "hexagonal": True, "ratio": (1, 1),
+        "sites": [
+            (0, (1 / 3, 2 / 3, 0.0)), (0, (2 / 3, 1 / 3, 0.5)),
+            (1, (1 / 3, 2 / 3, _WURTZITE_U)), (1, (2 / 3, 1 / 3, _WURTZITE_U + 0.5)),
+        ],
+    },
+}
+
+# Experimental room-temperature lattice constants in Å: `a` for the cubic
+# families, `(a, c)` for wurtzite. Relax before production use. A composition
+# absent from these tables is refused rather than guessed -- pass an explicit
+# `a` (and `c`) to build it anyway.
+COMPOUND_LATTICE: dict[str, dict[str, float | tuple[float, float]]] = {
+    "rocksalt": {
+        "MgO": 4.212, "CaO": 4.811, "SrO": 5.160, "BaO": 5.523,
+        "NiO": 4.177, "CoO": 4.260, "FeO": 4.326, "MnO": 4.445,
+        "NaCl": 5.640, "KCl": 6.293, "LiF": 4.027, "NaF": 4.620,
+        "MgS": 5.202, "CaS": 5.690, "PbS": 5.936, "TiN": 4.242,
+    },
+    "zincblende": {
+        "ZnS": 5.409, "ZnSe": 5.668, "ZnTe": 6.104, "CdS": 5.818,
+        "CdSe": 6.052, "CdTe": 6.482, "GaAs": 5.653, "GaP": 5.451,
+        "InP": 5.869, "InAs": 6.058, "AlAs": 5.661, "SiC": 4.358,
+        "BN": 3.615, "GaN": 4.500,
+    },
+    "wurtzite": {
+        "ZnO": (3.250, 5.207), "GaN": (3.189, 5.185), "AlN": (3.112, 4.982),
+        "InN": (3.545, 5.703), "ZnS": (3.811, 6.234), "CdS": (4.136, 6.713),
+        "SiC": (3.076, 5.048), "BeO": (2.698, 4.380),
+    },
+    "fluorite": {
+        "CeO2": 5.411, "UO2": 5.470, "ThO2": 5.600, "ZrO2": 5.090,
+        "CaF2": 5.463, "SrF2": 5.800, "BaF2": 6.200,
+    },
+}
+
+# Per-compound internal parameter for wurtzite; the ideal value is 3/8.
+_WURTZITE_U_BY_COMPOUND = {"ZnO": 0.3819, "GaN": 0.3768, "AlN": 0.3821}
+
+_FORMULA_RE = re.compile(r"^([A-Z][a-z]?)(\d*)([A-Z][a-z]?)(\d*)$")
+
+
+def parse_binary_formula(formula: str) -> tuple[str, int, str, int] | None:
+    """'CeO2' -> ('Ce', 1, 'O', 2); None when it is not a binary formula."""
+    match = _FORMULA_RE.match(formula.strip())
+    if not match:
+        return None
+    first, first_n, second, second_n = match.groups()
+    return first, int(first_n or 1), second, int(second_n or 1)
+
+
+def _canonical_formula(family: str, formula: str) -> str | None:
+    """Match a formula against a family's table, case-insensitively."""
+    for known in COMPOUND_LATTICE[family]:
+        if known.lower() == formula.lower():
+            return known
+    return None
+
+
+def compound_prototypes() -> list[str]:
+    """Every canonical '<family>-<formula>' name the tables can build."""
+    return sorted(
+        f"{family}-{formula}"
+        for family, table in COMPOUND_LATTICE.items()
+        for formula in table
+    )
+
+
+def split_compound(name: str) -> tuple[str, str] | None:
+    """Parse a compound prototype request into (family, canonical formula).
+
+    Accepts 'rocksalt-MgO', 'rocksalt MgO', 'MgO rocksalt', 'MgO-rocksalt', and a
+    bare 'MgO' when exactly one family lists it (ZnS and CdS are in two, so they
+    need the family named). Returns None when this is not a compound request.
+    """
+    tokens = [t for t in re.split(r"[\s_\-]+", str(name).strip()) if t]
+    if not 1 <= len(tokens) <= 2:
+        return None
+    families = [t for t in tokens if t.lower() in COMPOUND_FAMILIES]
+    others = [t for t in tokens if t.lower() not in COMPOUND_FAMILIES]
+
+    if len(families) == 1 and len(others) == 1:
+        family = families[0].lower()
+        formula = _canonical_formula(family, others[0])
+        if formula is None:
+            # Naming the wrong family is a likelier mistake than wanting an
+            # untabulated one, so say where the composition actually lives.
+            elsewhere = [
+                f"{other}-{_canonical_formula(other, others[0])}"
+                for other in COMPOUND_LATTICE
+                if other != family and _canonical_formula(other, others[0])
+            ]
+            if elsewhere:
+                raise ValueError(
+                    f"{others[0]} is not a tabulated {family} composition; it is "
+                    f"tabulated as {' or '.join(elsewhere)}. Use that name, or pass "
+                    f"an explicit 'a' to force the {family} structure."
+                )
+            known = ", ".join(sorted(COMPOUND_LATTICE[family]))
+            raise ValueError(
+                f"No tabulated lattice constant for {others[0]!r} in the {family} "
+                f"family. Known {family} compositions: {known}. Pass an explicit "
+                f"'a' (and 'c' for wurtzite) to build another composition."
+            )
+        return family, formula
+
+    if len(families) == 1 and not others:  # a bare family name
+        known = ", ".join(sorted(COMPOUND_LATTICE[families[0].lower()]))
+        raise ValueError(
+            f"{families[0]!r} is a prototype family, not a structure -- name the "
+            f"composition too, e.g. '{families[0].lower()}-"
+            f"{sorted(COMPOUND_LATTICE[families[0].lower()])[0]}'. Known: {known}"
+        )
+
+    if len(others) == 1 and not families:  # a bare formula: infer if unambiguous
+        hits = [
+            (family, _canonical_formula(family, others[0]))
+            for family in COMPOUND_LATTICE
+            if _canonical_formula(family, others[0])
+        ]
+        if len(hits) == 1:
+            return hits[0][0], hits[0][1]
+        if len(hits) > 1:
+            options = ", ".join(f"{family}-{formula}" for family, formula in hits)
+            raise ValueError(
+                f"{others[0]!r} is ambiguous -- name the family: {options}"
+            )
+    return None
+
+
 def resolve_prototype(name: str) -> str:
     key = str(name).strip().lower().replace("_", "-").replace(" ", "-")
     canonical = _PROTOTYPE_ALIASES.get(key)
@@ -663,17 +842,84 @@ def resolve_prototype(name: str) -> str:
                 canonical = proto
                 break
     if canonical is None:
+        compound = split_compound(name)
+        if compound is not None:
+            return f"{compound[0]}-{compound[1]}"
+    if canonical is None:
         raise ValueError(
-            f"Unknown prototype {name!r}. Available: " + ", ".join(sorted(PROTOTYPES))
+            f"Unknown prototype {name!r}. Available: "
+            + ", ".join(sorted(PROTOTYPES))
+            + "; plus <family>-<formula> for the "
+            + ", ".join(sorted(COMPOUND_FAMILIES))
+            + " families, e.g. rocksalt-MgO, wurtzite-ZnO, fluorite-CeO2."
         )
     return canonical
 
 
+def _make_compound(family: str, formula: str, a: float | None,
+                   c: float | None) -> dict:
+    """Instantiate a composition-parameterised family, e.g. rocksalt + MgO."""
+    spec = COMPOUND_FAMILIES[family]
+    parsed = parse_binary_formula(formula)
+    if parsed is None:
+        raise ValueError(f"{formula!r} is not a binary formula (expected e.g. MgO)")
+    first, first_n, second, second_n = parsed
+    if (first_n, second_n) != spec["ratio"]:
+        want = f"{spec['ratio'][0]}:{spec['ratio'][1]}"
+        raise ValueError(
+            f"{family} is a {want} structure, but {formula!r} is "
+            f"{first_n}:{second_n}"
+        )
+
+    tabulated = COMPOUND_LATTICE[family].get(formula)
+    if spec["hexagonal"]:
+        default_a, default_c = tabulated if tabulated else (None, None)
+    else:
+        default_a, default_c = tabulated, tabulated
+    a = float(a) if a else default_a
+    c = float(c) if c else (float(a) if not spec["hexagonal"] else default_c)
+    if a is None or c is None:
+        raise ValueError(
+            f"No tabulated lattice constant for {family}-{formula}; pass an "
+            f"explicit 'a'" + (" and 'c'" if spec["hexagonal"] else "")
+        )
+    if min(a, c) <= 0:
+        raise ValueError(f"Lattice constants must be positive, got a={a}, c={c}")
+
+    sites = spec["sites"]
+    if family == "wurtzite":
+        u = _WURTZITE_U_BY_COMPOUND.get(formula, _WURTZITE_U)
+        sites = [
+            (slot, (x, y, z if slot == 0 else (z - _WURTZITE_U + u) % 1.0))
+            for slot, (x, y, z) in sites
+        ]
+
+    if spec["hexagonal"]:
+        lattice = [[a, 0.0, 0.0], [-a / 2.0, a * _SQRT3 / 2.0, 0.0], [0.0, 0.0, c]]
+    else:
+        lattice = [[a, 0.0, 0.0], [0.0, a, 0.0], [0.0, 0.0, c]]
+
+    species = (first, second)
+    symbols = [species[slot] for slot, _ in sites]
+    coords = [list(position) for _, position in sites]
+    return build_struct(
+        f"{family}-{formula} ({spec['description']})", lattice, symbols, coords
+    )
+
+
 def make_prototype(name: str, a: float | None = None, c: float | None = None,
                    vacuum: float | None = None) -> dict:
-    """Build a prototype crystal (graphene, graphite, rutile-TiO2,
-    anatase-TiO2, hBN) as a structure dict. `a`/`c` override the tabulated
-    lattice constants (Å); for 2D sheets `vacuum` sets the c box height."""
+    """Build a prototype crystal as a structure dict.
+
+    Two kinds are supported: the fixed prototypes (graphene, graphite, hBN,
+    rutile-TiO2, anatase-TiO2) and the composition-parameterised binary families
+    (rocksalt, zincblende, wurtzite, fluorite), named '<family>-<formula>' --
+    rocksalt-MgO, wurtzite-ZnO, fluorite-CeO2. `a`/`c` override the tabulated
+    lattice constants (Å); for 2D sheets `vacuum` sets the c box height.
+    """
+    compound = split_compound(name)
+    if compound is not None:
+        return _make_compound(compound[0], compound[1], a, c)
     proto = PROTOTYPES[resolve_prototype(name)]
     a = float(a) if a else proto["a"]
     c = float(c) if c else proto["c"]

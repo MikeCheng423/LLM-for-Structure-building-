@@ -65,6 +65,17 @@ slab) is rejected by `request_rule.missing_slots` before it can enter the
 corpus, in addition to the existing execute + replay + invariant + policy gates.
 No paraphrase may introduce a slot value that differs from the canonical recipe.
 
+## Planned region: `crystal` — NOT ACTIVE
+
+Reserved for `build_crystal` (space group + fractional basis), the one builder
+with no corpus coverage. It is **not** in `request_rule.FAMILY_REQUIRED` and must
+not be added there until the whole change lands together — the guided input form
+asserts rule/UI agreement at import and will break every entry point otherwise.
+Planned required slots: `formula`, `spacegroup`, `lattice`.
+
+Full plan, including why this family is higher-risk than the others and the extra
+promotion bars it needs: **HANDBOOK §12**.
+
 ## Current conformance (pilot_r4, 1,314 prompts)
 
 Auditing the existing templated prompts against this rule: **43.3% conform.**

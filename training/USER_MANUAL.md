@@ -67,6 +67,25 @@ CLI.
 
 ---
 
+### 2a. Guided input — let the tool ask for the slots
+
+If you would rather not have to remember §3's slot table, don't:
+
+```bash
+ASE_auto_build --guided                             # region menu, then one question per slot
+ASE_auto_build --guided --region atomic_adsorption  # skip the menu
+```
+
+The form asks one question per required slot for the region you pick, validates
+each answer, composes the request in the corpus's own phrasing, shows it with a
+slot-coverage verdict, and only then loads the model — so a mistyped slot costs
+no GPU time. Inside the REPL, type `guided` at a `request>` prompt for the same
+thing. It also sidesteps the adsorption-height phrasing trap in §7.
+
+See **[docs/GUIDED_INPUT.md](../docs/GUIDED_INPUT.md)**.
+
+---
+
 ## 3. The golden rule: state every required slot
 
 **A request maps to one correct structure only if it names every structural
@@ -116,8 +135,47 @@ phrase requests. Core builders and their **required** arguments:
 | `ask_clarification` | question (+ choices, field) | Pause for one missing choice |
 | `finish` | name | Validate + select the final structure |
 
-Prototype names available: `graphene`, `graphite`, `hBN`, `anatase-TiO2`,
-`rutile-TiO2`.
+Prototype names available:
+
+- **Fixed:** `graphene`, `graphite`, `hBN`, `anatase-TiO2`, `rutile-TiO2`.
+- **Binary compounds**, named `<family>-<formula>` — this is how you get a metal
+  oxide, sulfide, nitride, or III–V semiconductor, since `build_bulk` wraps
+  `ase.build.bulk` and takes a *single element*:
+
+  | Family | Stoichiometry | Examples |
+  | --- | --- | --- |
+  | `rocksalt` | 1:1 | `rocksalt-MgO`, `rocksalt-NiO`, `rocksalt-NaCl`, `rocksalt-PbS`, `rocksalt-TiN` |
+  | `zincblende` | 1:1 | `zincblende-ZnS`, `zincblende-GaAs`, `zincblende-SiC` |
+  | `wurtzite` | 1:1 | `wurtzite-ZnO`, `wurtzite-GaN`, `wurtzite-AlN` |
+  | `fluorite` | 1:2 | `fluorite-CeO2`, `fluorite-UO2`, `fluorite-CaF2` |
+
+  45 compositions are tabulated with experimental lattice constants — **relax
+  before production use.** A composition that is not tabulated is *refused
+  rather than guessed*; pass an explicit `a` (and `c` for wurtzite) to build it
+  anyway. Where a formula is unambiguous you can drop the family (`MgO`, `CeO2`,
+  `NaCl`); `ZnS`, `CdS`, `GaN` and `SiC` exist in two families and need it named.
+  Full list: `structure.COMPOUND_LATTICE`.
+
+Compounds are not limited to the prototype region — **slabs, vacancies and
+substitutions work too**. Name the compound where you would name an element:
+
+| Prompt | Result |
+| --- | --- |
+| `Build a 2x2 rocksalt-MgO(100) slab with 4 layers and 12 Å vacuum.` | Mg64O64 slab |
+| `…and freeze the 2 bottom layers.` | + 32 constrained atoms |
+| `Build a 2x2x1 rocksalt-MgO supercell and remove the first atom.` | Mg15O16 |
+| `Build a 2x2x1 rocksalt-MgO supercell and replace the first atom with Ca.` | Ca1Mg15O16 |
+
+Use the **hyphenated** `family-formula` name: `rocksalt-MgO(100)` builds on the
+first call, while a bare `MgO(100)` makes the model guess the family and retry.
+`--guided` composes the hyphenated form for you — answering a compound there also
+skips the crystal-phase question, since the family already states it.
+
+Two caveats. Polar or reconstructed facets (ZnO(0001)) are **cut geometrically,
+not repaired** — inspect before running DFT. And if the model builds a different
+compound than you asked for, the post-build check now catches it and `--strict`
+exits 7; it did happen (a `rocksalt-NiO` request built MgO), so keep `--strict`
+on for batches.
 
 ---
 
@@ -217,9 +275,19 @@ Other disambiguation tips:
   ```
 
   `--strict` turns that warning into exit code 7 so a batch script fails rather
-  than quietly producing wrong DFT inputs. The known instance on r5: an
-  adsorption height phrased as `2.5 Å above the ontop site` is dropped, while
-  `at a height of 2.5 Å` is honoured. Put the number next to the word "height".
+  than quietly producing wrong DFT inputs. The known instance on r5 is the
+  adsorption height, and it is **more fragile than "put the number next to the
+  word height"** — an earlier revision of this manual said `at a height of 2.5 Å`
+  is honoured, which is not reliable: with the unit written `Å` that phrasing is
+  still dropped on Cu(100)/O/ontop. Of eleven phrasings measured, one survived
+  that case:
+
+  > `Put one O atom at a height of 2.5 angstrom on the ontop site of a 2x2 Cu(100) 5-layer slab with 12 Å vacuum.`
+
+  Rather than memorising it, use **`--guided`** (§2a), which composes that exact
+  wording for you. The root cause is corpus-side — every adsorption record the
+  adapter trained on used height 1.8 Å (1.9 for molecules), so any other value is
+  extrapolation. Full measurement table: **[docs/GUIDED_INPUT.md](../docs/GUIDED_INPUT.md)**.
 
 ---
 
@@ -248,5 +316,6 @@ exact hash is the reproducibility guarantee.
 | Model asks a question | You omitted exactly one required slot | Answer at `clarify>` |
 | Slab too thin/thick, or squished | Missing `layers` or `vacuum` | State both explicitly |
 | Adsorbate in the wrong place | Missing `site`/`height` (or `anchor` for a molecule) | Name the site, height, and anchor |
-| Adsorbate at 1.8 Å when you asked for another height | The model dropped `height` (§7) | Phrase it `at a height of N Å`; run with `--strict` |
+| Adsorbate at 1.8 Å when you asked for another height | The model dropped `height` (§7) | Use `--guided`; run with `--strict`. Rephrasing by hand is unreliable |
+| You forgot which slots a region needs | — | `--guided` asks for each one (§2a) |
 | Model load is slow | 4-bit base model load (~1–2 min) | One-time per session; the REPL reuses it |
