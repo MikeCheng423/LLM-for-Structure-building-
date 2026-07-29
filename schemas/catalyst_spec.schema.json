@@ -1,154 +1,429 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "catalyst-spec/v0.1",
-  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
-  "required": [
-    "schema_version", "task_status", "material", "model", "modifications",
-    "provenance", "clarification_questions", "requested_outputs"
-  ],
   "properties": {
-    "schema_version": {"const": "0.1"},
-    "task_status": {
-      "type": "string",
-      "enum": ["ready", "needs_clarification", "unsupported"]
+    "clarification_questions": {
+      "items": {
+        "maxLength": 500,
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array"
     },
     "material": {
-      "type": "object",
       "additionalProperties": false,
       "properties": {
-        "formula": {"type": "string", "minLength": 1, "maxLength": 64},
         "crystal_structure": {
-          "type": "string",
-          "enum": ["fcc", "bcc", "hcp", "diamond", "sc", "fluorite", "rocksalt", "wurtzite", "zincblende"]
+          "description": "Elemental phase, compound family, or registered prototype. A family is combined with material.formula ('fluorite' + 'CeO2'); a fixed prototype names itself ('rutile' + 'TiO2', 'graphene' + 'C').",
+          "enum": [
+            "anatase",
+            "bcc",
+            "diamond",
+            "fcc",
+            "fluorite",
+            "graphene",
+            "graphite",
+            "hBN",
+            "hcp",
+            "rocksalt",
+            "rutile",
+            "sc",
+            "wurtzite",
+            "zincblende"
+          ],
+          "type": "string"
         },
-        "reference_id": {"type": "string", "minLength": 1, "maxLength": 64},
+        "formula": {
+          "maxLength": 64,
+          "minLength": 1,
+          "type": "string"
+        },
         "lattice_parameters_angstrom": {
-          "type": "object",
           "additionalProperties": false,
           "properties": {
-            "a": {"type": "number", "exclusiveMinimum": 0.0},
-            "b": {"type": "number", "exclusiveMinimum": 0.0},
-            "c": {"type": "number", "exclusiveMinimum": 0.0},
-            "alpha": {"type": "number", "exclusiveMinimum": 0.0, "maximum": 180.0},
-            "beta": {"type": "number", "exclusiveMinimum": 0.0, "maximum": 180.0},
-            "gamma": {"type": "number", "exclusiveMinimum": 0.0, "maximum": 180.0}
-          }
-        }
-      }
-    },
-    "model": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "kind": {"type": "string", "enum": ["bulk", "surface", "nanoparticle"]},
-        "miller_indices": {
-          "type": "array", "minItems": 3, "maxItems": 3,
-          "items": {"type": "integer"}
-        },
-        "supercell": {
-          "type": "array", "minItems": 3, "maxItems": 3,
-          "items": {"type": "integer", "minimum": 1, "maximum": 12}
-        },
-        "layers": {"type": "integer", "minimum": 1, "maximum": 40},
-        "vacuum_angstrom": {"type": "number", "minimum": 3.0, "maximum": 100.0},
-        "shape": {"type": "string", "enum": ["icosahedron", "octahedron", "cuboctahedron"]},
-        "shells": {"type": "integer", "minimum": 1, "maximum": 6},
-        "lattice_constant_angstrom": {"type": "number", "exclusiveMinimum": 0.0},
-        "termination": {"type": "string", "minLength": 1, "maxLength": 64},
-        "periodic_boundary_conditions": {
-          "type": "array", "minItems": 3, "maxItems": 3,
-          "items": {"type": "boolean"}
-        },
-        "fixed_layers_from_bottom": {"type": "integer", "minimum": 0, "maximum": 40},
-        "center": {"type": "boolean"},
-        "atom_ordering": {"type": "string", "enum": ["ase_default"]}
-      }
-    },
-    "modifications": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "additionalProperties": false,
-        "required": ["operation"],
-        "properties": {
-          "operation": {"type": "string", "enum": ["make_vacancy", "substitute", "add_adsorbate", "add_supported_cluster"]},
-          "selector": {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "indices": {
-                "type": "array", "minItems": 1, "uniqueItems": true,
-                "items": {"type": "integer", "minimum": 1}
-              },
-              "element": {
-                "type": "array", "minItems": 1, "uniqueItems": true,
-                "items": {"type": "string", "minLength": 1, "maxLength": 3}
-              },
-              "region": {
-                "type": "object", "additionalProperties": false,
-                "required": ["axis", "op", "value"],
-                "properties": {
-                  "axis": {"type": "string", "enum": ["x", "y", "z"]},
-                  "op": {"type": "string", "enum": ["<", "<=", ">", ">=", "=="]},
-                  "value": {"type": "number"},
-                  "fractional": {"type": "boolean"},
-                  "tolerance": {"type": "number", "minimum": 0.0}
-                }
-              },
-              "layer": {
-                "type": "object", "additionalProperties": false,
-                "required": ["side", "count"],
-                "properties": {
-                  "side": {"type": "string", "enum": ["bottom", "top"]},
-                  "count": {"type": "integer", "minimum": 1},
-                  "tolerance": {"type": "number", "exclusiveMinimum": 0.0}
-                }
-              },
-              "ordinal": {"type": "integer", "minimum": 1}
+            "a": {
+              "exclusiveMinimum": 0.0,
+              "type": "number"
+            },
+            "alpha": {
+              "exclusiveMinimum": 0.0,
+              "maximum": 180.0,
+              "type": "number"
+            },
+            "b": {
+              "exclusiveMinimum": 0.0,
+              "type": "number"
+            },
+            "beta": {
+              "exclusiveMinimum": 0.0,
+              "maximum": 180.0,
+              "type": "number"
+            },
+            "c": {
+              "exclusiveMinimum": 0.0,
+              "type": "number"
+            },
+            "gamma": {
+              "exclusiveMinimum": 0.0,
+              "maximum": 180.0,
+              "type": "number"
             }
           },
-          "element": {"type": "string", "minLength": 1, "maxLength": 3},
-          "species": {"type": "string", "minLength": 1, "maxLength": 32},
-          "site": {"type": "string", "enum": ["ontop", "bridge", "hollow"]},
-          "site_index": {"type": "integer", "minimum": 1, "maximum": 1000},
-          "height_angstrom": {"type": "number", "minimum": 0.5, "maximum": 20.0},
-          "anchor": {"type": "integer", "minimum": 1, "maximum": 100},
-          "orientation": {"type": "string", "minLength": 1, "maxLength": 32},
-          "coverage_monolayer": {"type": "number", "exclusiveMinimum": 0.0, "maximum": 10.0}
-          ,
-          "shape": {"type": "string", "enum": ["icosahedron", "octahedron", "cuboctahedron"]},
-          "shells": {"type": "integer", "minimum": 1, "maximum": 6},
-          "gap_angstrom": {"type": "number", "minimum": 0.5, "maximum": 20.0},
-          "vacuum_angstrom": {"type": "number", "minimum": 3.0, "maximum": 100.0},
-          "lattice_constant_angstrom": {"type": "number", "exclusiveMinimum": 0.0}
+          "type": "object"
+        },
+        "reference_id": {
+          "maxLength": 64,
+          "minLength": 1,
+          "type": "string"
         }
-      }
+      },
+      "type": "object"
+    },
+    "model": {
+      "additionalProperties": false,
+      "properties": {
+        "atom_ordering": {
+          "enum": [
+            "ase_default"
+          ],
+          "type": "string"
+        },
+        "center": {
+          "type": "boolean"
+        },
+        "fixed_layers_from_bottom": {
+          "maximum": 40,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "kind": {
+          "enum": [
+            "bulk",
+            "surface",
+            "nanoparticle"
+          ],
+          "type": "string"
+        },
+        "lattice_constant_angstrom": {
+          "exclusiveMinimum": 0.0,
+          "type": "number"
+        },
+        "layers": {
+          "maximum": 40,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "miller_indices": {
+          "items": {
+            "type": "integer"
+          },
+          "maxItems": 3,
+          "minItems": 3,
+          "type": "array"
+        },
+        "periodic_boundary_conditions": {
+          "items": {
+            "type": "boolean"
+          },
+          "maxItems": 3,
+          "minItems": 3,
+          "type": "array"
+        },
+        "shape": {
+          "enum": [
+            "icosahedron",
+            "octahedron",
+            "cuboctahedron"
+          ],
+          "type": "string"
+        },
+        "shells": {
+          "maximum": 6,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "supercell": {
+          "items": {
+            "maximum": 12,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "maxItems": 3,
+          "minItems": 3,
+          "type": "array"
+        },
+        "termination": {
+          "maxLength": 64,
+          "minLength": 1,
+          "type": "string"
+        },
+        "vacuum_angstrom": {
+          "maximum": 100.0,
+          "minimum": 3.0,
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
+    "modifications": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "anchor": {
+            "maximum": 100,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "coverage_monolayer": {
+            "exclusiveMinimum": 0.0,
+            "maximum": 10.0,
+            "type": "number"
+          },
+          "element": {
+            "maxLength": 3,
+            "minLength": 1,
+            "type": "string"
+          },
+          "gap_angstrom": {
+            "maximum": 20.0,
+            "minimum": 0.5,
+            "type": "number"
+          },
+          "height_angstrom": {
+            "maximum": 20.0,
+            "minimum": 0.5,
+            "type": "number"
+          },
+          "lattice_constant_angstrom": {
+            "exclusiveMinimum": 0.0,
+            "type": "number"
+          },
+          "operation": {
+            "enum": [
+              "make_vacancy",
+              "substitute",
+              "add_adsorbate",
+              "add_supported_cluster"
+            ],
+            "type": "string"
+          },
+          "orientation": {
+            "maxLength": 32,
+            "minLength": 1,
+            "type": "string"
+          },
+          "selector": {
+            "additionalProperties": false,
+            "properties": {
+              "element": {
+                "items": {
+                  "maxLength": 3,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array",
+                "uniqueItems": true
+              },
+              "indices": {
+                "items": {
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                "minItems": 1,
+                "type": "array",
+                "uniqueItems": true
+              },
+              "layer": {
+                "additionalProperties": false,
+                "properties": {
+                  "count": {
+                    "minimum": 1,
+                    "type": "integer"
+                  },
+                  "side": {
+                    "enum": [
+                      "bottom",
+                      "top"
+                    ],
+                    "type": "string"
+                  },
+                  "tolerance": {
+                    "exclusiveMinimum": 0.0,
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "side",
+                  "count"
+                ],
+                "type": "object"
+              },
+              "ordinal": {
+                "minimum": 1,
+                "type": "integer"
+              },
+              "region": {
+                "additionalProperties": false,
+                "properties": {
+                  "axis": {
+                    "enum": [
+                      "x",
+                      "y",
+                      "z"
+                    ],
+                    "type": "string"
+                  },
+                  "fractional": {
+                    "type": "boolean"
+                  },
+                  "op": {
+                    "enum": [
+                      "<",
+                      "<=",
+                      ">",
+                      ">=",
+                      "=="
+                    ],
+                    "type": "string"
+                  },
+                  "tolerance": {
+                    "minimum": 0.0,
+                    "type": "number"
+                  },
+                  "value": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "axis",
+                  "op",
+                  "value"
+                ],
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "shape": {
+            "enum": [
+              "icosahedron",
+              "octahedron",
+              "cuboctahedron"
+            ],
+            "type": "string"
+          },
+          "shells": {
+            "maximum": 6,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "site": {
+            "enum": [
+              "ontop",
+              "bridge",
+              "hollow"
+            ],
+            "type": "string"
+          },
+          "site_index": {
+            "maximum": 1000,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "species": {
+            "maxLength": 32,
+            "minLength": 1,
+            "type": "string"
+          },
+          "vacuum_angstrom": {
+            "maximum": 100.0,
+            "minimum": 3.0,
+            "type": "number"
+          }
+        },
+        "required": [
+          "operation"
+        ],
+        "type": "object"
+      },
+      "type": "array"
     },
     "provenance": {
-      "type": "array",
       "items": {
-        "type": "object",
         "additionalProperties": false,
-        "required": ["field", "value", "evidence_type"],
         "properties": {
-          "field": {"type": "string", "minLength": 1, "maxLength": 160},
-          "value": {},
-          "evidence_type": {
-            "type": "string",
-            "enum": ["reported", "derived", "assumed_default", "user_supplied", "ambiguous"]
+          "claim_index": {
+            "minimum": 0,
+            "type": "integer"
           },
-          "claim_index": {"type": "integer", "minimum": 0},
-          "reason": {"type": "string", "minLength": 1, "maxLength": 500}
-        }
-      }
-    },
-    "clarification_questions": {
-      "type": "array", "items": {"type": "string", "minLength": 1, "maxLength": 500}
+          "evidence_type": {
+            "enum": [
+              "reported",
+              "derived",
+              "assumed_default",
+              "user_supplied",
+              "ambiguous"
+            ],
+            "type": "string"
+          },
+          "field": {
+            "maxLength": 160,
+            "minLength": 1,
+            "type": "string"
+          },
+          "reason": {
+            "maxLength": 500,
+            "minLength": 1,
+            "type": "string"
+          },
+          "value": {}
+        },
+        "required": [
+          "field",
+          "value",
+          "evidence_type"
+        ],
+        "type": "object"
+      },
+      "type": "array"
     },
     "requested_outputs": {
-      "type": "array", "minItems": 1, "uniqueItems": true,
-      "items": {"type": "string", "enum": ["cif", "vasp", "xyz", "traj"]}
+      "items": {
+        "enum": [
+          "cif",
+          "vasp",
+          "xyz",
+          "traj"
+        ],
+        "type": "string"
+      },
+      "minItems": 1,
+      "type": "array",
+      "uniqueItems": true
+    },
+    "schema_version": {
+      "const": "0.1"
+    },
+    "task_status": {
+      "enum": [
+        "ready",
+        "needs_clarification",
+        "unsupported"
+      ],
+      "type": "string"
     }
-  }
+  },
+  "required": [
+    "schema_version",
+    "task_status",
+    "material",
+    "model",
+    "modifications",
+    "provenance",
+    "clarification_questions",
+    "requested_outputs"
+  ],
+  "type": "object"
 }

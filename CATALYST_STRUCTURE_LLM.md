@@ -90,10 +90,11 @@ has a caller-assigned ID, locator, and text. The command writes one immutable
 directory under the output root and returns a nonzero status for clarification,
 unsupported work, pipeline failure, or environment failure.
 
-The deterministic slice is gated by 100 immutable golden fixtures in
-`tests/golden/` and the section 9 runner
+The deterministic slice is gated by 106 immutable golden fixtures in
+`tests/golden/` -- section 7.2's 100 plus the six section 14 examples, all of
+which now build and validate -- and the section 9 runner
 `training/evaluations/run_vertical_slice_gate.py`, which reports all six
-criteria at their thresholds (100/100 schema conformance, 89/89 build and export
+criteria at their thresholds (106/106 schema conformance, 95/95 build and export
 round trips, zero writes outside a request package, zero unregistered tool
 calls, zero fields without provenance, 11/11 ambiguities refused). Milestone 1's
 exit criterion is therefore met for the supported scope, with the caveat that
@@ -106,13 +107,34 @@ schema gate, so no journal-role adapter is promoted. The typed Python pipeline
 can consume reviewed records while a dedicated journal-role corpus and adapter
 are developed.
 
-The dispatcher builds elemental and registered-prototype bulk/slab
-structures, typed vacancies and substitutions, atomic or ASE-known molecular
-adsorbates, simple elemental nanoparticles, and one supported cluster. A caller
-may pass a resolved MP bulk parent through the Python API. Non-default compound
-terminations, repeated coverage/coadsorption, molecular orientation controls,
-lattice matching, and relaxation remain fail-closed until deterministic tools
-and validation rules cover them.
+The dispatcher builds elemental, compound-family and fixed-prototype bulk/slab
+structures -- `fcc`/`bcc`/`hcp`/`diamond`/`sc` phases, the `fluorite`,
+`rocksalt`, `wurtzite` and `zincblende` families, and the registered `rutile`,
+`anatase`, `graphene`, `graphite` and `hBN` prototypes -- plus typed vacancies
+and substitutions, atomic or ASE-known molecular adsorbates, simple elemental
+nanoparticles, and one supported cluster. A caller may pass a resolved MP bulk
+parent through the Python API.
+
+A molecular adsorbate is oriented so its declared `anchor` is the atom nearest
+the surface. `ase.build.molecule` geometries are not built for adsorption --
+`molecule("CO")` is stored as (O, C) with the carbon lower -- so placing the
+anchor at the requested height would otherwise leave the rest of the molecule
+between it and the slab. `anchor` is 1-based over that ASE ordering, so the
+carbon of CO is atom 2.
+
+When the reference resolver cannot reduce a bulk parent to one entry,
+`run_candidate_set` builds one separately named package per candidate and writes
+a `candidate_set.json` index, as section 7 requires. Each package labels its own
+`material.reference_id` as `derived` with the reason; the choice is never
+presented as reported.
+
+A request may carry the section 4 `paper` block (`title`, `doi`, `year`). Every
+source-backed fact in the review packet then carries that DOI alongside its
+locator, and the reproduction record retains the full block.
+
+Non-default compound terminations, repeated coverage/coadsorption, user-supplied
+molecular orientation controls, lattice matching, and relaxation remain
+fail-closed until deterministic tools and validation rules cover them.
 
 ## 4. Input contract
 

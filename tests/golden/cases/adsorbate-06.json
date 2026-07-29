@@ -102,8 +102,8 @@
         "field": "modifications[0].species",
         "locator": "Figure S1 caption",
         "source_id": "paper-1",
-        "value": "NO",
-        "verbatim_span": "The reported modification 0 species is \"NO\"."
+        "value": "OH",
+        "verbatim_span": "The reported modification 0 species is \"OH\"."
       },
       {
         "confidence": "high",
@@ -169,11 +169,12 @@
     "generated_by": "golden-fixture-generator/v1"
   },
   "schema_valid": true,
+  "section": "7.2",
   "sources": [
     {
       "locator": "Figure S1 caption",
       "source_id": "paper-1",
-      "text": "The reported chemical formula is \"Au\".\nThe reported crystal structure is \"fcc\".\nThe reported model type is \"surface\".\nThe reported Miller indices is [1, 0, 0].\nThe reported supercell repeat is [2, 2, 1].\nThe reported slab layer count is 8.\nThe reported vacuum thickness in angstrom is 17.0.\nThe reported periodic boundary conditions is [true, true, false].\nThe reported number of fixed bottom layers is 3.\nThe reported modification 0 species is \"NO\".\nThe reported modification 0 anchor is 1.\nThe reported modification 0 operation is \"add_adsorbate\".\nThe reported modification 0 site is \"ontop\".\nThe reported modification 0 site index is 1.\nThe reported modification 0 height angstrom is 1.8."
+      "text": "The reported chemical formula is \"Au\".\nThe reported crystal structure is \"fcc\".\nThe reported model type is \"surface\".\nThe reported Miller indices is [1, 0, 0].\nThe reported supercell repeat is [2, 2, 1].\nThe reported slab layer count is 8.\nThe reported vacuum thickness in angstrom is 17.0.\nThe reported periodic boundary conditions is [true, true, false].\nThe reported number of fixed bottom layers is 3.\nThe reported modification 0 species is \"OH\".\nThe reported modification 0 anchor is 1.\nThe reported modification 0 operation is \"add_adsorbate\".\nThe reported modification 0 site is \"ontop\".\nThe reported modification 0 site index is 1.\nThe reported modification 0 height angstrom is 1.8."
     }
   ],
   "spec_proposal": {
@@ -215,7 +216,7 @@
           "operation": "add_adsorbate",
           "site": "ontop",
           "site_index": 1,
-          "species": "NO"
+          "species": "OH"
         }
       ],
       "provenance": [
@@ -301,7 +302,7 @@
           "claim_index": 9,
           "evidence_type": "reported",
           "field": "modifications[0].species",
-          "value": "NO"
+          "value": "OH"
         },
         {
           "claim_index": 10,

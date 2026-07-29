@@ -66,8 +66,19 @@ def model_info(args, adapter: Path | None) -> dict[str, Any]:
 
 def load_request(path: Path) -> dict[str, Any]:
     value = json.loads(path.read_text(encoding="utf-8"))
-    if not isinstance(value, dict) or set(value) != {"request_id", "request", "sources"}:
-        raise ValueError("input must contain only request_id, request, and sources")
+    if not isinstance(value, dict) or not {"request_id", "request", "sources"} <= set(value):
+        raise ValueError("input must contain request_id, request, and sources")
+    if set(value) - {"request_id", "request", "sources", "paper"}:
+        raise ValueError("input must contain only request_id, request, sources, and paper")
+    if "paper" in value:
+        paper = value["paper"]
+        if not isinstance(paper, dict) or set(paper) - {"title", "doi", "year"}:
+            raise ValueError("paper accepts only title, doi, and year")
+        for key in ("title", "doi"):
+            if key in paper and (not isinstance(paper[key], str) or not paper[key]):
+                raise ValueError(f"paper {key} must be a nonempty string")
+        if "year" in paper and not isinstance(paper["year"], int):
+            raise ValueError("paper year must be an integer")
     if not isinstance(value["request_id"], str) or not isinstance(value["request"], str):
         raise ValueError("request_id and request must be strings")
     if re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,63}", value["request_id"]) is None:
@@ -131,6 +142,7 @@ def main(argv: list[str] | None = None) -> int:
         result = run_journal_request(
             request["request_id"], request["request"], request["sources"],
             chat, args.out, model_info=model_info(args, adapter),
+            paper=request.get("paper"),
         )
     except Exception as exc:
         print(f"ASE_catalyst_build: {type(exc).__name__}: {exc}", file=sys.stderr)

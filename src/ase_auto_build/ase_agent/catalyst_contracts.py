@@ -33,7 +33,8 @@ def load_schema(name: str) -> dict[str, Any]:
 
 
 SCHEMA_NAMES = (
-    "build_record", "catalyst_spec", "clarification_request", "evidence_ledger", "failure_record",
+    "build_record", "candidate_set", "catalyst_spec", "clarification_request", "evidence_ledger",
+    "failure_record",
     "reference_record", "relaxation_record", "review_packet", "spec_proposal",
     "supplied_evidence", "validation_report",
 )

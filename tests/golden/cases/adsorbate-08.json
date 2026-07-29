@@ -111,8 +111,8 @@
         "field": "modifications[0].anchor",
         "locator": "Figure S3 caption",
         "source_id": "paper-1",
-        "value": 1,
-        "verbatim_span": "The reported modification 0 anchor is 1."
+        "value": 2,
+        "verbatim_span": "The reported modification 0 anchor is 2."
       },
       {
         "confidence": "high",
@@ -169,11 +169,12 @@
     "generated_by": "golden-fixture-generator/v1"
   },
   "schema_valid": true,
+  "section": "7.2",
   "sources": [
     {
       "locator": "Figure S3 caption",
       "source_id": "paper-1",
-      "text": "The reported chemical formula is \"Ni\".\nThe reported crystal structure is \"fcc\".\nThe reported model type is \"surface\".\nThe reported Miller indices is [1, 1, 1].\nThe reported supercell repeat is [2, 2, 1].\nThe reported slab layer count is 6.\nThe reported vacuum thickness in angstrom is 16.0.\nThe reported periodic boundary conditions is [true, true, false].\nThe reported number of fixed bottom layers is 1.\nThe reported modification 0 species is \"CO\".\nThe reported modification 0 anchor is 1.\nThe reported modification 0 operation is \"add_adsorbate\".\nThe reported modification 0 site is \"bridge\".\nThe reported modification 0 site index is 1.\nThe reported modification 0 height angstrom is 2.0."
+      "text": "The reported chemical formula is \"Ni\".\nThe reported crystal structure is \"fcc\".\nThe reported model type is \"surface\".\nThe reported Miller indices is [1, 1, 1].\nThe reported supercell repeat is [2, 2, 1].\nThe reported slab layer count is 6.\nThe reported vacuum thickness in angstrom is 16.0.\nThe reported periodic boundary conditions is [true, true, false].\nThe reported number of fixed bottom layers is 1.\nThe reported modification 0 species is \"CO\".\nThe reported modification 0 anchor is 2.\nThe reported modification 0 operation is \"add_adsorbate\".\nThe reported modification 0 site is \"bridge\".\nThe reported modification 0 site index is 1.\nThe reported modification 0 height angstrom is 2.0."
     }
   ],
   "spec_proposal": {
@@ -210,7 +211,7 @@
       },
       "modifications": [
         {
-          "anchor": 1,
+          "anchor": 2,
           "height_angstrom": 2.0,
           "operation": "add_adsorbate",
           "site": "bridge",
@@ -307,7 +308,7 @@
           "claim_index": 10,
           "evidence_type": "reported",
           "field": "modifications[0].anchor",
-          "value": 1
+          "value": 2
         },
         {
           "claim_index": 11,

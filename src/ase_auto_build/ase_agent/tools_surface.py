@@ -60,12 +60,34 @@ def _choose_site(atoms: Atoms, args: dict[str, Any]) -> tuple[float, float]:
     return tuple(candidates[index]["xy"])
 
 
+def _anchor_down(adsorbate: Atoms, anchor: int) -> Atoms:
+    """Orient a molecule so its binding anchor is the atom nearest the surface.
+
+    `ase.build.molecule` geometries are not oriented for adsorption: CO is stored
+    as (O, C) with the carbon lower, and H2O/NH3/OH keep their hydrogens below the
+    heavy atom. Placing the anchor at the requested height then leaves the rest of
+    the molecule between it and the slab -- for CO on Pt at 1.9 A that is a 0.75 A
+    C-Pt contact, which the r6 corpus recorded as a successful build.
+
+    Mirroring z about the anchor plane is deterministic and keeps every bond
+    length; it is a placement rule, not the user-facing orientation control that
+    the policy gate still refuses.
+    """
+    if anchor < 0 or anchor >= len(adsorbate):
+        raise IndexError(f"anchor {anchor + 1} out of range for {len(adsorbate)} atoms")
+    z = adsorbate.positions[:, 2]
+    if float(z.min()) < float(z[anchor]) - 1e-9:
+        adsorbate = adsorbate.copy()
+        adsorbate.positions[:, 2] = 2.0 * float(z[anchor]) - z
+    return adsorbate
+
+
 def _add(workspace, args, *, molecular: bool):
     name = args["name"]
     atoms = workspace.require_atoms(name)
     position = _choose_site(atoms, args)
     if molecular:
-        adsorbate = molecule(args["species"])
+        adsorbate = _anchor_down(molecule(args["species"]), int(args.get("anchor", 1)) - 1)
         add_adsorbate(atoms, adsorbate, float(args.get("height", 1.8)), position=position, mol_index=int(args.get("anchor", 1)) - 1)
     else:
         add_adsorbate(atoms, args["element"], float(args.get("height", 1.8)), position=position)

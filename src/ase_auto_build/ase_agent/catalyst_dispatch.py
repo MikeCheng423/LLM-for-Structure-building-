@@ -105,6 +105,10 @@ def _reference_tools(registry, reference: ReferenceResolution) -> None:
     ))
 
 
+#: Phases ase.build.bulk understands; anything else names a registered prototype.
+ELEMENTAL_PHASES = {"fcc", "bcc", "hcp", "diamond", "sc"}
+
+
 def dispatch_spec(
     spec: dict[str, Any], *, request_id: str,
     reference: ReferenceResolution | None = None,
@@ -178,12 +182,22 @@ def dispatch_spec(
         compound = _element_count(formula) > 1
         if compound and model.get("termination") != "ase_default":
             raise CatalystDispatchError("compound surfaces require the registered ase_default termination")
-        element = f"{crystal}-{formula}" if compound else formula
+        if compound:
+            # `crystal` only names the family here, and the builder treats it as
+            # redundant with the prototype; passing both trips the phase enum.
+            element, phase = f"{crystal}-{formula}", None
+        elif crystal in ELEMENTAL_PHASES:
+            element, phase = formula, crystal
+        else:
+            # A registered single-element prototype, e.g. graphene or graphite.
+            element, phase = crystal, None
         args = {
-            "name": name, "element": element, "crystal": crystal,
+            "name": name, "element": element,
             "miller": model["miller_indices"], "layers": model["layers"],
             "repeat": model["supercell"], "vacuum": model["vacuum_angstrom"],
         }
+        if phase:
+            args["crystal"] = phase
         for key in ("a", "c"):
             if key in lattice:
                 args[key] = lattice[key]

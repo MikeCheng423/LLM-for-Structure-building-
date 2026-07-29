@@ -5,10 +5,11 @@ from __future__ import annotations
 import hashlib
 import json
 import re
+from copy import deepcopy
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Literal
+from typing import Any, Callable, Literal
 
 import ase
 import numpy as np
@@ -20,7 +21,7 @@ from .catalyst_agents import ChatCallable, extract_evidence, plan_spec
 from .catalyst_dispatch import dispatch_spec
 from .catalyst_validation import catalyst_validation_rules
 from .export import _extension_for, write_bundle
-from .mp_resolver import ReferenceResolution
+from .mp_resolver import ReferenceResolution, resolve_reference
 from .validation import _constrained_count, atoms_hash, structure_invariants, validate_atoms
 
 PRODUCER_VERSION = "ASE_auto_build/0.9.2"
@@ -98,6 +99,51 @@ def _round_trip_mismatch(path: Path, atoms) -> str | None:
                 f"{_constrained_count(atoms)} -> {_constrained_count(restored)}"
             )
     return None
+
+
+def _model_summary(spec: dict[str, Any]) -> dict[str, Any]:
+    """Describe the surface and its adsorbates, as section 11 requires."""
+    model = spec["model"]
+    summary: dict[str, Any] = {
+        "kind": model["kind"],
+        "formula": spec["material"]["formula"],
+        "crystal_structure": spec["material"].get("crystal_structure"),
+        "supercell": model.get("supercell"),
+    }
+    if model["kind"] == "surface":
+        summary.update({
+            "miller_indices": model.get("miller_indices"),
+            "layers": model.get("layers"),
+            "vacuum_angstrom": model.get("vacuum_angstrom"),
+            "termination": model.get("termination", "ase_default"),
+            "fixed_layers_from_bottom": model.get("fixed_layers_from_bottom", 0),
+        })
+    elif model["kind"] == "nanoparticle":
+        summary.update({"shape": model.get("shape"), "shells": model.get("shells")})
+    adsorbates, defects, clusters = [], [], []
+    for modification in spec["modifications"]:
+        operation = modification["operation"]
+        if operation == "add_adsorbate":
+            adsorbates.append({
+                "species": modification.get("species") or modification["element"],
+                "site": modification["site"], "site_index": modification.get("site_index", 1),
+                "height_angstrom": modification["height_angstrom"],
+                "anchor": modification.get("anchor"),
+            })
+        elif operation == "add_supported_cluster":
+            clusters.append({
+                "element": modification["element"], "shape": modification["shape"],
+                "shells": modification["shells"], "gap_angstrom": modification["gap_angstrom"],
+            })
+        else:
+            defects.append({
+                "operation": operation, "element": modification.get("element"),
+                "selector": modification.get("selector"),
+            })
+    summary["adsorbates"] = adsorbates
+    summary["defects"] = defects
+    summary["supported_clusters"] = clusters
+    return summary
 
 
 def _write_json(path: Path, value: dict[str, Any]) -> None:
@@ -199,6 +245,7 @@ def _run_catalyst_pipeline(
     *,
     reference: ReferenceResolution | None = None,
     model_info: dict[str, Any] | None = None,
+    paper: dict[str, Any] | None = None,
     _allow_existing_inputs: bool = False,
 ) -> CatalystPipelineResult:
     """Run one immutable request package without any interactive fallback."""
@@ -350,6 +397,7 @@ def _run_catalyst_pipeline(
                 "evidence_type": source["evidence_type"],
                 "source_id": claim["source_id"], "locator": claim["locator"],
                 "claim_index": source["claim_index"],
+                **({"doi": paper["doi"]} if paper and paper.get("doi") else {}),
             })
         elif source["evidence_type"] in {"assumed_default", "derived"}:
             assumptions.append({
@@ -362,7 +410,7 @@ def _run_catalyst_pipeline(
         }),
         "schema_version": "review-packet/v1",
         "status": "review_ready" if validation["passed"] else "failed",
-        "structure_summary": validation["invariants"],
+        "structure_summary": {**validation["invariants"], "model": _model_summary(spec)},
         "source_backed_facts": source_backed_facts,
         "assumptions": assumptions,
         "warnings": list(proposal["agent_warnings"]) + [
@@ -373,6 +421,7 @@ def _run_catalyst_pipeline(
             "build_record.json", "validation_report.json",
         ],
         "reproduction": {
+            **({"paper": paper} if paper else {}),
             "catalyst_spec_schema": spec["schema_version"],
             "registry_version": build["registry_version"],
             "recipe_hash": recipe_digest,
@@ -396,13 +445,15 @@ def run_catalyst_pipeline(
     *,
     reference: ReferenceResolution | None = None,
     model_info: dict[str, Any] | None = None,
+    paper: dict[str, Any] | None = None,
     _allow_existing_inputs: bool = False,
 ) -> CatalystPipelineResult:
     """Run the deterministic pipeline and retain a failure record after setup."""
     try:
         return _run_catalyst_pipeline(
             evidence, proposal, output_root, reference=reference,
-            model_info=model_info, _allow_existing_inputs=_allow_existing_inputs,
+            model_info=model_info, paper=paper,
+            _allow_existing_inputs=_allow_existing_inputs,
         )
     except FileExistsError:
         raise
@@ -415,6 +466,111 @@ def run_catalyst_pipeline(
         return _failure_result(request_id, request_dir, "deterministic_pipeline", exc)
 
 
+@dataclass(frozen=True)
+class CandidateSetResult:
+    """One package per scientifically reasonable reconstruction."""
+    record: dict[str, Any]
+    results: tuple[CatalystPipelineResult, ...]
+
+
+def _candidate_proposal(
+    proposal: dict[str, Any], material_id: str, index: int, total: int, request_id: str
+) -> dict[str, Any]:
+    """Point one proposal at one candidate parent, labelled `derived`.
+
+    Section 5 forbids presenting a system choice as reported, so the selected
+    material id carries a reason naming its position in the candidate set.
+    """
+    spec = deepcopy(proposal["catalyst_spec"])
+    spec["material"]["reference_id"] = material_id
+    reason = (
+        f"Ambiguous bulk parent: candidate {index} of {total} ({material_id}). "
+        "Each candidate is built separately rather than one being chosen silently."
+    )
+    entry = {
+        "field": "material.reference_id", "value": material_id,
+        "evidence_type": "derived", "reason": reason,
+    }
+    spec["provenance"] = [
+        item for item in spec["provenance"] if item["field"] != "material.reference_id"
+    ] + [entry]
+    sources = [
+        item for item in proposal["field_sources"] if item["field"] != "material.reference_id"
+    ] + [{"field": "material.reference_id", "evidence_type": "derived", "reason": reason}]
+    return {
+        **proposal, "request_id": request_id, "catalyst_spec": spec, "field_sources": sources,
+    }
+
+
+def run_candidate_set(
+    evidence: dict[str, Any],
+    proposal: dict[str, Any],
+    output_root: Path,
+    *,
+    query: dict[str, Any],
+    fetch: Callable[[dict[str, Any]], Any],
+    model_info: dict[str, Any] | None = None,
+    paper: dict[str, Any] | None = None,
+) -> CandidateSetResult:
+    """Build every meaningful bulk parent when the resolver cannot choose one.
+
+    CATALYST_STRUCTURE_LLM.md section 7: when several scientifically reasonable
+    reconstructions exist, generate separately named candidates rather than
+    silently selecting one.
+    """
+    base_request_id = str(proposal["request_id"])
+    probe = resolve_reference(base_request_id, dict(query), fetch)
+    if probe.status != "needs_clarification":
+        raise ValueError("candidate sets apply only to an unresolved bulk parent")
+    material_ids = list(probe.candidate_material_ids)
+
+    results: list[CatalystPipelineResult] = []
+    entries: list[dict[str, Any]] = []
+    for index, material_id in enumerate(material_ids, start=1):
+        request_id = f"{base_request_id}-{material_id}"
+        if _SAFE_ID.fullmatch(request_id) is None:
+            raise ValueError(f"candidate request_id is not path-free: {request_id}")
+        resolution = resolve_reference(request_id, {**query, "material_id": material_id}, fetch)
+        if resolution.status != "resolved":
+            raise ValueError(f"candidate {material_id} did not resolve to one entry")
+        candidate_evidence = {**evidence, "request_id": request_id}
+        candidate_proposal = _candidate_proposal(
+            proposal, material_id, index, len(material_ids), request_id
+        )
+        result = run_catalyst_pipeline(
+            candidate_evidence, candidate_proposal, output_root,
+            reference=resolution, model_info=model_info, paper=paper,
+        )
+        results.append(result)
+        entry = {
+            "candidate_id": f"candidate-{index}", "request_id": request_id,
+            "value": material_id, "status": result.status,
+            "directory": result.request_dir.name,
+        }
+        build_record = result.request_dir / "build_record.json"
+        if build_record.is_file():
+            entry["atoms_hash"] = json.loads(
+                build_record.read_text(encoding="utf-8")
+            )["output_hashes"]["atoms"]
+        entries.append(entry)
+
+    record = {
+        **_metadata(base_request_id, {"spec_proposal": _sha(proposal)}),
+        "schema_version": "candidate-set/v1",
+        "ambiguous_field": "material.reference_id",
+        "reason": (
+            f"The bulk reference query matched {len(material_ids)} meaningful entries; "
+            "each is built as a separate named candidate."
+        ),
+        "candidates": entries,
+    }
+    validate_record("candidate_set", record)
+    root = Path(output_root).resolve()
+    root.mkdir(parents=True, exist_ok=True)
+    _write_json(root / f"{base_request_id}-candidate_set.json", record)
+    return CandidateSetResult(record, tuple(results))
+
+
 def run_journal_request(
     request_id: str,
     request: str,
@@ -424,6 +580,7 @@ def run_journal_request(
     *,
     reference: ReferenceResolution | None = None,
     model_info: dict[str, Any] | None = None,
+    paper: dict[str, Any] | None = None,
     model_location: Literal["local", "external"] = "local",
     authorize_private_external: bool = False,
 ) -> CatalystPipelineResult:
@@ -433,6 +590,7 @@ def run_journal_request(
         **_metadata(request_id, {"request": _sha(request.encode())}),
         "schema_version": "supplied-evidence/v1", "request": request,
         "sources": sources, "model_location": model_location,
+        **({"paper": paper} if paper else {}),
         "private_external_authorized": bool(authorize_private_external),
     }
     validate_record("supplied_evidence", supplied)
@@ -454,10 +612,13 @@ def run_journal_request(
     try:
         return run_catalyst_pipeline(
             evidence, proposal, output_root, reference=reference,
-            model_info=model_info, _allow_existing_inputs=True,
+            model_info=model_info, paper=paper, _allow_existing_inputs=True,
         )
     except Exception as exc:
         return _failure_result(request_id, request_dir, "deterministic_pipeline", exc)
 
 
-__all__ = ["CatalystPipelineResult", "run_catalyst_pipeline", "run_journal_request"]
+__all__ = [
+    "CandidateSetResult", "CatalystPipelineResult", "run_candidate_set",
+    "run_catalyst_pipeline", "run_journal_request",
+]

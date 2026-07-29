@@ -1,31 +1,110 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "supplied-evidence/v1",
-  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
-  "required": ["schema_version", "request_id", "created_at", "producer_version", "artifact_hashes", "request", "sources", "model_location", "private_external_authorized"],
   "properties": {
-    "schema_version": {"const": "supplied-evidence/v1"},
-    "request_id": {"type": "string", "minLength": 1, "maxLength": 64},
-    "created_at": {"type": "string", "minLength": 20, "maxLength": 40},
-    "producer_version": {"type": "string", "minLength": 1, "maxLength": 128},
-    "artifact_hashes": {"type": "object"},
-    "request": {"type": "string", "minLength": 1, "maxLength": 10000},
-    "model_location": {"type": "string", "enum": ["local", "external"]},
-    "private_external_authorized": {"type": "boolean"},
-    "sources": {
-      "type": "array", "minItems": 1,
-      "items": {
-        "type": "object",
-        "additionalProperties": false,
-        "required": ["source_id", "locator", "text"],
-        "properties": {
-          "source_id": {"type": "string", "minLength": 1, "maxLength": 128},
-          "locator": {"type": "string", "minLength": 1, "maxLength": 500},
-          "text": {"type": "string", "minLength": 1, "maxLength": 1000000},
-          "private": {"type": "boolean"}
+    "artifact_hashes": {
+      "type": "object"
+    },
+    "created_at": {
+      "maxLength": 40,
+      "minLength": 20,
+      "type": "string"
+    },
+    "model_location": {
+      "enum": [
+        "local",
+        "external"
+      ],
+      "type": "string"
+    },
+    "paper": {
+      "additionalProperties": false,
+      "description": "Bibliographic identity of the source publication (section 4).",
+      "properties": {
+        "doi": {
+          "maxLength": 200,
+          "minLength": 1,
+          "type": "string"
+        },
+        "title": {
+          "maxLength": 500,
+          "minLength": 1,
+          "type": "string"
+        },
+        "year": {
+          "maximum": 2200,
+          "minimum": 1800,
+          "type": "integer"
         }
-      }
+      },
+      "type": "object"
+    },
+    "private_external_authorized": {
+      "type": "boolean"
+    },
+    "producer_version": {
+      "maxLength": 128,
+      "minLength": 1,
+      "type": "string"
+    },
+    "request": {
+      "maxLength": 10000,
+      "minLength": 1,
+      "type": "string"
+    },
+    "request_id": {
+      "maxLength": 64,
+      "minLength": 1,
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "supplied-evidence/v1"
+    },
+    "sources": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "locator": {
+            "maxLength": 500,
+            "minLength": 1,
+            "type": "string"
+          },
+          "private": {
+            "type": "boolean"
+          },
+          "source_id": {
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string"
+          },
+          "text": {
+            "maxLength": 1000000,
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "source_id",
+          "locator",
+          "text"
+        ],
+        "type": "object"
+      },
+      "minItems": 1,
+      "type": "array"
     }
-  }
+  },
+  "required": [
+    "schema_version",
+    "request_id",
+    "created_at",
+    "producer_version",
+    "artifact_hashes",
+    "request",
+    "sources",
+    "model_location",
+    "private_external_authorized"
+  ],
+  "type": "object"
 }

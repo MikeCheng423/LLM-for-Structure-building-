@@ -1,6 +1,6 @@
 {
-  "buildable_case_count": 89,
-  "case_count": 100,
+  "buildable_case_count": 95,
+  "case_count": 106,
   "cases": [
     {
       "built_structure": true,
@@ -2022,6 +2022,135 @@
       "tool_calls": [
         "build_surface",
         "freeze_layers",
+        "finish"
+      ],
+      "unregistered_tools": [],
+      "validation_passed": true,
+      "writes_outside_request_dir": []
+    },
+    {
+      "built_structure": true,
+      "case_id": "slice-co-on-pt111",
+      "expected_status": "review_ready",
+      "failed_rules": [],
+      "family": "vertical_slice",
+      "fields_without_provenance": [],
+      "label": "construction_golden",
+      "reference_status": null,
+      "round_trip_passed": true,
+      "schema_conformant": true,
+      "status": "review_ready",
+      "tool_calls": [
+        "build_surface",
+        "add_molecular_adsorbate",
+        "finish"
+      ],
+      "unregistered_tools": [],
+      "validation_passed": true,
+      "writes_outside_request_dir": []
+    },
+    {
+      "built_structure": true,
+      "case_id": "slice-cu-cluster-on-ceo2-111",
+      "expected_status": "review_ready",
+      "failed_rules": [],
+      "family": "vertical_slice",
+      "fields_without_provenance": [],
+      "label": "construction_golden",
+      "reference_status": null,
+      "round_trip_passed": true,
+      "schema_conformant": true,
+      "status": "review_ready",
+      "tool_calls": [
+        "build_surface",
+        "build_nanoparticle",
+        "combine",
+        "finish"
+      ],
+      "unregistered_tools": [],
+      "validation_passed": true,
+      "writes_outside_request_dir": []
+    },
+    {
+      "built_structure": true,
+      "case_id": "slice-n-doped-graphene-single-atom",
+      "expected_status": "review_ready",
+      "failed_rules": [],
+      "family": "vertical_slice",
+      "fields_without_provenance": [],
+      "label": "construction_golden",
+      "reference_status": null,
+      "round_trip_passed": true,
+      "schema_conformant": true,
+      "status": "review_ready",
+      "tool_calls": [
+        "build_surface",
+        "substitute",
+        "add_atomic_adsorbate",
+        "finish"
+      ],
+      "unregistered_tools": [],
+      "validation_passed": true,
+      "writes_outside_request_dir": []
+    },
+    {
+      "built_structure": true,
+      "case_id": "slice-o-on-pd100",
+      "expected_status": "review_ready",
+      "failed_rules": [],
+      "family": "vertical_slice",
+      "fields_without_provenance": [],
+      "label": "construction_golden",
+      "reference_status": null,
+      "round_trip_passed": true,
+      "schema_conformant": true,
+      "status": "review_ready",
+      "tool_calls": [
+        "build_surface",
+        "add_atomic_adsorbate",
+        "finish"
+      ],
+      "unregistered_tools": [],
+      "validation_passed": true,
+      "writes_outside_request_dir": []
+    },
+    {
+      "built_structure": true,
+      "case_id": "slice-o-vacancy-tio2-110",
+      "expected_status": "review_ready",
+      "failed_rules": [],
+      "family": "vertical_slice",
+      "fields_without_provenance": [],
+      "label": "construction_golden",
+      "reference_status": null,
+      "round_trip_passed": true,
+      "schema_conformant": true,
+      "status": "review_ready",
+      "tool_calls": [
+        "build_surface",
+        "make_vacancy",
+        "finish"
+      ],
+      "unregistered_tools": [],
+      "validation_passed": true,
+      "writes_outside_request_dir": []
+    },
+    {
+      "built_structure": true,
+      "case_id": "slice-pt-substituted-au111",
+      "expected_status": "review_ready",
+      "failed_rules": [],
+      "family": "vertical_slice",
+      "fields_without_provenance": [],
+      "label": "construction_golden",
+      "reference_status": null,
+      "round_trip_passed": true,
+      "schema_conformant": true,
+      "status": "review_ready",
+      "tool_calls": [
+        "build_surface",
+        "freeze_layers",
+        "substitute",
         "finish"
       ],
       "unregistered_tools": [],

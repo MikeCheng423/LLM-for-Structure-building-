@@ -107,11 +107,25 @@ def catalyst_validation_rules(spec: dict[str, Any], workspace) -> list[dict[str,
     if model["kind"] == "surface" and build is not None:
         slab = build.atoms
         measured_layers = len(geometric_layers(slab))
-        rules.append(_rule(
-            "slab_layer_count", measured_layers, int(model["layers"]),
-            measured_layers == int(model["layers"]),
-            "slab thickness matches the requested layer count",
-        ))
+        requested_layers = int(model["layers"])
+        if len(set(Formula(spec["material"]["formula"]).count())) == 1:
+            rules.append(_rule(
+                "slab_layer_count", measured_layers, requested_layers,
+                measured_layers == requested_layers,
+                "slab thickness matches the requested layer count",
+            ))
+        else:
+            # A compound layer resolves into sublayers -- rutile TiO2(110) gives
+            # three z levels per requested layer -- so the honest invariant is
+            # divisibility, not equality.
+            multiple = requested_layers > 0 and measured_layers % requested_layers == 0
+            rules.append(_rule(
+                "slab_layer_count", measured_layers,
+                f"positive multiple of {requested_layers}",
+                bool(multiple) and measured_layers >= requested_layers,
+                "compound slab thickness is a whole number of requested layers "
+                f"({measured_layers // requested_layers if multiple else '?'} sublayers each)",
+            ))
         z_min, z_max = float(np.min(slab.positions[:, 2])), float(np.max(slab.positions[:, 2]))
         cell_z = float(slab.cell.lengths()[2])
         lower, upper = z_min, cell_z - z_max
@@ -170,6 +184,18 @@ def catalyst_validation_rules(spec: dict[str, Any], workspace) -> list[dict[str,
             f"adsorbate_{index}_anchor_height", round(measured_height, 6), expected_height,
             abs(measured_height - expected_height) <= 1e-5,
             "binding anchor height matches CatalystSpec",
+        ))
+        # The anchor is the binding atom, so nothing may sit between it and the
+        # surface. `ase.build.molecule` orders CO as (O, C), so anchor=1 buries
+        # the carbon 1.15 A below the requested height -- geometry alone barely
+        # tolerates it, but it is not the reported adsorption configuration.
+        adsorbate_z = final.positions[first_new:, 2]
+        lowest = float(np.min(adsorbate_z))
+        anchor_z = float(final.positions[anchor, 2])
+        rules.append(_rule(
+            f"adsorbate_{index}_anchor_is_lowest", round(anchor_z - lowest, 6),
+            "<= 1e-06 angstrom", anchor_z - lowest <= 1e-6,
+            "the binding anchor is the adsorbate atom closest to the surface",
         ))
         distances = final.get_all_distances(mic=True)[first_new:, :first_new]
         closest = np.unravel_index(int(np.argmin(distances)), distances.shape)

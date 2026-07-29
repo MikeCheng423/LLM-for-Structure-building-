@@ -8,6 +8,7 @@ from typing import Any
 from ase import Atoms
 from ase.build import bulk, molecule, nanotube, surface
 from ase.cluster import Icosahedron, Octahedron
+from ase.data import atomic_numbers
 from ase.constraints import FixAtoms, FixCartesian
 from ase.spacegroup import crystal
 
@@ -133,6 +134,20 @@ def _surface_substrate(args: dict[str, Any]) -> Atoms:
             f"crystal={crystal!r} is a compound family but element={substrate!r} "
             f"is not a composition; use element='{crystal}-MgO' style"
         )
+    if substrate not in atomic_numbers:
+        # A fixed registered prototype -- 'rutile-TiO2', 'graphene', 'hBN' -- is
+        # neither a <family>-<formula> compound nor an ase.build.bulk phase, so
+        # it needs the prototype table rather than a reference-data lookup.
+        try:
+            canonical = resolve_prototype(substrate)
+        except ValueError:
+            canonical = None
+        if canonical is not None:
+            return _from_structure_dict(make_prototype(
+                canonical,
+                a=float(args["a"]) if "a" in args else None,
+                c=float(args["c"]) if "c" in args else None,
+            ))
     kwargs: dict[str, Any] = {}
     if crystal:
         kwargs["crystalstructure"] = crystal

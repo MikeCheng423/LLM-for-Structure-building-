@@ -76,7 +76,11 @@ def _ready_specs() -> Iterable[tuple[str, str, dict[str, Any]]]:
         }, [])
         yield f"surface-{index:04d}", "surface", spec
 
-    adsorbates = (("O", None, None, 1.6), ("H", None, None, 1.2), (None, "CO", 1, 1.9),
+    # `anchor` is 1-based over ase.build.molecule's ordering: molecule("CO") is
+    # (O, C), so the carbon that binds to the metal is atom 2. Anchoring atom 1
+    # left the carbon 0.75 A from the top layer and the corpus recorded it as a
+    # successful build.
+    adsorbates = (("O", None, None, 1.6), ("H", None, None, 1.2), (None, "CO", 2, 1.9),
                   (None, "NH3", 1, 2.0), (None, "H2O", 1, 1.9))
     for index, ((element, crystal), facet, site, adsorbate, repeat) in enumerate(itertools.islice(
         itertools.cycle(itertools.product(phases[:5], facets, ("ontop",), adsorbates, ([2, 2, 1],))), 500

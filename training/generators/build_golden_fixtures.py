@@ -315,11 +315,14 @@ def _defect_fixtures() -> Iterator[dict[str, Any]]:
 # Adsorbate fixtures (15) -- height, site and species varied independently
 # --------------------------------------------------------------------------
 
+# `anchor` is 1-based over ase.build.molecule's ordering, which is not the
+# formula's: molecule("CO") is (O, C), so the carbon is atom 2. Anchoring atom 1
+# there puts the carbon 1.15 A below the requested height, inside the slab.
 _ADSORBATES = (
     {"element": "O"}, {"element": "H"}, {"element": "N"}, {"element": "C"},
-    {"species": "CO", "anchor": 1}, {"species": "CO", "anchor": 2},
+    {"species": "CO", "anchor": 2}, {"species": "NO", "anchor": 1},
     {"species": "H2O", "anchor": 1}, {"species": "NH3", "anchor": 1},
-    {"species": "NO", "anchor": 1}, {"species": "O2", "anchor": 1},
+    {"species": "OH", "anchor": 1}, {"species": "O2", "anchor": 1},
 )
 _SITES = ("ontop", "bridge", "hollow")
 _HEIGHTS = (1.2, 1.4, 1.6, 1.8, 2.0, 2.2, 2.4)
@@ -581,13 +584,85 @@ def _refusal_fixtures() -> Iterator[dict[str, Any]]:
     )
 
 
+# --------------------------------------------------------------------------
+# The section 14 vertical slice: the six suggested golden examples
+# --------------------------------------------------------------------------
+
+_SLICE = (
+    (
+        "co-on-pt111", "CO on Pt(111)",
+        {"formula": "Pt", "crystal_structure": "fcc"},
+        _surface_model(miller_indices=[1, 1, 1], layers=4, vacuum_angstrom=15.0),
+        [{"operation": "add_adsorbate", "species": "CO", "anchor": 2, "site": "ontop",
+          "site_index": 1, "height_angstrom": 1.85}],
+    ),
+    (
+        "o-on-pd100", "O on Pd(100)",
+        {"formula": "Pd", "crystal_structure": "fcc"},
+        _surface_model(miller_indices=[1, 0, 0], layers=5, vacuum_angstrom=13.0),
+        [{"operation": "add_adsorbate", "element": "O", "site": "hollow",
+          "site_index": 1, "height_angstrom": 1.2}],
+    ),
+    (
+        "pt-substituted-au111", "Pt-substituted Au(111)",
+        {"formula": "Au", "crystal_structure": "fcc"},
+        _surface_model(miller_indices=[1, 1, 1], layers=4, vacuum_angstrom=14.0,
+                       fixed_layers_from_bottom=2),
+        [{"operation": "substitute", "selector": {"layer": {"side": "top", "count": 1}, "ordinal": 1},
+          "element": "Pt"}],
+    ),
+    (
+        "n-doped-graphene-single-atom", "N-doped graphene with a supported single metal atom",
+        {"formula": "C", "crystal_structure": "graphene"},
+        _surface_model(miller_indices=[0, 0, 1], supercell=[3, 3, 1], layers=1,
+                       vacuum_angstrom=16.0),
+        [{"operation": "substitute", "selector": {"ordinal": 1}, "element": "N"},
+         {"operation": "add_adsorbate", "element": "Pt", "site": "ontop",
+          "site_index": 1, "height_angstrom": 2.0}],
+    ),
+    (
+        "o-vacancy-tio2-110", "Oxygen vacancy on rutile TiO2(110)",
+        {"formula": "TiO2", "crystal_structure": "rutile"},
+        _surface_model(miller_indices=[1, 1, 0], supercell=[1, 1, 1], layers=3,
+                       vacuum_angstrom=12.0, termination="ase_default"),
+        [{"operation": "make_vacancy", "selector": {"element": ["O"], "ordinal": 1}}],
+    ),
+    (
+        "cu-cluster-on-ceo2-111", "Cu cluster on CeO2(111)",
+        {"formula": "CeO2", "crystal_structure": "fluorite"},
+        _surface_model(miller_indices=[1, 1, 1], supercell=[2, 2, 1], layers=4,
+                       vacuum_angstrom=14.0, termination="ase_default"),
+        [{"operation": "add_supported_cluster", "element": "Cu", "shape": "icosahedron",
+          "shells": 1, "gap_angstrom": 2.2, "vacuum_angstrom": 8.0}],
+    ),
+)
+
+
+def _vertical_slice_fixtures() -> Iterator[dict[str, Any]]:
+    """Section 14's named examples: the risks the slice is meant to exercise."""
+    for index, (case_id, title, material, model, modifications) in enumerate(_SLICE):
+        spec = _spec(material, model, modifications, ["cif", "vasp", "xyz"])
+        fixture = _ready_fixture(
+            f"slice-{case_id}", "construction_golden", "vertical_slice", spec,
+            locator=f"Section 14 example: {title}",
+        )
+        fixture["section"] = "14"
+        fixture["title"] = title
+        yield fixture
+
+
 def build_fixtures() -> list[dict[str, Any]]:
     fixtures = [
         *_mp_fixtures(), *_slab_fixtures(), *_defect_fixtures(),
         *_adsorbate_fixtures(), *_refusal_fixtures(),
     ]
+    for fixture in fixtures:
+        fixture.setdefault("section", "7.2")
     if len(fixtures) != 100:
         raise RuntimeError(f"section 7.2 requires 100 fixtures; generated {len(fixtures)}")
+    fixtures.extend(_vertical_slice_fixtures())
+    if sum(fixture["section"] == "14" for fixture in fixtures) != len(_SLICE):
+        raise RuntimeError("every section 14 example must produce one fixture")
     seen = {fixture["case_id"] for fixture in fixtures}
     if len(seen) != len(fixtures):
         raise RuntimeError("fixture case_id values must be unique")
@@ -632,18 +707,23 @@ def main() -> int:
         entries.append({
             "case_id": fixture["case_id"], "label": fixture["label"],
             "family": fixture["family"], "expected_status": fixture["expected_status"],
-            "schema_valid": fixture["schema_valid"],
+            "schema_valid": fixture["schema_valid"], "section": fixture["section"],
             "sha256": hashlib.sha256(raw.encode()).hexdigest(),
         })
 
     counts: dict[str, int] = {}
     for entry in entries:
-        counts[entry["family"]] = counts.get(entry["family"], 0) + 1
+        if entry["section"] == "7.2":
+            counts[entry["family"]] = counts.get(entry["family"], 0) + 1
     manifest = {
         "schema_version": "golden-corpus/v1",
         "generator": "training/generators/build_golden_fixtures.py",
         "created_at": CREATED_AT,
         "case_count": len(entries),
+        "section_counts": {
+            section: sum(entry["section"] == section for entry in entries)
+            for section in sorted({entry["section"] for entry in entries})
+        },
         "family_counts": counts,
         "label_counts": {
             label: sum(entry["label"] == label for entry in entries)
@@ -659,6 +739,11 @@ def main() -> int:
             "physical_reference_golden": (
                 "Empty on purpose: section 7.1 requires licensed literature data or a declared "
                 "converged calculation, and neither is available in this repository."
+            ),
+            "vertical_slice": (
+                "The six section 14 examples are carried as a separate group "
+                "(section 14); section 7.2's 100 fixtures and family counts are "
+                "unchanged by them."
             ),
             "standardization": (
                 "standardize_cell is not in the deterministic registry, so the MP cases exercise "

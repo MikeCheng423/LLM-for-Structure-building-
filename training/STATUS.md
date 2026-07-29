@@ -1,5 +1,58 @@
 # Training status — 2026-07-29 Asia/Taipei
 
+## Section 14 vertical slice completed; CO geometry fixed at runtime (2026-07-29)
+
+All six suggested golden examples in `CATALYST_STRUCTURE_LLM.md` section 14 now
+build, validate and export. They are carried in `tests/golden/` as a separate
+`section: "14"` group, so section 7.2's 100 fixtures and their family counts are
+unchanged. The gate reports 106 cases, 95 buildable, all six criteria at
+threshold.
+
+Three of the six needed work:
+
+- **CO/Pt(111) did not build at all.** `ase.build.molecule("CO")` is stored as
+  (O, C) with the carbon *below* the oxygen, so anchoring atom 1 at 1.85-1.9 A
+  left the carbon ~0.70-0.75 A from the top metal layer. The r7 branch fixed this
+  in the *corpus* by anchoring atom 2; the runtime still placed whatever it was
+  given. `tools_surface._anchor_down` now mirrors the molecule about the anchor
+  plane whenever another atom would sit below it, so the declared binding anchor
+  is always the atom nearest the surface. Bond lengths are unchanged; this is a
+  placement rule, not the user-facing orientation control the policy gate still
+  refuses. A new `adsorbate_N_anchor_is_lowest` validation rule keeps it honest.
+- **TiO2(110) and graphene were unreachable.** Fixed prototypes such as
+  `rutile-TiO2`, `graphene`, `graphite` and `hBN` are neither `<family>-<formula>`
+  compounds nor `ase.build.bulk` phases, so `_surface_substrate` fell through to a
+  reference-data lookup and failed. It now consults the prototype table, the
+  dispatcher stops passing a redundant `crystal` argument that tripped the phase
+  enum, and `catalyst_spec.schema.json` accepts `rutile`, `anatase`, `graphene`,
+  `graphite` and `hBN` as `material.crystal_structure`.
+- `slab_layer_count` is host-aware: a compound layer resolves into sublayers
+  (rutile TiO2(110) gives three z levels per requested layer), so compounds are
+  checked for divisibility and elemental hosts for equality.
+
+**`journal_roles_v1` carried the same CO defect.** Its 100 CO adsorption cases
+used anchor 1 at 1.9 A, i.e. a 0.7497 A C-Pt contact recorded as a successful
+build -- the same defect the r7 commit found in `pilot_r6`. The generator now
+anchors atom 2. **The corpus must be regenerated before the journal track is
+retrained**; the copy in the primary checkout is still the one that trained the
+un-promoted r1 adapter and has been left alone as the record of that run. A
+regenerated corpus was audited here: 5,000 records, 2,375 ready builds, replay
+success 1.0, zero forbidden actions, no split-group overlap.
+
+Also closed from the product document: the section 4 `paper` block
+(`title`/`doi`/`year`) is accepted by `ASE_catalyst_build` and threaded into
+`supplied_evidence`, every source-backed fact and the reproduction record, so
+section 11's "value + DOI/page/table/figure" is satisfied; the review packet's
+structure summary now describes the surface, adsorbates, defects and supported
+clusters rather than only the invariants; and `run_candidate_set` implements
+section 7's "generate separately named candidates rather than silently selecting
+one" for an ambiguous bulk parent, labelling each selection `derived`.
+
+Still open and GPU-bound: the section 10.3 held-out sets (`template_holdout`,
+`family_holdout`, `journal_holdout`) and the section 8 equivalents in the agent
+design. `journal_holdout` additionally needs licensed journal text, which this
+repository does not have.
+
 ## Vertical-slice gate built; journal-role r1 promotion reverted (2026-07-29)
 
 **The deterministic slice now has the section 9 gate it was supposed to pass

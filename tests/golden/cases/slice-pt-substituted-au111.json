@@ -1,5 +1,5 @@
 {
-  "case_id": "refuse-termination",
+  "case_id": "slice-pt-substituted-au111",
   "evidence_ledger": {
     "artifact_hashes": {},
     "claims": [
@@ -7,111 +7,153 @@
         "confidence": "high",
         "evidence_type": "reported",
         "field": "material.formula",
-        "locator": "Methods, p. 7",
+        "locator": "Section 14 example: Pt-substituted Au(111)",
         "source_id": "paper-1",
-        "value": "MgO"
+        "value": "Au",
+        "verbatim_span": "The reported chemical formula is \"Au\"."
       },
       {
         "confidence": "high",
         "evidence_type": "reported",
         "field": "material.crystal_structure",
-        "locator": "Methods, p. 7",
+        "locator": "Section 14 example: Pt-substituted Au(111)",
         "source_id": "paper-1",
-        "value": "rocksalt"
+        "value": "fcc",
+        "verbatim_span": "The reported crystal structure is \"fcc\"."
       },
       {
         "confidence": "high",
         "evidence_type": "reported",
         "field": "model.kind",
-        "locator": "Methods, p. 7",
+        "locator": "Section 14 example: Pt-substituted Au(111)",
         "source_id": "paper-1",
-        "value": "surface"
+        "value": "surface",
+        "verbatim_span": "The reported model type is \"surface\"."
       },
       {
         "confidence": "high",
         "evidence_type": "reported",
         "field": "model.miller_indices",
-        "locator": "Methods, p. 7",
+        "locator": "Section 14 example: Pt-substituted Au(111)",
         "source_id": "paper-1",
         "value": [
           1,
-          0,
-          0
-        ]
+          1,
+          1
+        ],
+        "verbatim_span": "The reported Miller indices is [1, 1, 1]."
       },
       {
         "confidence": "high",
         "evidence_type": "reported",
         "field": "model.supercell",
-        "locator": "Methods, p. 7",
+        "locator": "Section 14 example: Pt-substituted Au(111)",
         "source_id": "paper-1",
         "value": [
           2,
           2,
           1
-        ]
+        ],
+        "verbatim_span": "The reported supercell repeat is [2, 2, 1]."
       },
       {
         "confidence": "high",
         "evidence_type": "reported",
         "field": "model.layers",
-        "locator": "Methods, p. 7",
+        "locator": "Section 14 example: Pt-substituted Au(111)",
         "source_id": "paper-1",
-        "value": 4
+        "value": 4,
+        "verbatim_span": "The reported slab layer count is 4."
       },
       {
         "confidence": "high",
         "evidence_type": "reported",
         "field": "model.vacuum_angstrom",
-        "locator": "Methods, p. 7",
+        "locator": "Section 14 example: Pt-substituted Au(111)",
         "source_id": "paper-1",
-        "value": 14.0
+        "value": 14.0,
+        "verbatim_span": "The reported vacuum thickness in angstrom is 14.0."
       },
       {
         "confidence": "high",
         "evidence_type": "reported",
         "field": "model.periodic_boundary_conditions",
-        "locator": "Methods, p. 7",
+        "locator": "Section 14 example: Pt-substituted Au(111)",
         "source_id": "paper-1",
         "value": [
           true,
           true,
           false
-        ]
+        ],
+        "verbatim_span": "The reported periodic boundary conditions is [true, true, false]."
       },
       {
         "confidence": "high",
         "evidence_type": "reported",
-        "field": "model.termination",
-        "locator": "Methods, p. 7",
+        "field": "model.fixed_layers_from_bottom",
+        "locator": "Section 14 example: Pt-substituted Au(111)",
         "source_id": "paper-1",
-        "value": "O_terminated"
+        "value": 2,
+        "verbatim_span": "The reported number of fixed bottom layers is 2."
+      },
+      {
+        "confidence": "high",
+        "evidence_type": "reported",
+        "field": "modifications[0].operation",
+        "locator": "Section 14 example: Pt-substituted Au(111)",
+        "source_id": "paper-1",
+        "value": "substitute",
+        "verbatim_span": "The reported modification 0 operation is \"substitute\"."
+      },
+      {
+        "confidence": "high",
+        "evidence_type": "reported",
+        "field": "modifications[0].selector",
+        "locator": "Section 14 example: Pt-substituted Au(111)",
+        "source_id": "paper-1",
+        "value": {
+          "layer": {
+            "count": 1,
+            "side": "top"
+          },
+          "ordinal": 1
+        },
+        "verbatim_span": "The reported modification 0 selector is {\"layer\": {\"count\": 1, \"side\": \"top\"}, \"ordinal\": 1}."
+      },
+      {
+        "confidence": "high",
+        "evidence_type": "reported",
+        "field": "modifications[0].element",
+        "locator": "Section 14 example: Pt-substituted Au(111)",
+        "source_id": "paper-1",
+        "value": "Pt",
+        "verbatim_span": "The reported modification 0 element is \"Pt\"."
       }
     ],
     "contradictions": [],
     "created_at": "2026-07-29T00:00:00+00:00",
     "producer_version": "golden-fixture-generator/v1",
-    "request_id": "golden-refuse-termination",
+    "request_id": "golden-slice-pt-substituted-au111",
     "schema_version": "evidence-ledger/v1",
     "unresolved_fields": []
   },
-  "expected_status": "unsupported",
-  "family": "refusal",
-  "label": "refusal_golden",
-  "request": "Build the oxygen-terminated MgO(100) support.",
-  "request_id": "golden-refuse-termination",
+  "expected_status": "review_ready",
+  "family": "vertical_slice",
+  "label": "construction_golden",
+  "request": "Reconstruct the reported catalyst candidate.",
+  "request_id": "golden-slice-pt-substituted-au111",
   "review": {
     "created_at": "2026-07-29T00:00:00+00:00",
     "domain_review": "pending",
     "generated_by": "golden-fixture-generator/v1"
   },
   "schema_valid": true,
-  "section": "7.2",
+  "section": "14",
   "sources": [
     {
-      "locator": "Methods, p. 7",
+      "locator": "Section 14 example: Pt-substituted Au(111)",
       "source_id": "paper-1",
-      "text": "An oxygen-terminated MgO(100) surface was used."
+      "text": "The reported chemical formula is \"Au\".\nThe reported crystal structure is \"fcc\".\nThe reported model type is \"surface\".\nThe reported Miller indices is [1, 1, 1].\nThe reported supercell repeat is [2, 2, 1].\nThe reported slab layer count is 4.\nThe reported vacuum thickness in angstrom is 14.0.\nThe reported periodic boundary conditions is [true, true, false].\nThe reported number of fixed bottom layers is 2.\nThe reported modification 0 operation is \"substitute\".\nThe reported modification 0 selector is {\"layer\": {\"count\": 1, \"side\": \"top\"}, \"ordinal\": 1}.\nThe reported modification 0 element is \"Pt\"."
     }
   ],
   "spec_proposal": {
@@ -120,18 +162,19 @@
     "catalyst_spec": {
       "clarification_questions": [],
       "material": {
-        "crystal_structure": "rocksalt",
-        "formula": "MgO"
+        "crystal_structure": "fcc",
+        "formula": "Au"
       },
       "model": {
         "atom_ordering": "ase_default",
         "center": true,
+        "fixed_layers_from_bottom": 2,
         "kind": "surface",
         "layers": 4,
         "miller_indices": [
           1,
-          0,
-          0
+          1,
+          1
         ],
         "periodic_boundary_conditions": [
           true,
@@ -143,22 +186,33 @@
           2,
           1
         ],
-        "termination": "O_terminated",
         "vacuum_angstrom": 14.0
       },
-      "modifications": [],
+      "modifications": [
+        {
+          "element": "Pt",
+          "operation": "substitute",
+          "selector": {
+            "layer": {
+              "count": 1,
+              "side": "top"
+            },
+            "ordinal": 1
+          }
+        }
+      ],
       "provenance": [
         {
           "claim_index": 0,
           "evidence_type": "reported",
           "field": "material.formula",
-          "value": "MgO"
+          "value": "Au"
         },
         {
           "claim_index": 1,
           "evidence_type": "reported",
           "field": "material.crystal_structure",
-          "value": "rocksalt"
+          "value": "fcc"
         },
         {
           "claim_index": 2,
@@ -172,8 +226,8 @@
           "field": "model.miller_indices",
           "value": [
             1,
-            0,
-            0
+            1,
+            1
           ]
         },
         {
@@ -223,8 +277,32 @@
         {
           "claim_index": 8,
           "evidence_type": "reported",
-          "field": "model.termination",
-          "value": "O_terminated"
+          "field": "model.fixed_layers_from_bottom",
+          "value": 2
+        },
+        {
+          "claim_index": 9,
+          "evidence_type": "reported",
+          "field": "modifications[0].operation",
+          "value": "substitute"
+        },
+        {
+          "claim_index": 10,
+          "evidence_type": "reported",
+          "field": "modifications[0].selector",
+          "value": {
+            "layer": {
+              "count": 1,
+              "side": "top"
+            },
+            "ordinal": 1
+          }
+        },
+        {
+          "claim_index": 11,
+          "evidence_type": "reported",
+          "field": "modifications[0].element",
+          "value": "Pt"
         },
         {
           "evidence_type": "assumed_default",
@@ -232,13 +310,15 @@
           "reason": "Output formats are a workflow choice, not a paper-reported value.",
           "value": [
             "cif",
-            "vasp"
+            "vasp",
+            "xyz"
           ]
         }
       ],
       "requested_outputs": [
         "cif",
-        "vasp"
+        "vasp",
+        "xyz"
       ],
       "schema_version": "0.1",
       "task_status": "ready"
@@ -299,7 +379,22 @@
       {
         "claim_index": 8,
         "evidence_type": "reported",
-        "field": "model.termination"
+        "field": "model.fixed_layers_from_bottom"
+      },
+      {
+        "claim_index": 9,
+        "evidence_type": "reported",
+        "field": "modifications[0].operation"
+      },
+      {
+        "claim_index": 10,
+        "evidence_type": "reported",
+        "field": "modifications[0].selector"
+      },
+      {
+        "claim_index": 11,
+        "evidence_type": "reported",
+        "field": "modifications[0].element"
       },
       {
         "evidence_type": "assumed_default",
@@ -308,8 +403,9 @@
       }
     ],
     "producer_version": "golden-fixture-generator/v1",
-    "request_id": "golden-refuse-termination",
+    "request_id": "golden-slice-pt-substituted-au111",
     "schema_version": "spec-proposal/v1",
     "task_status": "ready"
-  }
+  },
+  "title": "Pt-substituted Au(111)"
 }

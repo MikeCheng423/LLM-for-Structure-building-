@@ -1,5 +1,5 @@
 {
-  "case_id": "refuse-anchor",
+  "case_id": "slice-cu-cluster-on-ceo2-111",
   "evidence_ledger": {
     "artifact_hashes": {},
     "claims": [
@@ -7,143 +7,174 @@
         "confidence": "high",
         "evidence_type": "reported",
         "field": "material.formula",
-        "locator": "Figure S2 caption",
+        "locator": "Section 14 example: Cu cluster on CeO2(111)",
         "source_id": "paper-1",
-        "value": "Pt"
+        "value": "CeO2",
+        "verbatim_span": "The reported chemical formula is \"CeO2\"."
       },
       {
         "confidence": "high",
         "evidence_type": "reported",
         "field": "material.crystal_structure",
-        "locator": "Figure S2 caption",
+        "locator": "Section 14 example: Cu cluster on CeO2(111)",
         "source_id": "paper-1",
-        "value": "fcc"
+        "value": "fluorite",
+        "verbatim_span": "The reported crystal structure is \"fluorite\"."
       },
       {
         "confidence": "high",
         "evidence_type": "reported",
         "field": "model.kind",
-        "locator": "Figure S2 caption",
+        "locator": "Section 14 example: Cu cluster on CeO2(111)",
         "source_id": "paper-1",
-        "value": "surface"
+        "value": "surface",
+        "verbatim_span": "The reported model type is \"surface\"."
       },
       {
         "confidence": "high",
         "evidence_type": "reported",
         "field": "model.miller_indices",
-        "locator": "Figure S2 caption",
+        "locator": "Section 14 example: Cu cluster on CeO2(111)",
         "source_id": "paper-1",
         "value": [
           1,
           1,
           1
-        ]
+        ],
+        "verbatim_span": "The reported Miller indices is [1, 1, 1]."
       },
       {
         "confidence": "high",
         "evidence_type": "reported",
         "field": "model.supercell",
-        "locator": "Figure S2 caption",
+        "locator": "Section 14 example: Cu cluster on CeO2(111)",
         "source_id": "paper-1",
         "value": [
           2,
           2,
           1
-        ]
+        ],
+        "verbatim_span": "The reported supercell repeat is [2, 2, 1]."
       },
       {
         "confidence": "high",
         "evidence_type": "reported",
         "field": "model.layers",
-        "locator": "Figure S2 caption",
+        "locator": "Section 14 example: Cu cluster on CeO2(111)",
         "source_id": "paper-1",
-        "value": 4
+        "value": 4,
+        "verbatim_span": "The reported slab layer count is 4."
       },
       {
         "confidence": "high",
         "evidence_type": "reported",
         "field": "model.vacuum_angstrom",
-        "locator": "Figure S2 caption",
+        "locator": "Section 14 example: Cu cluster on CeO2(111)",
         "source_id": "paper-1",
-        "value": 14.0
+        "value": 14.0,
+        "verbatim_span": "The reported vacuum thickness in angstrom is 14.0."
       },
       {
         "confidence": "high",
         "evidence_type": "reported",
         "field": "model.periodic_boundary_conditions",
-        "locator": "Figure S2 caption",
+        "locator": "Section 14 example: Cu cluster on CeO2(111)",
         "source_id": "paper-1",
         "value": [
           true,
           true,
           false
-        ]
+        ],
+        "verbatim_span": "The reported periodic boundary conditions is [true, true, false]."
+      },
+      {
+        "confidence": "high",
+        "evidence_type": "reported",
+        "field": "model.termination",
+        "locator": "Section 14 example: Cu cluster on CeO2(111)",
+        "source_id": "paper-1",
+        "value": "ase_default",
+        "verbatim_span": "The reported surface termination is \"ase_default\"."
       },
       {
         "confidence": "high",
         "evidence_type": "reported",
         "field": "modifications[0].operation",
-        "locator": "Figure S2 caption",
+        "locator": "Section 14 example: Cu cluster on CeO2(111)",
         "source_id": "paper-1",
-        "value": "add_adsorbate"
+        "value": "add_supported_cluster",
+        "verbatim_span": "The reported modification 0 operation is \"add_supported_cluster\"."
       },
       {
         "confidence": "high",
         "evidence_type": "reported",
-        "field": "modifications[0].species",
-        "locator": "Figure S2 caption",
+        "field": "modifications[0].element",
+        "locator": "Section 14 example: Cu cluster on CeO2(111)",
         "source_id": "paper-1",
-        "value": "CO"
+        "value": "Cu",
+        "verbatim_span": "The reported modification 0 element is \"Cu\"."
       },
       {
         "confidence": "high",
         "evidence_type": "reported",
-        "field": "modifications[0].site",
-        "locator": "Figure S2 caption",
+        "field": "modifications[0].shape",
+        "locator": "Section 14 example: Cu cluster on CeO2(111)",
         "source_id": "paper-1",
-        "value": "ontop"
+        "value": "icosahedron",
+        "verbatim_span": "The reported modification 0 shape is \"icosahedron\"."
       },
       {
         "confidence": "high",
         "evidence_type": "reported",
-        "field": "modifications[0].site_index",
-        "locator": "Figure S2 caption",
+        "field": "modifications[0].shells",
+        "locator": "Section 14 example: Cu cluster on CeO2(111)",
         "source_id": "paper-1",
-        "value": 1
+        "value": 1,
+        "verbatim_span": "The reported modification 0 shells is 1."
       },
       {
         "confidence": "high",
         "evidence_type": "reported",
-        "field": "modifications[0].height_angstrom",
-        "locator": "Figure S2 caption",
+        "field": "modifications[0].gap_angstrom",
+        "locator": "Section 14 example: Cu cluster on CeO2(111)",
         "source_id": "paper-1",
-        "value": 1.9
+        "value": 2.2,
+        "verbatim_span": "The reported modification 0 gap angstrom is 2.2."
+      },
+      {
+        "confidence": "high",
+        "evidence_type": "reported",
+        "field": "modifications[0].vacuum_angstrom",
+        "locator": "Section 14 example: Cu cluster on CeO2(111)",
+        "source_id": "paper-1",
+        "value": 8.0,
+        "verbatim_span": "The reported modification 0 vacuum angstrom is 8.0."
       }
     ],
     "contradictions": [],
     "created_at": "2026-07-29T00:00:00+00:00",
     "producer_version": "golden-fixture-generator/v1",
-    "request_id": "golden-refuse-anchor",
+    "request_id": "golden-slice-cu-cluster-on-ceo2-111",
     "schema_version": "evidence-ledger/v1",
     "unresolved_fields": []
   },
-  "expected_status": "needs_clarification",
-  "family": "refusal",
-  "label": "refusal_golden",
-  "request": "Adsorb CO on the platinum slab.",
-  "request_id": "golden-refuse-anchor",
+  "expected_status": "review_ready",
+  "family": "vertical_slice",
+  "label": "construction_golden",
+  "request": "Reconstruct the reported catalyst candidate.",
+  "request_id": "golden-slice-cu-cluster-on-ceo2-111",
   "review": {
     "created_at": "2026-07-29T00:00:00+00:00",
     "domain_review": "pending",
     "generated_by": "golden-fixture-generator/v1"
   },
   "schema_valid": true,
-  "section": "7.2",
+  "section": "14",
   "sources": [
     {
-      "locator": "Figure S2 caption",
+      "locator": "Section 14 example: Cu cluster on CeO2(111)",
       "source_id": "paper-1",
-      "text": "CO was placed at an atop site 1.9 A above the surface."
+      "text": "The reported chemical formula is \"CeO2\".\nThe reported crystal structure is \"fluorite\".\nThe reported model type is \"surface\".\nThe reported Miller indices is [1, 1, 1].\nThe reported supercell repeat is [2, 2, 1].\nThe reported slab layer count is 4.\nThe reported vacuum thickness in angstrom is 14.0.\nThe reported periodic boundary conditions is [true, true, false].\nThe reported surface termination is \"ase_default\".\nThe reported modification 0 operation is \"add_supported_cluster\".\nThe reported modification 0 element is \"Cu\".\nThe reported modification 0 shape is \"icosahedron\".\nThe reported modification 0 shells is 1.\nThe reported modification 0 gap angstrom is 2.2.\nThe reported modification 0 vacuum angstrom is 8.0."
     }
   ],
   "spec_proposal": {
@@ -152,8 +183,8 @@
     "catalyst_spec": {
       "clarification_questions": [],
       "material": {
-        "crystal_structure": "fcc",
-        "formula": "Pt"
+        "crystal_structure": "fluorite",
+        "formula": "CeO2"
       },
       "model": {
         "atom_ordering": "ase_default",
@@ -175,15 +206,17 @@
           2,
           1
         ],
+        "termination": "ase_default",
         "vacuum_angstrom": 14.0
       },
       "modifications": [
         {
-          "height_angstrom": 1.9,
-          "operation": "add_adsorbate",
-          "site": "ontop",
-          "site_index": 1,
-          "species": "CO"
+          "element": "Cu",
+          "gap_angstrom": 2.2,
+          "operation": "add_supported_cluster",
+          "shape": "icosahedron",
+          "shells": 1,
+          "vacuum_angstrom": 8.0
         }
       ],
       "provenance": [
@@ -191,13 +224,13 @@
           "claim_index": 0,
           "evidence_type": "reported",
           "field": "material.formula",
-          "value": "Pt"
+          "value": "CeO2"
         },
         {
           "claim_index": 1,
           "evidence_type": "reported",
           "field": "material.crystal_structure",
-          "value": "fcc"
+          "value": "fluorite"
         },
         {
           "claim_index": 2,
@@ -262,32 +295,44 @@
         {
           "claim_index": 8,
           "evidence_type": "reported",
-          "field": "modifications[0].operation",
-          "value": "add_adsorbate"
+          "field": "model.termination",
+          "value": "ase_default"
         },
         {
           "claim_index": 9,
           "evidence_type": "reported",
-          "field": "modifications[0].species",
-          "value": "CO"
+          "field": "modifications[0].operation",
+          "value": "add_supported_cluster"
         },
         {
           "claim_index": 10,
           "evidence_type": "reported",
-          "field": "modifications[0].site",
-          "value": "ontop"
+          "field": "modifications[0].element",
+          "value": "Cu"
         },
         {
           "claim_index": 11,
           "evidence_type": "reported",
-          "field": "modifications[0].site_index",
-          "value": 1
+          "field": "modifications[0].shape",
+          "value": "icosahedron"
         },
         {
           "claim_index": 12,
           "evidence_type": "reported",
-          "field": "modifications[0].height_angstrom",
-          "value": 1.9
+          "field": "modifications[0].shells",
+          "value": 1
+        },
+        {
+          "claim_index": 13,
+          "evidence_type": "reported",
+          "field": "modifications[0].gap_angstrom",
+          "value": 2.2
+        },
+        {
+          "claim_index": 14,
+          "evidence_type": "reported",
+          "field": "modifications[0].vacuum_angstrom",
+          "value": 8.0
         },
         {
           "evidence_type": "assumed_default",
@@ -295,13 +340,15 @@
           "reason": "Output formats are a workflow choice, not a paper-reported value.",
           "value": [
             "cif",
-            "vasp"
+            "vasp",
+            "xyz"
           ]
         }
       ],
       "requested_outputs": [
         "cif",
-        "vasp"
+        "vasp",
+        "xyz"
       ],
       "schema_version": "0.1",
       "task_status": "ready"
@@ -362,27 +409,37 @@
       {
         "claim_index": 8,
         "evidence_type": "reported",
-        "field": "modifications[0].operation"
+        "field": "model.termination"
       },
       {
         "claim_index": 9,
         "evidence_type": "reported",
-        "field": "modifications[0].species"
+        "field": "modifications[0].operation"
       },
       {
         "claim_index": 10,
         "evidence_type": "reported",
-        "field": "modifications[0].site"
+        "field": "modifications[0].element"
       },
       {
         "claim_index": 11,
         "evidence_type": "reported",
-        "field": "modifications[0].site_index"
+        "field": "modifications[0].shape"
       },
       {
         "claim_index": 12,
         "evidence_type": "reported",
-        "field": "modifications[0].height_angstrom"
+        "field": "modifications[0].shells"
+      },
+      {
+        "claim_index": 13,
+        "evidence_type": "reported",
+        "field": "modifications[0].gap_angstrom"
+      },
+      {
+        "claim_index": 14,
+        "evidence_type": "reported",
+        "field": "modifications[0].vacuum_angstrom"
       },
       {
         "evidence_type": "assumed_default",
@@ -391,8 +448,9 @@
       }
     ],
     "producer_version": "golden-fixture-generator/v1",
-    "request_id": "golden-refuse-anchor",
+    "request_id": "golden-slice-cu-cluster-on-ceo2-111",
     "schema_version": "spec-proposal/v1",
     "task_status": "ready"
-  }
+  },
+  "title": "Cu cluster on CeO2(111)"
 }

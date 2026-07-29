@@ -47,7 +47,9 @@ def gate_report(fixtures, tmp_path_factory) -> dict:
 
 def test_corpus_has_the_composition_section_7_2_requires():
     manifest = load_manifest(GOLDEN_ROOT)
-    assert manifest["case_count"] == 100
+    # Section 7.2's 100 cases are counted separately from section 14's examples.
+    assert manifest["section_counts"]["7.2"] == 100
+    assert manifest["case_count"] == sum(manifest["section_counts"].values())
     assert manifest["family_counts"] == EXPECTED_FAMILIES
     # physical_reference_golden needs licensed data; it is empty on purpose.
     assert manifest["label_counts"]["physical_reference_golden"] == 0
@@ -95,8 +97,8 @@ def test_vertical_slice_gate_passes(gate_report):
         for name, criterion in gate_report["criteria"].items() if criterion["failures"]
     }
     assert gate_report["passed"], json.dumps(failures, indent=2, sort_keys=True)
-    assert gate_report["case_count"] == 100
-    assert gate_report["buildable_case_count"] == 89
+    assert gate_report["case_count"] == 106
+    assert gate_report["buildable_case_count"] == 95
 
 
 @pytest.mark.parametrize("criterion", [
