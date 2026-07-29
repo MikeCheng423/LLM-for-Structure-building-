@@ -60,7 +60,11 @@ Paper text / SI excerpt / user description
 ```
 
 The LLM should normally generate `CatalystSpec` JSON rather than unrestricted Python. A deterministic dispatcher converts the specification into ASE calls. This makes outputs testable and avoids executing arbitrary model-generated code.
-### 3.1 Agent implementation design
+### 3.1 Agent implementation design and feature catalogue
+
+[`CATALYST_FEATURES.md`](CATALYST_FEATURES.md) lists what the implementation can
+build today, what it deliberately refuses, and how each claim is checked.
+
 
 This document is the product, scientific-scope, and data-quality contract. The
 implementation design for the cooperating agents, their permissions, hand-off
@@ -400,6 +404,22 @@ Create three held-out sets:
 - `template_holdout`: familiar chemistry with unseen wording.
 - `family_holdout`: unseen catalyst families or supports.
 - `journal_holdout`: complete papers never used in data preparation.
+
+Two of the three are built by
+`training/generators/build_journal_holdouts.py` (200 records each,
+evaluation-only). `template_holdout` varies wording alone: five phrase templates
+and both request sentences disjoint from the training pool, which the generator
+imports rather than copies, so a change to training cannot silently invalidate
+the claim. `family_holdout` varies chemistry alone: elements Rh, Ir, Pb, Mo and
+Ta, adsorbates N, C, NO, O2 and OH, and CeO2 and CaO supports, none of which
+appear in training. Generation fails closed if held-out wording or chemistry
+turns out to be present in the training corpus.
+
+`journal_holdout` is **not** built. It requires complete papers never used in
+data preparation, and this repository contains no licensed journal text.
+
+Because the Spec Planner is prompted with the EvidenceLedger JSON rather than the
+prose, `template_holdout` chiefly stresses the Evidence Extractor role.
 
 Manually inspect failed structures in a 3D viewer and assign failure categories such as extraction error, ambiguity handling, incorrect ASE mapping, geometry collision, or source inconsistency.
 

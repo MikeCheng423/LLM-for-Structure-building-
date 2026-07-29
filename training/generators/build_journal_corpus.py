@@ -16,6 +16,27 @@ from training.dataset_contract import JOURNAL_SCHEMA_VERSION, validate_journal_r
 
 
 CREATED_AT = "2026-07-28T00:00:00+00:00"
+
+#: The wording pool. `build_journal_holdouts.py` imports this to guarantee its
+#: template_holdout set shares no phrase with training.
+PHRASE_TEMPLATES = (
+    "The reported {label} is {value}.",
+    "Use {value} for the {label}.",
+    "{label_capitalized}: {value}.",
+    "文獻記載 {label} 為 {value}。",
+)
+REQUEST_TEMPLATES = (
+    "Reconstruct an auditable catalyst candidate from the supplied settings.",
+    "請依據提供的設定建立可稽核的觸媒結構。",
+)
+#: language index (ordinal % 5) -> PHRASE_TEMPLATES index.
+_LANGUAGE_PHRASE = (0, 1, 2, 0, 3)
+
+#: The elemental phases the corpus trains on; imported by the held-out generator.
+PHASES = (
+    ("Al", "fcc"), ("Cu", "fcc"), ("Ni", "fcc"), ("Pt", "fcc"), ("Au", "fcc"),
+    ("Ag", "fcc"), ("Pd", "fcc"), ("Fe", "bcc"), ("W", "bcc"), ("Si", "diamond"),
+)
 PRODUCER = "journal-corpus-generator/v1"
 REGISTRY = "journal-policy-v1"
 
@@ -53,8 +74,7 @@ def _spec(kind: str, material: dict[str, Any], model: dict[str, Any], modificati
 
 
 def _ready_specs() -> Iterable[tuple[str, str, dict[str, Any]]]:
-    phases = (("Al", "fcc"), ("Cu", "fcc"), ("Ni", "fcc"), ("Pt", "fcc"), ("Au", "fcc"),
-              ("Ag", "fcc"), ("Pd", "fcc"), ("Fe", "bcc"), ("W", "bcc"), ("Si", "diamond"))
+    phases = PHASES
     repeats = ([1, 1, 1], [2, 1, 1], [1, 2, 1], [2, 2, 1], [2, 2, 2])
     for index, ((element, crystal), repeat, variant) in enumerate(itertools.islice(itertools.cycle(itertools.product(phases, repeats, range(20))), 625)):
         spec = _spec("bulk", {"formula": element, "crystal_structure": crystal}, {
@@ -159,18 +179,10 @@ def _records(case_id: str, family: str, spec: dict[str, Any], ordinal: int) -> l
     for field, value in fields:
         label = labels.get(field, field.replace("_", " ").replace(".", " "))
         rendered = json.dumps(value, sort_keys=True)
-        if language == 4:
-            lines.append(f"文獻記載 {label} 為 {rendered}。")
-        elif language % 3 == 0:
-            lines.append(f"The reported {label} is {rendered}.")
-        elif language % 3 == 1:
-            lines.append(f"Use {rendered} for the {label}.")
-        else:
-            lines.append(f"{label.capitalize()}: {rendered}.")
-    request = (
-        "請依據提供的設定建立可稽核的觸媒結構。" if language == 4
-        else "Reconstruct an auditable catalyst candidate from the supplied settings."
-    )
+        lines.append(PHRASE_TEMPLATES[_LANGUAGE_PHRASE[language]].format(
+            label=label, label_capitalized=label.capitalize(), value=rendered,
+        ))
+    request = REQUEST_TEMPLATES[1 if language == 4 else 0]
     source = {"source_id": "fixture-1", "locator": locator, "text": "\n".join(lines)}
     claims = [{
         "field": field, "value": value, "evidence_type": "user_supplied",

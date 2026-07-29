@@ -78,7 +78,9 @@ def evaluate_dataset(dataset_dir: Path) -> dict[str, Any]:
     results: list[dict[str, Any]] = []
     errors: list[dict[str, str]] = []
     split_counts: dict[str, int] = {}
-    for split in ("train", "validation", "test"):
+    # An evaluation-only set declares just `test`; a training corpus declares all three.
+    declared = [split for split in ("train", "validation", "test") if split in manifest["split_sha256"]]
+    for split in declared:
         path = dataset_dir / f"{split}.jsonl"
         if _sha(path) != manifest["split_sha256"][split]:
             raise ValueError(f"{split} file hash differs from manifest")
@@ -93,9 +95,9 @@ def evaluate_dataset(dataset_dir: Path) -> dict[str, Any]:
             except Exception as exc:
                 errors.append({"id": record.get("id", "<missing>"), "split": split, "error": f"{type(exc).__name__}: {exc}"})
     overlaps = {
-        "train_validation": sorted(groups["train"] & groups["validation"]),
-        "train_test": sorted(groups["train"] & groups["test"]),
-        "validation_test": sorted(groups["validation"] & groups["test"]),
+        f"{left}_{right}": sorted(groups[left] & groups[right])
+        for left, right in (("train", "validation"), ("train", "test"), ("validation", "test"))
+        if left in groups and right in groups
     }
     if any(overlaps.values()):
         raise ValueError("split_group leakage detected")
