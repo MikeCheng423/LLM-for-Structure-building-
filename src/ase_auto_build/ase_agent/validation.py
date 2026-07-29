@@ -96,14 +96,32 @@ def structure_invariants(atoms: Atoms) -> dict[str, Any]:
     }
 
 
-def _minimum_pair(atoms: Atoms) -> tuple[float, int, int] | None:
+def pair_hard_limits(numbers: np.ndarray) -> np.ndarray:
+    """Element-pair minimum-distance table derived from covalent radii."""
+    radii = covalent_radii[np.asarray(numbers, dtype=int)]
+    return np.maximum(0.25, 0.35 * (radii[:, None] + radii[None, :]))
+
+
+def _worst_overlap(atoms: Atoms) -> tuple[float, int, int, float, int] | None:
+    """Return the pair that most violates *its own* threshold, plus a count.
+
+    Comparing only the globally closest pair hides a violation whenever some
+    other pair of larger atoms happens to sit closer in absolute terms, so the
+    scan has to be per-pair like the threshold already is.
+    """
     if len(atoms) < 2:
         return None
     distances = atoms.get_all_distances(mic=bool(np.any(atoms.pbc)))
     np.fill_diagonal(distances, np.inf)
-    flat = int(np.argmin(distances))
-    i, j = np.unravel_index(flat, distances.shape)
-    return float(distances[i, j]), int(i), int(j)
+    limits = pair_hard_limits(atoms.numbers)
+    slack = distances - limits
+    np.fill_diagonal(slack, np.inf)
+    flat = int(np.argmin(slack))
+    i, j = np.unravel_index(flat, slack.shape)
+    if float(slack[i, j]) >= 0.0:
+        return None
+    violations = int(np.count_nonzero(slack < 0.0) // 2)
+    return float(distances[i, j]), int(i), int(j), float(limits[i, j]), violations
 
 
 def validate_atoms(
@@ -149,20 +167,17 @@ def validate_atoms(
                 issues.append(ValidationIssue("short_cell", f"periodic axis {axis} is too short", "error"))
 
     if len(atoms) <= policy.max_atoms and np.isfinite(positions).all():
-        pair = _minimum_pair(atoms)
-        if pair is not None:
-            distance, i, j = pair
-            radii_sum = float(covalent_radii[atoms.numbers[i]] + covalent_radii[atoms.numbers[j]])
-            hard_limit = max(0.25, 0.35 * radii_sum)
-            if distance < hard_limit:
-                issues.append(
-                    ValidationIssue(
-                        "atom_overlap",
-                        f"atoms {i + 1} and {j + 1} are {distance:.3f} A apart "
-                        f"(hard limit {hard_limit:.3f} A)",
-                        "error",
-                    )
+        overlap = _worst_overlap(atoms)
+        if overlap is not None:
+            distance, i, j, hard_limit, violations = overlap
+            issues.append(
+                ValidationIssue(
+                    "atom_overlap",
+                    f"atoms {i + 1} and {j + 1} are {distance:.3f} A apart "
+                    f"(hard limit {hard_limit:.3f} A); {violations} pair(s) below limit",
+                    "error",
                 )
+            )
 
     for constraint in atoms.constraints:
         try:

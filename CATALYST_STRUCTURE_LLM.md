@@ -90,6 +90,15 @@ has a caller-assigned ID, locator, and text. The command writes one immutable
 directory under the output root and returns a nonzero status for clarification,
 unsupported work, pipeline failure, or environment failure.
 
+The deterministic slice is gated by 100 immutable golden fixtures in
+`tests/golden/` and the section 9 runner
+`training/evaluations/run_vertical_slice_gate.py`, which reports all six
+criteria at their thresholds (100/100 schema conformance, 89/89 build and export
+round trips, zero writes outside a request package, zero unregistered tool
+calls, zero fields without provenance, 11/11 ambiguities refused). Milestone 1's
+exit criterion is therefore met for the supported scope, with the caveat that
+the fixtures have not had a domain-expert review.
+
 The journal command is an experimental, fail-closed baseline. The production r5
 adapter was trained for direct ASE tool calling, not EvidenceLedger and
 SpecProposal generation. Live prompt-only smokes on 2026-07-28 failed the journal

@@ -1,0 +1,327 @@
+{
+  "case_id": "slab-10",
+  "evidence_ledger": {
+    "artifact_hashes": {},
+    "claims": [
+      {
+        "confidence": "high",
+        "evidence_type": "reported",
+        "field": "material.formula",
+        "locator": "Methods, page 5",
+        "source_id": "paper-1",
+        "value": "W",
+        "verbatim_span": "The reported chemical formula is \"W\"."
+      },
+      {
+        "confidence": "high",
+        "evidence_type": "reported",
+        "field": "material.crystal_structure",
+        "locator": "Methods, page 5",
+        "source_id": "paper-1",
+        "value": "bcc",
+        "verbatim_span": "The reported crystal structure is \"bcc\"."
+      },
+      {
+        "confidence": "high",
+        "evidence_type": "reported",
+        "field": "model.kind",
+        "locator": "Methods, page 5",
+        "source_id": "paper-1",
+        "value": "surface",
+        "verbatim_span": "The reported model type is \"surface\"."
+      },
+      {
+        "confidence": "high",
+        "evidence_type": "reported",
+        "field": "model.miller_indices",
+        "locator": "Methods, page 5",
+        "source_id": "paper-1",
+        "value": [
+          1,
+          0,
+          0
+        ],
+        "verbatim_span": "The reported Miller indices is [1, 0, 0]."
+      },
+      {
+        "confidence": "high",
+        "evidence_type": "reported",
+        "field": "model.supercell",
+        "locator": "Methods, page 5",
+        "source_id": "paper-1",
+        "value": [
+          1,
+          2,
+          1
+        ],
+        "verbatim_span": "The reported supercell repeat is [1, 2, 1]."
+      },
+      {
+        "confidence": "high",
+        "evidence_type": "reported",
+        "field": "model.layers",
+        "locator": "Methods, page 5",
+        "source_id": "paper-1",
+        "value": 5,
+        "verbatim_span": "The reported slab layer count is 5."
+      },
+      {
+        "confidence": "high",
+        "evidence_type": "reported",
+        "field": "model.vacuum_angstrom",
+        "locator": "Methods, page 5",
+        "source_id": "paper-1",
+        "value": 14.0,
+        "verbatim_span": "The reported vacuum thickness in angstrom is 14.0."
+      },
+      {
+        "confidence": "high",
+        "evidence_type": "reported",
+        "field": "model.periodic_boundary_conditions",
+        "locator": "Methods, page 5",
+        "source_id": "paper-1",
+        "value": [
+          true,
+          true,
+          false
+        ],
+        "verbatim_span": "The reported periodic boundary conditions is [true, true, false]."
+      },
+      {
+        "confidence": "high",
+        "evidence_type": "reported",
+        "field": "model.fixed_layers_from_bottom",
+        "locator": "Methods, page 5",
+        "source_id": "paper-1",
+        "value": 2,
+        "verbatim_span": "The reported number of fixed bottom layers is 2."
+      }
+    ],
+    "contradictions": [],
+    "created_at": "2026-07-29T00:00:00+00:00",
+    "producer_version": "golden-fixture-generator/v1",
+    "request_id": "golden-slab-10",
+    "schema_version": "evidence-ledger/v1",
+    "unresolved_fields": []
+  },
+  "expected_status": "review_ready",
+  "family": "slab",
+  "label": "construction_golden",
+  "request": "Reconstruct the reported catalyst candidate.",
+  "request_id": "golden-slab-10",
+  "review": {
+    "created_at": "2026-07-29T00:00:00+00:00",
+    "domain_review": "pending",
+    "generated_by": "golden-fixture-generator/v1"
+  },
+  "schema_valid": true,
+  "sources": [
+    {
+      "locator": "Methods, page 5",
+      "source_id": "paper-1",
+      "text": "The reported chemical formula is \"W\".\nThe reported crystal structure is \"bcc\".\nThe reported model type is \"surface\".\nThe reported Miller indices is [1, 0, 0].\nThe reported supercell repeat is [1, 2, 1].\nThe reported slab layer count is 5.\nThe reported vacuum thickness in angstrom is 14.0.\nThe reported periodic boundary conditions is [true, true, false].\nThe reported number of fixed bottom layers is 2."
+    }
+  ],
+  "spec_proposal": {
+    "agent_warnings": [],
+    "artifact_hashes": {},
+    "catalyst_spec": {
+      "clarification_questions": [],
+      "material": {
+        "crystal_structure": "bcc",
+        "formula": "W"
+      },
+      "model": {
+        "atom_ordering": "ase_default",
+        "center": true,
+        "fixed_layers_from_bottom": 2,
+        "kind": "surface",
+        "layers": 5,
+        "miller_indices": [
+          1,
+          0,
+          0
+        ],
+        "periodic_boundary_conditions": [
+          true,
+          true,
+          false
+        ],
+        "supercell": [
+          1,
+          2,
+          1
+        ],
+        "vacuum_angstrom": 14.0
+      },
+      "modifications": [],
+      "provenance": [
+        {
+          "claim_index": 0,
+          "evidence_type": "reported",
+          "field": "material.formula",
+          "value": "W"
+        },
+        {
+          "claim_index": 1,
+          "evidence_type": "reported",
+          "field": "material.crystal_structure",
+          "value": "bcc"
+        },
+        {
+          "claim_index": 2,
+          "evidence_type": "reported",
+          "field": "model.kind",
+          "value": "surface"
+        },
+        {
+          "claim_index": 3,
+          "evidence_type": "reported",
+          "field": "model.miller_indices",
+          "value": [
+            1,
+            0,
+            0
+          ]
+        },
+        {
+          "claim_index": 4,
+          "evidence_type": "reported",
+          "field": "model.supercell",
+          "value": [
+            1,
+            2,
+            1
+          ]
+        },
+        {
+          "claim_index": 5,
+          "evidence_type": "reported",
+          "field": "model.layers",
+          "value": 5
+        },
+        {
+          "claim_index": 6,
+          "evidence_type": "reported",
+          "field": "model.vacuum_angstrom",
+          "value": 14.0
+        },
+        {
+          "claim_index": 7,
+          "evidence_type": "reported",
+          "field": "model.periodic_boundary_conditions",
+          "value": [
+            true,
+            true,
+            false
+          ]
+        },
+        {
+          "claim_index": 8,
+          "evidence_type": "reported",
+          "field": "model.fixed_layers_from_bottom",
+          "value": 2
+        },
+        {
+          "evidence_type": "assumed_default",
+          "field": "model.center",
+          "reason": "Slab centering was not reported; the ASE default is disclosed.",
+          "value": true
+        },
+        {
+          "evidence_type": "assumed_default",
+          "field": "model.atom_ordering",
+          "reason": "Atom ordering was not reported; the ASE default is disclosed.",
+          "value": "ase_default"
+        },
+        {
+          "evidence_type": "assumed_default",
+          "field": "requested_outputs",
+          "reason": "Output formats are a workflow choice, not a paper-reported value.",
+          "value": [
+            "cif",
+            "xyz",
+            "traj",
+            "vasp"
+          ]
+        }
+      ],
+      "requested_outputs": [
+        "cif",
+        "xyz",
+        "traj",
+        "vasp"
+      ],
+      "schema_version": "0.1",
+      "task_status": "ready"
+    },
+    "clarification_questions": [],
+    "created_at": "2026-07-29T00:00:00+00:00",
+    "field_sources": [
+      {
+        "claim_index": 0,
+        "evidence_type": "reported",
+        "field": "material.formula"
+      },
+      {
+        "claim_index": 1,
+        "evidence_type": "reported",
+        "field": "material.crystal_structure"
+      },
+      {
+        "claim_index": 2,
+        "evidence_type": "reported",
+        "field": "model.kind"
+      },
+      {
+        "claim_index": 3,
+        "evidence_type": "reported",
+        "field": "model.miller_indices"
+      },
+      {
+        "claim_index": 4,
+        "evidence_type": "reported",
+        "field": "model.supercell"
+      },
+      {
+        "claim_index": 5,
+        "evidence_type": "reported",
+        "field": "model.layers"
+      },
+      {
+        "claim_index": 6,
+        "evidence_type": "reported",
+        "field": "model.vacuum_angstrom"
+      },
+      {
+        "claim_index": 7,
+        "evidence_type": "reported",
+        "field": "model.periodic_boundary_conditions"
+      },
+      {
+        "claim_index": 8,
+        "evidence_type": "reported",
+        "field": "model.fixed_layers_from_bottom"
+      },
+      {
+        "evidence_type": "assumed_default",
+        "field": "model.center",
+        "reason": "Slab centering was not reported; the ASE default is disclosed."
+      },
+      {
+        "evidence_type": "assumed_default",
+        "field": "model.atom_ordering",
+        "reason": "Atom ordering was not reported; the ASE default is disclosed."
+      },
+      {
+        "evidence_type": "assumed_default",
+        "field": "requested_outputs",
+        "reason": "Output formats are a workflow choice, not a paper-reported value."
+      }
+    ],
+    "producer_version": "golden-fixture-generator/v1",
+    "request_id": "golden-slab-10",
+    "schema_version": "spec-proposal/v1",
+    "task_status": "ready"
+  }
+}

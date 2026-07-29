@@ -11,15 +11,17 @@ from pathlib import Path
 from typing import Any, Literal
 
 import ase
+import numpy as np
+from ase.geometry import find_mic
 from ase.io import read as ase_read
 
 from .catalyst_contracts import GateDecision, policy_gate, validate_record
 from .catalyst_agents import ChatCallable, extract_evidence, plan_spec
 from .catalyst_dispatch import dispatch_spec
 from .catalyst_validation import catalyst_validation_rules
-from .export import write_bundle
+from .export import _extension_for, write_bundle
 from .mp_resolver import ReferenceResolution
-from .validation import atoms_hash, structure_invariants, validate_atoms
+from .validation import _constrained_count, atoms_hash, structure_invariants, validate_atoms
 
 PRODUCER_VERSION = "ASE_auto_build/0.9.2"
 _SAFE_ID = re.compile(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,63}\Z")
@@ -47,6 +49,55 @@ def _metadata(request_id: str, hashes: dict[str, str]) -> dict[str, Any]:
         "producer_version": PRODUCER_VERSION,
         "artifact_hashes": hashes,
     }
+
+
+#: Formats that carry selective dynamics / constraints through a write-read cycle.
+_CONSTRAINT_AWARE = {"POSCAR", ".traj"}
+_POSITION_TOLERANCE = 1e-2
+_CELL_TOLERANCE = 1e-2
+
+
+def _missing_formats(requested: list[str], produced: set[str]) -> list[str]:
+    """Requested output formats that did not actually produce a file."""
+    missing = []
+    for fmt in requested:
+        name = str(fmt).strip().lower()
+        if name in {"vasp", "poscar"}:
+            if "POSCAR" not in produced:
+                missing.append(name)
+        elif f"structure.{_extension_for(name)}" not in produced:
+            missing.append(name)
+    return missing
+
+
+def _round_trip_mismatch(path: Path, atoms) -> str | None:
+    """Return the first way `path` fails to reproduce `atoms`, or None."""
+    restored = ase_read(path)
+    if len(restored) != len(atoms):
+        return f"atom count changed {len(atoms)} -> {len(restored)}"
+    if restored.get_chemical_symbols() != atoms.get_chemical_symbols():
+        return "chemical symbols or their order changed"
+    if len(atoms):
+        delta = restored.get_positions() - atoms.get_positions()
+        if np.any(atoms.pbc) and atoms.cell.rank == 3:
+            delta, _ = find_mic(delta, atoms.cell, atoms.pbc)
+        drift = float(np.max(np.linalg.norm(delta, axis=1)))
+        if drift > _POSITION_TOLERANCE:
+            return f"positions drifted by {drift:.4f} A"
+    if restored.cell.rank == 3 and atoms.cell.rank == 3:
+        for measured, expected, label in (
+            (restored.cell.lengths(), atoms.cell.lengths(), "lengths"),
+            (restored.cell.angles(), atoms.cell.angles(), "angles"),
+        ):
+            if float(np.max(np.abs(np.asarray(measured) - np.asarray(expected)))) > _CELL_TOLERANCE:
+                return f"cell {label} changed"
+    if path.name in _CONSTRAINT_AWARE or path.suffix in _CONSTRAINT_AWARE:
+        if _constrained_count(restored) != _constrained_count(atoms):
+            return (
+                f"constrained atom count changed "
+                f"{_constrained_count(atoms)} -> {_constrained_count(restored)}"
+            )
+    return None
 
 
 def _write_json(path: Path, value: dict[str, Any]) -> None:
@@ -147,6 +198,7 @@ def _run_catalyst_pipeline(
     output_root: Path,
     *,
     reference: ReferenceResolution | None = None,
+    model_info: dict[str, Any] | None = None,
     _allow_existing_inputs: bool = False,
 ) -> CatalystPipelineResult:
     """Run one immutable request package without any interactive fallback."""
@@ -225,7 +277,10 @@ def _run_catalyst_pipeline(
         atoms, request_dir, request="CatalystSpec reconstruction", recipe=recipe,
         recipe_hash=recipe_digest, formats=requested,
         tool_sequence=[step["tool"] for step in recipe["steps"]],
-        controller_state="VALIDATED",
+        model_info=dict(model_info or {}),
+        # Truthful at export time; validation has not run yet. The final state
+        # lives in validation_report.passed and review_packet.status.
+        controller_state="BUILT",
     )
 
     output_paths = [path.relative_to(request_dir).as_posix() for path in bundle.paths]
@@ -252,16 +307,29 @@ def _run_catalyst_pipeline(
     rules.extend(catalyst_validation_rules(spec, dispatched.workspace))
     for path in bundle.paths[:-1]:
         try:
-            restored = ase_read(path)
-            passed = len(restored) == len(atoms) and restored.get_chemical_formula() == atoms.get_chemical_formula()
-            message = "atom count and composition preserved" if passed else "round-trip changed atom count or composition"
+            mismatch = _round_trip_mismatch(path, atoms)
         except Exception as exc:
-            passed, message = False, str(exc)
+            mismatch = f"{type(exc).__name__}: {exc}"
         rules.append({
-            "rule": f"export_round_trip:{path.name}", "measured": message,
-            "threshold": "same atom count and composition", "severity": "error",
-            "passed": passed, "message": message,
+            "rule": f"export_round_trip:{path.name}",
+            "measured": mismatch or "symbols, positions, cell and constraints preserved",
+            "threshold": (
+                f"positions within {_POSITION_TOLERANCE} A and cell within {_CELL_TOLERANCE}"
+            ),
+            "severity": "error", "passed": mismatch is None,
+            "message": mismatch or f"{path.name} round-trips to the built structure",
         })
+    produced = {path.name for path in bundle.paths}
+    missing_formats = sorted(_missing_formats(requested, produced))
+    rules.append({
+        "rule": "requested_output_formats", "measured": sorted(produced),
+        "threshold": sorted(requested), "severity": "error",
+        "passed": not missing_formats,
+        "message": (
+            f"requested formats without a file: {missing_formats}" if missing_formats
+            else "every requested output format produced a file"
+        ),
+    })
     validation = {
         **_metadata(request_id, {**input_hashes, "build_record": _sha(build)}),
         "schema_version": "validation-report/v1", "profile": "final",
@@ -309,6 +377,9 @@ def _run_catalyst_pipeline(
             "registry_version": build["registry_version"],
             "recipe_hash": recipe_digest,
             "atoms_hash": build["output_hashes"]["atoms"],
+            "producer_version": PRODUCER_VERSION,
+            "ase_version": ase.__version__,
+            "model": dict(model_info or {}),
         },
     }
     validate_record("review_packet", packet)
@@ -324,13 +395,14 @@ def run_catalyst_pipeline(
     output_root: Path,
     *,
     reference: ReferenceResolution | None = None,
+    model_info: dict[str, Any] | None = None,
     _allow_existing_inputs: bool = False,
 ) -> CatalystPipelineResult:
     """Run the deterministic pipeline and retain a failure record after setup."""
     try:
         return _run_catalyst_pipeline(
             evidence, proposal, output_root, reference=reference,
-            _allow_existing_inputs=_allow_existing_inputs,
+            model_info=model_info, _allow_existing_inputs=_allow_existing_inputs,
         )
     except FileExistsError:
         raise
@@ -351,6 +423,7 @@ def run_journal_request(
     output_root: Path,
     *,
     reference: ReferenceResolution | None = None,
+    model_info: dict[str, Any] | None = None,
     model_location: Literal["local", "external"] = "local",
     authorize_private_external: bool = False,
 ) -> CatalystPipelineResult:
@@ -381,7 +454,7 @@ def run_journal_request(
     try:
         return run_catalyst_pipeline(
             evidence, proposal, output_root, reference=reference,
-            _allow_existing_inputs=True,
+            model_info=model_info, _allow_existing_inputs=True,
         )
     except Exception as exc:
         return _failure_result(request_id, request_dir, "deterministic_pipeline", exc)

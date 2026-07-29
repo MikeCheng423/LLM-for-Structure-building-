@@ -1,0 +1,270 @@
+{
+  "case_id": "mp-bulk-ambiguous",
+  "evidence_ledger": {
+    "artifact_hashes": {},
+    "claims": [
+      {
+        "confidence": "high",
+        "evidence_type": "reported",
+        "field": "material.formula",
+        "locator": "Methods, unresolved Fe polymorph",
+        "source_id": "paper-1",
+        "value": "Fe",
+        "verbatim_span": "The reported chemical formula is \"Fe\"."
+      },
+      {
+        "confidence": "high",
+        "evidence_type": "reported",
+        "field": "material.reference_id",
+        "locator": "Methods, unresolved Fe polymorph",
+        "source_id": "paper-1",
+        "value": "mp-13",
+        "verbatim_span": "The reported Materials Project entry is \"mp-13\"."
+      },
+      {
+        "confidence": "high",
+        "evidence_type": "reported",
+        "field": "model.kind",
+        "locator": "Methods, unresolved Fe polymorph",
+        "source_id": "paper-1",
+        "value": "bulk",
+        "verbatim_span": "The reported model type is \"bulk\"."
+      },
+      {
+        "confidence": "high",
+        "evidence_type": "reported",
+        "field": "model.supercell",
+        "locator": "Methods, unresolved Fe polymorph",
+        "source_id": "paper-1",
+        "value": [
+          1,
+          1,
+          1
+        ],
+        "verbatim_span": "The reported supercell repeat is [1, 1, 1]."
+      },
+      {
+        "confidence": "high",
+        "evidence_type": "reported",
+        "field": "model.periodic_boundary_conditions",
+        "locator": "Methods, unresolved Fe polymorph",
+        "source_id": "paper-1",
+        "value": [
+          true,
+          true,
+          true
+        ],
+        "verbatim_span": "The reported periodic boundary conditions is [true, true, true]."
+      }
+    ],
+    "contradictions": [],
+    "created_at": "2026-07-29T00:00:00+00:00",
+    "producer_version": "golden-fixture-generator/v1",
+    "request_id": "golden-mp-bulk-ambiguous",
+    "schema_version": "evidence-ledger/v1",
+    "unresolved_fields": []
+  },
+  "expected_status": "needs_clarification",
+  "family": "bulk",
+  "label": "database_bulk_golden",
+  "mp_candidates": [
+    {
+      "formula": "Fe",
+      "is_stable": true,
+      "material_id": "mp-13",
+      "run_type": "GGA_U",
+      "structure": {
+        "bulk": {
+          "a": 2.87,
+          "crystalstructure": "bcc",
+          "cubic": true,
+          "name": "Fe"
+        }
+      },
+      "symmetry": {
+        "crystal_system": "Cubic",
+        "number": 229
+      },
+      "task_id": "mp-task-13"
+    },
+    {
+      "formula": "Fe",
+      "is_stable": true,
+      "material_id": "mp-150",
+      "run_type": "GGA_U",
+      "structure": {
+        "bulk": {
+          "a": 3.57,
+          "crystalstructure": "fcc",
+          "cubic": true,
+          "name": "Fe"
+        }
+      },
+      "symmetry": {
+        "crystal_system": "Cubic",
+        "number": 225
+      },
+      "task_id": "mp-task-150"
+    }
+  ],
+  "mp_query": {
+    "formula": "Fe"
+  },
+  "request": "Reconstruct the reported catalyst candidate.",
+  "request_id": "golden-mp-bulk-ambiguous",
+  "review": {
+    "created_at": "2026-07-29T00:00:00+00:00",
+    "domain_review": "pending",
+    "generated_by": "golden-fixture-generator/v1"
+  },
+  "schema_valid": true,
+  "sources": [
+    {
+      "locator": "Methods, unresolved Fe polymorph",
+      "source_id": "paper-1",
+      "text": "The reported chemical formula is \"Fe\".\nThe reported Materials Project entry is \"mp-13\".\nThe reported model type is \"bulk\".\nThe reported supercell repeat is [1, 1, 1].\nThe reported periodic boundary conditions is [true, true, true]."
+    }
+  ],
+  "spec_proposal": {
+    "agent_warnings": [],
+    "artifact_hashes": {},
+    "catalyst_spec": {
+      "clarification_questions": [],
+      "material": {
+        "formula": "Fe",
+        "reference_id": "mp-13"
+      },
+      "model": {
+        "atom_ordering": "ase_default",
+        "center": true,
+        "kind": "bulk",
+        "periodic_boundary_conditions": [
+          true,
+          true,
+          true
+        ],
+        "supercell": [
+          1,
+          1,
+          1
+        ]
+      },
+      "modifications": [],
+      "provenance": [
+        {
+          "claim_index": 0,
+          "evidence_type": "reported",
+          "field": "material.formula",
+          "value": "Fe"
+        },
+        {
+          "claim_index": 1,
+          "evidence_type": "reported",
+          "field": "material.reference_id",
+          "value": "mp-13"
+        },
+        {
+          "claim_index": 2,
+          "evidence_type": "reported",
+          "field": "model.kind",
+          "value": "bulk"
+        },
+        {
+          "claim_index": 3,
+          "evidence_type": "reported",
+          "field": "model.supercell",
+          "value": [
+            1,
+            1,
+            1
+          ]
+        },
+        {
+          "claim_index": 4,
+          "evidence_type": "reported",
+          "field": "model.periodic_boundary_conditions",
+          "value": [
+            true,
+            true,
+            true
+          ]
+        },
+        {
+          "evidence_type": "assumed_default",
+          "field": "model.center",
+          "reason": "Slab centering was not reported; the ASE default is disclosed.",
+          "value": true
+        },
+        {
+          "evidence_type": "assumed_default",
+          "field": "model.atom_ordering",
+          "reason": "Atom ordering was not reported; the ASE default is disclosed.",
+          "value": "ase_default"
+        },
+        {
+          "evidence_type": "assumed_default",
+          "field": "requested_outputs",
+          "reason": "Output formats are a workflow choice, not a paper-reported value.",
+          "value": [
+            "cif",
+            "vasp"
+          ]
+        }
+      ],
+      "requested_outputs": [
+        "cif",
+        "vasp"
+      ],
+      "schema_version": "0.1",
+      "task_status": "ready"
+    },
+    "clarification_questions": [],
+    "created_at": "2026-07-29T00:00:00+00:00",
+    "field_sources": [
+      {
+        "claim_index": 0,
+        "evidence_type": "reported",
+        "field": "material.formula"
+      },
+      {
+        "claim_index": 1,
+        "evidence_type": "reported",
+        "field": "material.reference_id"
+      },
+      {
+        "claim_index": 2,
+        "evidence_type": "reported",
+        "field": "model.kind"
+      },
+      {
+        "claim_index": 3,
+        "evidence_type": "reported",
+        "field": "model.supercell"
+      },
+      {
+        "claim_index": 4,
+        "evidence_type": "reported",
+        "field": "model.periodic_boundary_conditions"
+      },
+      {
+        "evidence_type": "assumed_default",
+        "field": "model.center",
+        "reason": "Slab centering was not reported; the ASE default is disclosed."
+      },
+      {
+        "evidence_type": "assumed_default",
+        "field": "model.atom_ordering",
+        "reason": "Atom ordering was not reported; the ASE default is disclosed."
+      },
+      {
+        "evidence_type": "assumed_default",
+        "field": "requested_outputs",
+        "reason": "Output formats are a workflow choice, not a paper-reported value."
+      }
+    ],
+    "producer_version": "golden-fixture-generator/v1",
+    "request_id": "golden-mp-bulk-ambiguous",
+    "schema_version": "spec-proposal/v1",
+    "task_status": "ready"
+  }
+}

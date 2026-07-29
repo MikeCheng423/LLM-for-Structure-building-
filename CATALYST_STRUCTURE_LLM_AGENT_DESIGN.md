@@ -332,7 +332,19 @@ correctness.
 ### 10.1 Implemented boundary
 
 The implementation covers steps 1 through 5 and the bounded role wrappers from
-step 6 in `src/ase_auto_build/ase_agent/`. The runtime packages all schemas from
+step 6 in `src/ase_auto_build/ase_agent/`. Step 4's golden fixtures are in
+`tests/golden/`: 100 immutable cases (30 `database_bulk_golden`, 60
+`construction_golden`, 10 refusal) written by
+`training/generators/build_golden_fixtures.py` and pinned by SHA-256 in
+`tests/golden/manifest.json`.
+`training/evaluations/run_vertical_slice_gate.py` measures all six section 9
+criteria over them and `tests/test_golden_corpus.py` keeps the gate standing.
+Two caveats are recorded rather than papered over: the fixtures have **not** had
+the section 7.1 domain-expert review (`domain_review: pending` on every case),
+and `physical_reference_golden` is empty because no licensed literature data or
+declared converged calculation is available here.
+`standardize_cell` is still unregistered, so the MP cases exercise reference
+resolution, hash verification and dispatch in its place. The runtime packages all schemas from
 `schemas/`, validates every hand-off, and exposes the journal workflow through
 `ASE_catalyst_build`. The MP resolver accepts an injected transport so tests and
 offline runs need no credential. The pipeline accepts only a resolved
@@ -349,6 +361,16 @@ the Evidence Extractor/Spec Planner gate. Three live prompt-only smokes failed
 closed before deterministic construction, so step 7 remains open for the journal
 roles: build a dedicated corpus, train an adapter, and run the held-out promotion
 suite.
+
+A dedicated journal-role corpus (`journal_roles_v1`) and adapter
+(`pilot-qwen3-4b-journal-role-r1`) now exist, but the adapter is **not**
+promoted: it passed the teacher-forced offline harness and then failed its own
+live `ASE_catalyst_build` smoke, and `journal_role_ready` has been reverted to
+`false`. The promotion path now consumes that smoke (`--smoke-dir`) and measures
+`forbidden_action_rate` instead of hardcoding it. Of the five section 8 test
+sets only `negative` exists, and not as a held-out set; `linguistic_ood`,
+`compositional_ood` and `journal_holdout` remain to be built. See
+`training/STATUS.md`.
 
 The current relaxation support stops at the record schema and explicit policy
 boundary. No calculator backend runs from the journal command. Coverage,

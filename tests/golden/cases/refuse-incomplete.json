@@ -1,0 +1,86 @@
+{
+  "case_id": "refuse-incomplete",
+  "evidence_ledger": {
+    "artifact_hashes": {},
+    "claims": [
+      {
+        "confidence": "high",
+        "evidence_type": "reported",
+        "field": "material.formula",
+        "locator": "Methods, p. 1",
+        "source_id": "paper-1",
+        "value": "Pt"
+      }
+    ],
+    "contradictions": [],
+    "created_at": "2026-07-29T00:00:00+00:00",
+    "producer_version": "golden-fixture-generator/v1",
+    "request_id": "golden-refuse-incomplete",
+    "schema_version": "evidence-ledger/v1",
+    "unresolved_fields": []
+  },
+  "expected_status": "needs_clarification",
+  "family": "refusal",
+  "label": "refusal_golden",
+  "request": "Build the fully specified conventional fcc Pt bulk candidate.",
+  "request_id": "golden-refuse-incomplete",
+  "review": {
+    "created_at": "2026-07-29T00:00:00+00:00",
+    "domain_review": "pending",
+    "generated_by": "golden-fixture-generator/v1"
+  },
+  "schema_valid": false,
+  "sources": [
+    {
+      "locator": "Methods, p. 1",
+      "source_id": "paper-1",
+      "text": "Use formula Pt, fcc crystal structure, and a bulk model."
+    }
+  ],
+  "spec_proposal": {
+    "agent_warnings": [],
+    "artifact_hashes": {},
+    "catalyst_spec": {
+      "clarification_questions": [],
+      "material": {
+        "crystal_structure": "fcc",
+        "formula": "Pt"
+      },
+      "model": {
+        "atom_ordering": "ase_default",
+        "center": true,
+        "kind": "bulk",
+        "periodic_boundary_conditions": [
+          true,
+          true,
+          true
+        ],
+        "supercell": [
+          1,
+          1,
+          1
+        ]
+      },
+      "provenance": [],
+      "requested_outputs": [
+        "cif",
+        "vasp"
+      ],
+      "schema_version": "0.1",
+      "task_status": "ready"
+    },
+    "clarification_questions": [],
+    "created_at": "2026-07-29T00:00:00+00:00",
+    "field_sources": [
+      {
+        "claim_index": 0,
+        "evidence_type": "reported",
+        "field": "material.formula"
+      }
+    ],
+    "producer_version": "golden-fixture-generator/v1",
+    "request_id": "golden-refuse-incomplete",
+    "schema_version": "spec-proposal/v1",
+    "task_status": "ready"
+  }
+}

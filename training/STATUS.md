@@ -1,4 +1,78 @@
-# Training status — 2026-07-28 20:57 Asia/Taipei
+# Training status — 2026-07-29 Asia/Taipei
+
+## Vertical-slice gate built; journal-role r1 promotion reverted (2026-07-29)
+
+**The deterministic slice now has the section 9 gate it was supposed to pass
+before an LLM was ever connected.** `tests/golden/` holds 100 immutable
+fixtures (30 MP-bulk / 30 slab / 15 defect / 15 adsorbate / 10 refusal, hashes
+pinned in `tests/golden/manifest.json`), and
+`training/evaluations/run_vertical_slice_gate.py` measures all six criteria:
+
+```text
+schema_validation_rate            1.0   (100/100)
+build_export_round_trip_rate      1.0   (89/89 buildable)
+writes_outside_request_dir        0
+arbitrary_code_paths              0
+fields_without_provenance         0
+ambiguity_returned_clarification  1.0   (11/11)
+```
+
+`tests/test_golden_corpus.py` keeps it a standing barrier. Domain review of the
+fixtures (design section 7.1) has **not** happened; every case records
+`domain_review: pending`, and `physical_reference_golden` is empty on purpose
+because no licensed literature data or declared converged calculation exists
+here.
+
+**`journal_role_ready` is back to `false` for
+`training/runs/pilot-qwen3-4b-journal-role-r1`.** The adapter scored 1.000
+schema-valid / 0.970 exact-payload / 1.000 provenance on the 300-record
+teacher-forced harness and was flagged ready at 08:32 on 2026-07-29 — then its
+own live `ASE_catalyst_build` smoke failed at 08:34 on a fully specified fcc Pt
+bulk:
+
+```text
+stage: spec_planning
+SchemaValidationError: catalyst_spec missing required fields ['modifications']
+```
+
+Nothing in the promotion path read that result, and `forbidden_action_rate` was
+a hardcoded `0.0`, so `zero_forbidden_actions` could not fail. Both are closed:
+`evaluate_journal_model.py` now measures forbidden actions (a build the gate
+should have refused, or a tool name outside the registry) and reports
+`forbidden_action_measured`; `promote_journal_adapter.py` gained
+`live_smoke_passed` and `forbidden_actions_measured` checks and takes
+`--smoke-dir`; `run_journal_role_evaluation.sh` runs the smoke **before**
+promotion via the new `--allow-unpromoted` bypass, which every package it
+produces records in its reproduction block.
+
+**Why the live run failed where the harness did not:** `journal_roles_v1` is
+5,000 fully synthetic records whose wording comes from four English templates
+plus one Traditional Chinese template selected by `ordinal % 5`, shared across
+train/validation/test by construction. Of the five test sets design section 8
+requires, only `negative` exists, and it is a family inside the same splits
+rather than a held-out set:
+
+| set | status |
+| --- | --- |
+| `iid_construction` | the single random 10% hash bucket, unnamed |
+| `linguistic_ood` | **missing** — templates are shared across splits |
+| `compositional_ood` | **missing** — no element x facet x adsorbate is withheld |
+| `journal_holdout` | **missing** — the corpus contains no journal text at all |
+| `negative` | present as a family, not held out (30 of 484 test records) |
+
+Building those three sets and re-running the promotion suite on a GPU is the
+next required step for the journal track. Until then `ASE_catalyst_build`
+correctly refuses every adapter and is not production-ready.
+
+Deterministic defects fixed alongside the gate: the exported `structure.json`
+claimed `controller_state: VALIDATED` before validation ran; the overlap check
+compared only the globally closest pair against its element-pair threshold, so a
+short contact was invisible whenever a larger pair sat nearer; the export
+round-trip compared only atom count and formula; and there were no slab
+thickness, atom count, host stoichiometry, or requested-format rules. The
+review packet's reproduction block now also carries the model, adapter sha256,
+ASE version and decoding parameters.
+
 
 ## Catalyst supplement r3/r4 rejected; r5 remains production (2026-07-28)
 

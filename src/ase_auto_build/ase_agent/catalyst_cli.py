@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import re
@@ -32,9 +33,35 @@ def resolve_journal_adapter(args) -> Path | None:
     if not (candidate / "adapter_config.json").is_file() or not manifest_path.is_file():
         raise EntryPointError(f"journal adapter or manifest is missing: {candidate}")
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-    if manifest.get("corpus_contract") != "journal" or manifest.get("journal_role_ready") is not True:
+    if manifest.get("corpus_contract") != "journal":
+        raise EntryPointError(f"adapter was not trained on the journal contract: {candidate}")
+    if manifest.get("journal_role_ready") is not True and not getattr(args, "allow_unpromoted", False):
         raise EntryPointError(f"adapter has not passed the journal-role promotion gate: {candidate}")
     return candidate
+
+
+def adapter_fingerprint(adapter: Path | None) -> str | None:
+    """Hash the adapter weights so a report names the exact tensors that ran."""
+    if adapter is None:
+        return None
+    digest = hashlib.sha256()
+    for path in sorted(Path(adapter).rglob("*")):
+        if path.is_file():
+            digest.update(path.name.encode())
+            digest.update(path.read_bytes())
+    return digest.hexdigest()
+
+
+def model_info(args, adapter: Path | None) -> dict[str, Any]:
+    """Reproduction metadata for the review packet (CATALYST_STRUCTURE_LLM.md §11)."""
+    return {
+        "model": args.model,
+        "revision": args.revision,
+        "adapter": str(adapter) if adapter else None,
+        "adapter_sha256": adapter_fingerprint(adapter),
+        "promotion_gate_bypassed": bool(getattr(args, "allow_unpromoted", False)),
+        "decoding": {"do_sample": False, "seed": None, "max_new_tokens": args.max_new_tokens},
+    }
 
 
 def load_request(path: Path) -> dict[str, Any]:
@@ -69,6 +96,11 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--out", type=Path, required=True, help="Root for immutable request packages.")
     parser.add_argument("--adapter", type=Path)
     parser.add_argument("--base-only", action="store_true")
+    parser.add_argument(
+        "--allow-unpromoted", action="store_true",
+        help="Run a candidate adapter that has not passed the journal-role gate. "
+             "Intended for the pre-promotion smoke; every package records the bypass.",
+    )
     parser.add_argument("--model", default=DEFAULT_MODEL)
     parser.add_argument("--revision", default=DEFAULT_REVISION)
     parser.add_argument("--cache-dir", type=Path, default=None)
@@ -98,7 +130,7 @@ def main(argv: list[str] | None = None) -> int:
         )
         result = run_journal_request(
             request["request_id"], request["request"], request["sources"],
-            chat, args.out,
+            chat, args.out, model_info=model_info(args, adapter),
         )
     except Exception as exc:
         print(f"ASE_catalyst_build: {type(exc).__name__}: {exc}", file=sys.stderr)

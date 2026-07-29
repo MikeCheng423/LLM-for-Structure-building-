@@ -1,0 +1,91 @@
+{
+  "case_id": "refuse-contradiction",
+  "evidence_ledger": {
+    "artifact_hashes": {},
+    "claims": [
+      {
+        "confidence": "low",
+        "evidence_type": "reported",
+        "field": "model.layers",
+        "locator": "Methods, p. 3",
+        "source_id": "paper-1",
+        "value": 4
+      },
+      {
+        "confidence": "low",
+        "evidence_type": "reported",
+        "field": "model.layers",
+        "locator": "Table 1",
+        "source_id": "paper-1",
+        "value": 6
+      }
+    ],
+    "contradictions": [
+      {
+        "claim_indices": [
+          0,
+          1
+        ],
+        "field": "model.layers"
+      }
+    ],
+    "created_at": "2026-07-29T00:00:00+00:00",
+    "producer_version": "golden-fixture-generator/v1",
+    "request_id": "golden-refuse-contradiction",
+    "schema_version": "evidence-ledger/v1",
+    "unresolved_fields": [
+      "model.layers"
+    ]
+  },
+  "expected_status": "needs_clarification",
+  "family": "refusal",
+  "label": "refusal_golden",
+  "request": "Build the slab described in the paper.",
+  "request_id": "golden-refuse-contradiction",
+  "review": {
+    "created_at": "2026-07-29T00:00:00+00:00",
+    "domain_review": "pending",
+    "generated_by": "golden-fixture-generator/v1"
+  },
+  "schema_valid": true,
+  "sources": [
+    {
+      "locator": "Methods, p. 3",
+      "source_id": "paper-1",
+      "text": "The slab used four layers. Table 1 states six layers."
+    }
+  ],
+  "spec_proposal": {
+    "agent_warnings": [
+      "Conflicting layer counts must not be guessed."
+    ],
+    "artifact_hashes": {},
+    "catalyst_spec": {
+      "clarification_questions": [
+        "Does the Pt(111) slab contain 4 or 6 layers?"
+      ],
+      "material": {
+        "formula": "Pt"
+      },
+      "model": {
+        "kind": "surface"
+      },
+      "modifications": [],
+      "provenance": [],
+      "requested_outputs": [
+        "cif"
+      ],
+      "schema_version": "0.1",
+      "task_status": "needs_clarification"
+    },
+    "clarification_questions": [
+      "Does the Pt(111) slab contain 4 or 6 layers?"
+    ],
+    "created_at": "2026-07-29T00:00:00+00:00",
+    "field_sources": [],
+    "producer_version": "golden-fixture-generator/v1",
+    "request_id": "golden-refuse-contradiction",
+    "schema_version": "spec-proposal/v1",
+    "task_status": "needs_clarification"
+  }
+}

@@ -2,13 +2,15 @@
 
 from __future__ import annotations
 
+from functools import reduce
+from math import gcd
 from typing import Any
 
 import numpy as np
 from ase.data import covalent_radii
 from ase.formula import Formula
 
-from .selectors import geometric_layers
+from .selectors import geometric_layers, select_atoms
 from .validation import _constrained_count
 
 
@@ -24,6 +26,38 @@ def _rule(
         "rule": name, "measured": measured, "threshold": threshold,
         "severity": severity, "passed": bool(passed), "message": message,
     }
+
+
+def _expected_atom_delta(
+    spec: dict[str, Any],
+    vacancy_parents: list[Any],
+    cluster_atoms: int,
+) -> int:
+    """Atom-count change the CatalystSpec's modifications must produce.
+
+    Vacancy sizes are re-derived by applying the spec's selector to the parent
+    revision, so a modification that deleted more or fewer atoms than it selected
+    is caught rather than assumed away.
+    """
+    delta, removals = 0, iter(vacancy_parents)
+    for modification in spec["modifications"]:
+        operation = modification["operation"]
+        if operation == "make_vacancy":
+            parent = next(removals, None)
+            if parent is None:
+                continue
+            delta -= len(select_atoms(parent, modification["selector"]))
+        elif operation == "add_adsorbate":
+            species = modification.get("species") or modification["element"]
+            delta += int(sum(Formula(species).count().values()))
+        elif operation == "add_supported_cluster":
+            delta += cluster_atoms
+    return delta
+
+
+def _reduced_ratio(counts: dict[str, int]) -> dict[str, int]:
+    divisor = reduce(gcd, counts.values()) if counts else 1
+    return {symbol: value // max(1, divisor) for symbol, value in sorted(counts.items())}
 
 
 def catalyst_validation_rules(spec: dict[str, Any], workspace) -> list[dict[str, Any]]:
@@ -58,8 +92,26 @@ def catalyst_validation_rules(spec: dict[str, Any], workspace) -> list[dict[str,
         "build_bulk", "build_surface", "load_reference_bulk",
         "build_reference_surface", "build_nanoparticle",
     }), None)
+    if build is not None:
+        host_counts = dict(Formula(spec["material"]["formula"]).count())
+        measured_counts: dict[str, int] = {}
+        for symbol in build.atoms.get_chemical_symbols():
+            measured_counts[symbol] = measured_counts.get(symbol, 0) + 1
+        expected_ratio, measured_ratio = _reduced_ratio(host_counts), _reduced_ratio(measured_counts)
+        rules.append(_rule(
+            "host_stoichiometry", measured_ratio, expected_ratio,
+            measured_ratio == expected_ratio,
+            "built host composition matches the declared material formula",
+        ))
+
     if model["kind"] == "surface" and build is not None:
         slab = build.atoms
+        measured_layers = len(geometric_layers(slab))
+        rules.append(_rule(
+            "slab_layer_count", measured_layers, int(model["layers"]),
+            measured_layers == int(model["layers"]),
+            "slab thickness matches the requested layer count",
+        ))
         z_min, z_max = float(np.min(slab.positions[:, 2])), float(np.max(slab.positions[:, 2]))
         cell_z = float(slab.cell.lengths()[2])
         lower, upper = z_min, cell_z - z_max
@@ -153,6 +205,21 @@ def catalyst_validation_rules(spec: dict[str, Any], workspace) -> list[dict[str,
             f"supported_cluster_{index}_interface_gap", round(measured_gap, 6), expected_gap,
             abs(measured_gap - expected_gap) <= 1e-5,
             "supported-cluster interface gap matches CatalystSpec",
+        ))
+
+    if build is not None:
+        cluster_atoms = sum(
+            len(revision.atoms) - len(history.revisions[revision.parent_revision_ids[0]].atoms)
+            for revision in cluster_revisions
+        )
+        vacancy_parents = [
+            history.revisions[revision.parent_revision_ids[0]].atoms
+            for revision in revisions if revision.tool == "make_vacancy"
+        ]
+        expected_atoms = len(build.atoms) + _expected_atom_delta(spec, vacancy_parents, cluster_atoms)
+        rules.append(_rule(
+            "atom_count", len(atoms), expected_atoms, len(atoms) == expected_atoms,
+            "final atom count matches the host plus the requested modifications",
         ))
 
     rules.append(_rule(
