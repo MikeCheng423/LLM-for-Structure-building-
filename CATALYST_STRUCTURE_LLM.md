@@ -60,6 +60,50 @@ Paper text / SI excerpt / user description
 ```
 
 The LLM should normally generate `CatalystSpec` JSON rather than unrestricted Python. A deterministic dispatcher converts the specification into ASE calls. This makes outputs testable and avoids executing arbitrary model-generated code.
+### 3.1 Agent implementation design
+
+This document is the product, scientific-scope, and data-quality contract. The
+implementation design for the cooperating agents, their permissions, hand-off
+schemas, failure handling, and acceptance tests lives in
+[`CATALYST_STRUCTURE_LLM_AGENT_DESIGN.md`](CATALYST_STRUCTURE_LLM_AGENT_DESIGN.md).
+
+The non-negotiable boundary is: agents may extract evidence and propose a
+versioned `CatalystSpec`; deterministic code performs Materials Project
+retrieval, ASE construction, validation, file export, and any calculation. No
+agent may execute arbitrary code, silently choose a scientifically material
+missing value, or label an inference as a paper-reported fact.
+
+### 3.2 Implemented local workflow
+
+The local implementation lives in `src/ase_auto_build/ase_agent/`. It includes
+the hand-off schemas, two bounded LLM roles, the policy gate, an injected
+Materials Project resolver, the CatalystSpec dispatcher, validation, export,
+failure records, and review packets. `ASE_catalyst_build` runs the two LLM calls
+and deterministic pipeline without an interactive prompt:
+
+```bash
+ASE_catalyst_build --input request.json --out catalyst_requests
+```
+
+The input JSON contains only `request_id`, `request`, and `sources`. Each source
+has a caller-assigned ID, locator, and text. The command writes one immutable
+directory under the output root and returns a nonzero status for clarification,
+unsupported work, pipeline failure, or environment failure.
+
+The journal command is an experimental, fail-closed baseline. The production r5
+adapter was trained for direct ASE tool calling, not EvidenceLedger and
+SpecProposal generation. Live prompt-only smokes on 2026-07-28 failed the journal
+schema gate, so no journal-role adapter is promoted. The typed Python pipeline
+can consume reviewed records while a dedicated journal-role corpus and adapter
+are developed.
+
+The dispatcher builds elemental and registered-prototype bulk/slab
+structures, typed vacancies and substitutions, atomic or ASE-known molecular
+adsorbates, simple elemental nanoparticles, and one supported cluster. A caller
+may pass a resolved MP bulk parent through the Python API. Non-default compound
+terminations, repeated coverage/coadsorption, molecular orientation controls,
+lattice matching, and relaxation remain fail-closed until deterministic tools
+and validation rules cover them.
 
 ## 4. Input contract
 
@@ -119,10 +163,9 @@ Use a versioned schema. A minimal `CatalystSpec` is:
     {
       "operation": "add_adsorbate",
       "species": "CO",
-      "site": "atop",
-      "coverage_monolayer": 0.25,
+      "site": "ontop",
       "height_angstrom": 1.85,
-      "orientation": "C_down"
+      "anchor": 1
     }
   ],
   "provenance": [
@@ -130,7 +173,7 @@ Use a versioned schema. A minimal `CatalystSpec` is:
       "field": "model.layers",
       "value": 4,
       "evidence_type": "reported",
-      "citation": "Methods, page 4"
+      "claim_index": 0
     },
     {
       "field": "model.vacuum_angstrom",
@@ -143,6 +186,12 @@ Use a versioned schema. A minimal `CatalystSpec` is:
   "requested_outputs": ["cif", "vasp", "xyz"]
 }
 ```
+
+This compact example abbreviates provenance. The policy gate requires a
+`field_sources` entry and matching `CatalystSpec.provenance` entry for every
+supplied structure value, including each modification field. Reported and
+user-supplied values link to an `EvidenceLedger` claim; assumptions and derived
+values carry a reason.
 
 Allowed `task_status` values:
 
@@ -225,7 +274,7 @@ Store supervised fine-tuning data as chat JSONL:
     },
     {
       "role": "assistant",
-      "content": "{\"schema_version\":\"0.1\",\"task_status\":\"needs_clarification\",\"material\":{\"formula\":\"Au\",\"crystal_structure\":\"fcc\"},\"model\":{\"kind\":\"surface\",\"miller_indices\":[1,1,1],\"supercell\":[3,3,1],\"layers\":4,\"fixed_layers_from_bottom\":2},\"modifications\":[{\"operation\":\"substitute_atom\",\"from\":\"Au\",\"to\":\"Pd\",\"layer\":\"top\",\"site\":null}],\"clarification_questions\":[\"Which top-layer Au site should be replaced by Pd, or are all top-layer sites symmetry-equivalent before adsorption?\"]}"
+      "content": "{\"schema_version\":\"0.1\",\"task_status\":\"needs_clarification\",\"material\":{\"formula\":\"Au\",\"crystal_structure\":\"fcc\"},\"model\":{\"kind\":\"surface\",\"miller_indices\":[1,1,1],\"supercell\":[3,3,1],\"layers\":4,\"fixed_layers_from_bottom\":2},\"modifications\":[{\"operation\":\"substitute\",\"element\":\"Pd\"}],\"provenance\":[],\"clarification_questions\":[\"Which top-layer Au site should be replaced by Pd?\"],\"requested_outputs\":[\"cif\",\"vasp\"]}"
     }
   ]
 }
@@ -444,5 +493,3 @@ The project is successful when a held-out journal description can be transformed
 - Field-level provenance tied to the supplied journal evidence.
 - Explicit assumptions and unresolved ambiguities.
 - Versioned records sufficient to regenerate the same pre-relaxation structure.
-
-

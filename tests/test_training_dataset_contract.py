@@ -5,7 +5,10 @@ import hashlib
 
 import pytest
 
-from training.dataset_contract import DatasetContractError, SCHEMA_VERSION, validate_record
+from training.dataset_contract import (
+    DatasetContractError, SCHEMA_VERSION, validate_journal_record, validate_record,
+)
+from training.generators.build_journal_corpus import _negative_records
 
 
 def valid_record() -> dict:
@@ -85,3 +88,10 @@ def test_secret_marker_is_rejected() -> None:
     with pytest.raises(DatasetContractError, match="possible secret"):
         validate_record(record)
 
+
+def test_journal_contract_rejects_role_tool_mismatch() -> None:
+    record = _negative_records(0)[0]
+    validate_journal_record(record)
+    record["role"] = "spec_planner"
+    with pytest.raises(DatasetContractError, match="role/tool mismatch"):
+        validate_journal_record(record)

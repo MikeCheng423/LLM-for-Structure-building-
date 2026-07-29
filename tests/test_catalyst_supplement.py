@@ -20,10 +20,12 @@ def test_catalyst_supplement_cases_are_routable_and_replayable() -> None:
         families.setdefault(case.family, case)
 
     assert set(families) == {
-        "catalyst_adsorption_site", "catalyst_high_index", "catalyst_nanoparticle",
-        "catalyst_oxide_surface", "catalyst_supported_cluster",
+        "catalyst_adsorption_site", "catalyst_bulk_reference",
+        "catalyst_high_index", "catalyst_nanoparticle",
+        "catalyst_oxide_surface", "catalyst_supported_cluster", "catalyst_surface",
         "catalyst_surface_substitution", "catalyst_surface_vacancy",
     }
+    assert len(catalyst_cases()) == 100
     for case in families.values():
         result = evaluate_record(execute_case(case, case.descriptions[0], 0))
         assert result["output_hash"]
@@ -68,6 +70,17 @@ def test_supported_cluster_router_exposes_only_the_composed_recipe() -> None:
         )
     }
     assert routed == {"build_surface", "build_nanoparticle", "combine", "finish"}
+
+
+def test_diatomic_adsorbate_routes_to_molecular_tool() -> None:
+    routed = {
+        item["function"]["name"]
+        for item in route_tools(
+            "Adsorb N2 at ontop site 2 of a four-layer Rh(111) slab.",
+            create_default_registry(),
+        )
+    }
+    assert routed == {"build_surface", "add_molecular_adsorbate", "finish"}
 
 
 @pytest.mark.parametrize("request_text", [

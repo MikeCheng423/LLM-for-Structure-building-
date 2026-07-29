@@ -53,7 +53,9 @@ def controller(script: list[dict]) -> AgentController:
 
 def test_controller_builds_and_requires_finish() -> None:
     worker = controller([
-        call("build_bulk", {"name": "al", "element": "Al", "crystal": "fcc"}),
+        call("build_bulk", {
+            "name": "al", "element": "Al", "crystal": "fcc", "cubic": True,
+        }),
         call("finish", {"name": "al"}, 2),
     ])
     result = worker.run("Build fcc aluminium.")
@@ -64,8 +66,13 @@ def test_controller_builds_and_requires_finish() -> None:
 
 def test_controller_feeds_error_back_then_recovers() -> None:
     worker = controller([
-        call("build_bulk", {"name": "al", "element": "Al", "shell": "id"}),
-        call("build_bulk", {"name": "al", "element": "Al", "crystal": "fcc"}, 2),
+        call("build_bulk", {
+            "name": "al", "element": "Al", "crystal": "fcc", "cubic": True,
+            "shell": "id",
+        }),
+        call("build_bulk", {
+            "name": "al", "element": "Al", "crystal": "fcc", "cubic": True,
+        }, 2),
         call("finish", {"name": "al"}, 3),
     ])
     result = worker.run("Build fcc aluminium.")

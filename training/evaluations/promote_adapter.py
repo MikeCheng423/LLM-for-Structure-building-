@@ -16,6 +16,7 @@ def promotion_decision(
     *,
     minimum_exact_rate: float = 0.50,
     minimum_execution_rate: float = 0.95,
+    minimum_finish_rate: float = 0.95,
     minimum_family_exact_rate: float = 0.25,
     minimum_invariant_rate: float = 0.85,
     minimum_family_invariant_rate: float = 0.50,
@@ -32,6 +33,16 @@ def promotion_decision(
     )
     same_mode = base_summary.get("tool_mode") == adapter_summary.get("tool_mode")
     same_count = base_summary.get("record_count") == adapter_summary.get("record_count")
+    same_registry = (
+        bool(base.get("registry_version"))
+        and base.get("registry_version") == adapter.get("registry_version")
+    )
+    corpus_registries = corpus.get("registry_versions", {})
+    corpus_registry_matches = (
+        len(corpus_registries) == 1
+        and adapter.get("registry_version") in corpus_registries
+        and corpus.get("records_on_current_registry") == corpus.get("record_count")
+    )
     base_families = base_summary.get("family_metrics", {})
     adapter_families = adapter_summary.get("family_metrics", {})
     same_families = bool(base_families) and set(base_families) == set(adapter_families)
@@ -57,9 +68,12 @@ def promotion_decision(
         "same_tool_mode": same_mode,
         "deployment_tool_mode": adapter_summary.get("tool_mode") == required_tool_mode,
         "same_record_count": same_count,
+        "same_runtime_registry": same_registry,
+        "corpus_matches_runtime_registry": corpus_registry_matches,
         "same_recipe_families": same_families,
         "zero_forbidden_actions": adapter_summary.get("forbidden_action_rate") == 0.0,
         "minimum_schema_execution_rate": adapter_summary.get("schema_execution_success_rate", 0.0) >= minimum_execution_rate,
+        "minimum_finish_rate": adapter_summary.get("finish_rate", 0.0) >= minimum_finish_rate,
         "minimum_exact_structure_rate": adapter_summary.get("exact_structure_rate", 0.0) >= minimum_exact_rate,
         "minimum_exact_rate_per_family": family_minimum,
         "minimum_invariant_rate": adapter_summary.get("invariants_satisfied_rate", 0.0) >= minimum_invariant_rate,
@@ -79,6 +93,7 @@ def promotion_decision(
         "thresholds": {
             "minimum_exact_structure_rate": minimum_exact_rate,
             "minimum_schema_execution_rate": minimum_execution_rate,
+            "minimum_finish_rate": minimum_finish_rate,
             "minimum_family_exact_structure_rate": minimum_family_exact_rate,
             "minimum_invariant_rate": minimum_invariant_rate,
             "minimum_family_invariant_rate": minimum_family_invariant_rate,
@@ -98,6 +113,7 @@ def main() -> int:
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--minimum-exact-rate", type=float, default=0.50)
     parser.add_argument("--minimum-execution-rate", type=float, default=0.95)
+    parser.add_argument("--minimum-finish-rate", type=float, default=0.95)
     parser.add_argument("--minimum-family-exact-rate", type=float, default=0.25)
     parser.add_argument("--minimum-invariant-rate", type=float, default=0.85)
     parser.add_argument("--minimum-family-invariant-rate", type=float, default=0.50)
@@ -110,6 +126,7 @@ def main() -> int:
         json.loads(args.adapter_report.read_text(encoding="utf-8")),
         minimum_exact_rate=args.minimum_exact_rate,
         minimum_execution_rate=args.minimum_execution_rate,
+        minimum_finish_rate=args.minimum_finish_rate,
         minimum_family_exact_rate=args.minimum_family_exact_rate,
         minimum_invariant_rate=args.minimum_invariant_rate,
         minimum_family_invariant_rate=args.minimum_family_invariant_rate,

@@ -26,9 +26,18 @@ def test_registry_exports_one_schema_per_tool() -> None:
 def test_schema_rejects_unknown_fields_and_wrong_types() -> None:
     registry = create_default_registry()
     with pytest.raises(SchemaValidationError, match="unknown fields"):
-        registry.validate_arguments("build_bulk", {"name": "al", "element": "Al", "shell": "id"})
+        registry.validate_arguments("build_bulk", {
+            "name": "al", "element": "Al", "crystal": "fcc", "cubic": True,
+            "shell": "id",
+        })
     with pytest.raises(SchemaValidationError, match="must be integer"):
         registry.validate_arguments("repeat", {"name": "al", "repeat": [2, 2, 1.5]})
+
+
+def test_bulk_requires_phase_and_cell_convention() -> None:
+    registry = create_default_registry()
+    with pytest.raises(SchemaValidationError, match="missing required fields"):
+        registry.validate_arguments("build_bulk", {"name": "al", "element": "Al"})
 
 
 def test_transaction_rollback_preserves_active_revision() -> None:
@@ -109,7 +118,10 @@ def test_read_only_tools_do_not_create_revisions() -> None:
 
 def test_hash_canonicalizes_signed_zero_and_blas_noise() -> None:
     ws = workspace()
-    ws.execute_or_raise("build_bulk", {"name": "al", "element": "Al", "crystal": "fcc"})
+    ws.execute_or_raise(
+        "build_bulk",
+        {"name": "al", "element": "Al", "crystal": "fcc", "cubic": False},
+    )
     left = ws.require_atoms("al")
     right = left.copy()
     cell = right.cell.array.copy()
@@ -122,7 +134,7 @@ def test_structure_name_cannot_be_a_path() -> None:
     ws = workspace()
     result = ws.execute(
         "build_bulk",
-        {"name": "../../escape", "element": "Al", "crystal": "fcc"},
+        {"name": "../../escape", "element": "Al", "crystal": "fcc", "cubic": False},
     )
     assert result.success is False
     assert ws.structures == {}

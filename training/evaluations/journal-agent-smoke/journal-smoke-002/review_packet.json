@@ -1,0 +1,27 @@
+{
+  "artifact_hashes": {
+    "evidence_ledger.json": "d250ededb0b2204b62f0efafe9abeca2bb13e1b4be5def590ea5719e1a64cca2",
+    "failure_record": "2a22151669524fcc625b714866c32cf46782fabcd2f1e033e6d88992e448e927",
+    "supplied_evidence.json": "3e518a732041b40be0d429e91f09f8baf85e3650885cc5967f4c15cef9dab2a7"
+  },
+  "assumptions": [],
+  "created_at": "2026-07-28T12:52:41+00:00",
+  "files": [
+    "evidence_ledger.json",
+    "supplied_evidence.json",
+    "failure_record.json"
+  ],
+  "producer_version": "ASE_auto_build/0.9.2",
+  "reproduction": {
+    "error_code": "CatalystAgentError",
+    "failed_stage": "spec_planning"
+  },
+  "request_id": "journal-smoke-002",
+  "schema_version": "review-packet/v1",
+  "source_backed_facts": [],
+  "status": "failed",
+  "structure_summary": {},
+  "warnings": [
+    "agent must call 'submit_spec_proposal' exactly once"
+  ]
+}

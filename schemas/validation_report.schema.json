@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "validation-report/v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "request_id", "created_at", "producer_version", "artifact_hashes", "profile", "passed", "rules", "invariants"],
+  "properties": {
+    "schema_version": {"const": "validation-report/v1"},
+    "request_id": {"type": "string", "minLength": 1, "maxLength": 64},
+    "created_at": {"type": "string", "minLength": 20, "maxLength": 40},
+    "producer_version": {"type": "string", "minLength": 1, "maxLength": 128},
+    "artifact_hashes": {"type": "object"},
+    "profile": {"const": "final"},
+    "passed": {"type": "boolean"},
+    "rules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["rule", "measured", "threshold", "severity", "passed"],
+        "properties": {
+          "rule": {"type": "string", "minLength": 1, "maxLength": 128},
+          "measured": {},
+          "threshold": {},
+          "severity": {"type": "string", "enum": ["error", "warning", "not_applicable"]},
+          "passed": {"type": "boolean"},
+          "message": {"type": "string", "maxLength": 1000}
+        }
+      }
+    },
+    "invariants": {"type": "object"}
+  }
+}

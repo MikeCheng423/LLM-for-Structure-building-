@@ -1,0 +1,11 @@
+{
+  "request_id": "journal-agent-r1-smoke",
+  "request": "Build the fully specified conventional fcc Pt bulk candidate.",
+  "sources": [
+    {
+      "source_id": "user-spec-1",
+      "locator": "user request",
+      "text": "Use formula Pt, fcc crystal structure, bulk model, a 1 x 1 x 1 supercell, periodic boundary conditions [true, true, true], centered geometry, ASE-default atom ordering, and CIF plus VASP outputs."
+    }
+  ]
+}

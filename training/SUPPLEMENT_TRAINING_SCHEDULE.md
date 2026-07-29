@@ -1,6 +1,6 @@
 # Catalyst structure LLM supplemental training schedule
 
-Status: planned  
+Status: r3 and r4 rejected; r5 remains production
 Baseline to preserve: `training/runs/pilot-qwen3-4b-r5/adapter`  
 Proposed supplement revision: `catalyst-supplement-r1`
 
@@ -12,6 +12,19 @@ selectors. The resulting r2 corpus contains 2,646 replay-verified trajectories
 on registry `phase1-f6f5dcb756b74fb7`; its audited maximum is 1,800 tokens.
 Termination control, repeated coverage/coadsorption, and lattice matching remain
 future runtime work.
+
+Training update (2026-07-28): r2 completed its 200-step full-auto run and
+passed adapter integrity, but the strict 32-record paired gate rejected it.
+r2 reached 100% schema execution and finish with zero forbidden calls, while
+exact structure and invariants reached 71.9%, below r5's 75.0% and 87.5% on
+the same IDs. `training/STATUS.md` records the failure classes and evidence.
+
+Corrective update (2026-07-28): r3 restored structural defaults but regressed
+nanotube and molecular-adsorption families because it trained a new adapter from
+the frozen base. r4 continued from the promoted r5 adapter and repaired those
+families, but regressed slab repeats and supported clusters. The strict screen
+rejected r4 at 78.4% exact structure. The run changed no corpus target or
+promotion threshold and records both source and output adapter hashes.
 
 This schedule extends the bounded r5 Qwen3-4B tool-calling model toward the
 journal-reconstruction scope in `CATALYST_STRUCTURE_LLM.md`. It does not replace

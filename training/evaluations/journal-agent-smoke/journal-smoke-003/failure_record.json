@@ -1,0 +1,13 @@
+{
+  "artifact_hashes": {
+    "evidence_ledger.json": "0550cf9431d1925ab1e177048a5f2ba891d803a1a4d3feb5d80179db7bbd30b5",
+    "supplied_evidence.json": "2d9da1643e77570f8eca74077fb8f108ca6e5b41be11cbfd5ffb6a3bdee858a2"
+  },
+  "created_at": "2026-07-28T12:56:53+00:00",
+  "error_code": "SchemaValidationError",
+  "message": "catalyst_spec.model.center must be boolean",
+  "producer_version": "ASE_auto_build/0.9.2",
+  "request_id": "journal-smoke-003",
+  "schema_version": "failure-record/v1",
+  "stage": "spec_planning"
+}

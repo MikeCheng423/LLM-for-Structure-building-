@@ -1,0 +1,29 @@
+{
+  "dataset_manifest_sha256": "47e6ab678e5507290cea3729b043d309f34ed74ce0eca0692007691ee6048e86",
+  "errors": [],
+  "execution_success_rate": 1.0,
+  "forbidden_action_rate": 0.0,
+  "passed": true,
+  "ready_builds": 2375,
+  "record_count": 5000,
+  "role_counts": {
+    "evidence_extractor": 2500,
+    "spec_planner": 2500
+  },
+  "split_counts": {
+    "test": 484,
+    "train": 4092,
+    "validation": 424
+  },
+  "split_group_overlap": {
+    "train_test": [],
+    "train_validation": [],
+    "validation_test": []
+  },
+  "status_counts": {
+    "needs_clarification": 125,
+    "ready": 2375,
+    "validated": 2500
+  },
+  "successful_validations": 5000
+}

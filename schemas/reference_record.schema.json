@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "reference-record/v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "request_id", "created_at", "producer_version", "artifact_hashes", "source", "material_id", "retrieved_at", "structure_role", "formula", "structure_sha256", "calculation_method", "selection_rule", "citation_required"],
+  "properties": {
+    "schema_version": {"const": "reference-record/v1"},
+    "request_id": {"type": "string", "minLength": 1, "maxLength": 64},
+    "created_at": {"type": "string", "minLength": 20, "maxLength": 40},
+    "producer_version": {"type": "string", "minLength": 1, "maxLength": 128},
+    "artifact_hashes": {"type": "object"},
+    "source": {"const": "materials_project"},
+    "material_id": {"type": "string", "minLength": 1, "maxLength": 64},
+    "retrieved_at": {"type": "string", "minLength": 20, "maxLength": 40},
+    "structure_role": {"const": "bulk_parent"},
+    "formula": {"type": "string", "minLength": 1, "maxLength": 64},
+    "structure_sha256": {"type": "string", "minLength": 64, "maxLength": 64},
+    "calculation_method": {"type": "string", "enum": ["GGA", "GGA_U", "r2SCAN", "unknown"]},
+    "task_id": {"type": "string", "minLength": 1, "maxLength": 128},
+    "selection_rule": {"type": "string", "enum": ["user-specified mp-id", "deterministic ranked query"]},
+    "query_arguments": {"type": "object"},
+    "response_sha256": {"type": "string", "minLength": 64, "maxLength": 64},
+    "candidate_material_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1, "maxLength": 64}},
+    "citation_required": {"const": true}
+  }
+}

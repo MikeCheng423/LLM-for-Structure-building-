@@ -11,7 +11,7 @@ from pathlib import Path
 
 from transformers import AutoTokenizer
 
-from training.dataset_contract import load_jsonl, render_assistant_only
+from training.dataset_contract import load_journal_jsonl, load_jsonl, render_assistant_only
 from training.train_qlora import DEFAULT_MODEL, DEFAULT_REVISION
 
 
@@ -43,6 +43,7 @@ def main() -> int:
     parser.add_argument("--revision", default=DEFAULT_REVISION)
     parser.add_argument("--cache-dir", type=Path, default=Path("training/cache/huggingface"))
     parser.add_argument("--report", type=Path)
+    parser.add_argument("--corpus-contract", choices=("ase", "journal"), default="ase")
     args = parser.parse_args()
 
     tokenizer = AutoTokenizer.from_pretrained(
@@ -54,7 +55,8 @@ def main() -> int:
     assistant_by_split: dict[str, list[int]] = {}
     ids_by_length: list[tuple[int, str]] = []
     for split in ("train", "validation", "test"):
-        records, _ = load_jsonl(args.dataset_dir / f"{split}.jsonl")
+        load_records = load_journal_jsonl if args.corpus_contract == "journal" else load_jsonl
+        records, _ = load_records(args.dataset_dir / f"{split}.jsonl")
         lengths: list[int] = []
         assistant_lengths: list[int] = []
         for record in records:
@@ -100,4 +102,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

@@ -268,7 +268,7 @@ def register(registry: ToolRegistry) -> None:
         "a": {"type": "number", "exclusiveMinimum": 0.0},
         "c": {"type": "number", "exclusiveMinimum": 0.0},
         "cubic": {"type": "boolean"}, "repeat": REPEAT,
-    }, ["name", "element"]), "mutates_structure", _build_bulk))
+    }, ["name", "element", "crystal", "cubic"]), "mutates_structure", _build_bulk))
     # The tool description stays terse on purpose. A long one measurably perturbed
     # elemental slabs -- r5 began dropping `element` and the lateral `repeat` --
     # so the compound guidance lives on the arguments it concerns instead.

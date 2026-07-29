@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "review-packet/v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "request_id", "created_at", "producer_version", "artifact_hashes", "status", "structure_summary", "source_backed_facts", "assumptions", "warnings", "files", "reproduction"],
+  "properties": {
+    "schema_version": {"const": "review-packet/v1"},
+    "request_id": {"type": "string", "minLength": 1, "maxLength": 64},
+    "created_at": {"type": "string", "minLength": 20, "maxLength": 40},
+    "producer_version": {"type": "string", "minLength": 1, "maxLength": 128},
+    "artifact_hashes": {"type": "object"},
+    "status": {"type": "string", "enum": ["review_ready", "needs_clarification", "unsupported", "failed"]},
+    "structure_summary": {"type": "object"},
+    "source_backed_facts": {"type": "array", "items": {"type": "object"}},
+    "assumptions": {"type": "array", "items": {"type": "object"}},
+    "warnings": {"type": "array", "items": {"type": "string"}},
+    "files": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1, "maxLength": 256}},
+    "reproduction": {"type": "object"}
+  }
+}

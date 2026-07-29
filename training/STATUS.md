@@ -1,4 +1,97 @@
-# Training status — 2026-07-25 19:13 Asia/Taipei
+# Training status — 2026-07-28 20:57 Asia/Taipei
+
+## Catalyst supplement r3/r4 rejected; r5 remains production (2026-07-28)
+
+r3 trained for 200 steps on 2,149 replay-verified records and restored
+checkpoint 200. Its validation loss was `0.00190678`. All 252 LoRA-B tensors
+contained nonzero values. Adapter SHA-256:
+`ee8f8691da51fd477977cdadacaab97a66474b860e7d59f652a1ceb2ea218f42`.
+
+The strict full-tool comparison used the same ordered 37 records and adversarial
+set for r5 and r3. The promotion report rejected r3.
+
+| Metric | r5 | r3 |
+| --- | ---: | ---: |
+| Exact structure | 81.1% | 81.1% |
+| Invariants satisfied | 89.2% | 81.1% |
+| Schema execution | 93.5% | 83.6% |
+| Finish | 94.6% | 89.2% |
+| Adversarial safety | 100% | 100% |
+
+r3 fixed the held-out nanoparticle case but lost both nanotubes and both
+molecular-adsorption cases. It also missed both supported clusters and one
+adsorption-site structure. The run started from the frozen base, so it spent
+adapter capacity relearning the r5 replay pool and regressed families that r5
+handled.
+
+r4 changed one training variable: it loaded the promoted r5 adapter as trainable
+weights. It reused the frozen r3 corpus, lowered the learning rate to `1e-4`, and
+ran 100 steps. Checkpoint 100 won with validation loss `0.00247306`. The exported
+adapter matches checkpoint 100 and contains 252 LoRA-B tensors with 17,694,720
+nonzero values out of 17,694,720. Adapter SHA-256:
+`c0b684ef04af8d6a7c0ec806b3ea07d03f272935165fc51f2b4e0b4332360671`.
+
+The 37-record screen rejected r4 before the 120-record gate. r4 reached 100%
+schema execution, finish, and adversarial safety, but exact structure and
+invariants were 78.4%, below r5's 81.1% and 89.2%. Eight outputs had the wrong
+structure. r4 repaired the r3 nanotube and molecular-adsorption failures, then
+omitted lateral repeats on elemental, oxide, and high-index slabs and missed both
+supported clusters. r5 remains the production adapter.
+
+## Journal-agent live smoke — prompt-only baseline rejected (2026-07-28)
+
+Three immutable live smokes exercised the evidence and SpecProposal tools with
+r5. The first omitted a required empty `contradictions` array. A stricter prompt
+fixed that omission. The next run produced informal evidence fields and no
+complete proposal tool call under 1,024 tokens. A 2,048-token run produced exact
+field paths and a complete proposal, but encoded `model.center` as the string
+`"geometry"`; schema validation rejected it before ASE execution.
+
+The deterministic journal pipeline, schemas, policy gate, resolver, dispatcher,
+validation, export, and failure records pass scripted tests. The r5 model is not
+qualified for the Evidence Extractor/Spec Planner roles. A dedicated journal-role
+corpus, training run, and held-out promotion remain required before
+`ASE_catalyst_build` can be called production-ready. Smoke packages:
+`training/evaluations/journal-agent-smoke/journal-smoke-{001,002,003}/`.
+
+Reports:
+`training/evaluations/catalyst-supplement-r3-full-pf2-{base,r5,adapter,promotion}.json`
+and `training/evaluations/catalyst-supplement-r4-full-pf2-{adapter,promotion}.json`.
+r4 reuses the matched r3 base/r5 reports.
+
+## Catalyst supplement r2 evaluated — rejected, r5 remains production (2026-07-28)
+
+The r2 full-auto run completed 200 QLoRA steps on 2,099 training records and
+restored checkpoint 175, which had the best validation loss (`0.0017678794`).
+The adapter integrity check found 252 LoRA-B tensors and 17,694,720 nonzero
+values out of 17,694,720. Adapter SHA-256:
+`b8079cbd9a037be43d4f7d6d669aaff6954b91df2b44fb1ae962ab77b888974a`.
+
+The paired full-tool evaluation used the same ordered 32-record catalyst sample
+for the frozen base, r5, and r2. The strict promotion report returned
+`promoted: false`.
+
+| Metric | Frozen base | r5 | r2 |
+| --- | ---: | ---: | ---: |
+| Exact structure | 21.9% | 75.0% | 71.9% |
+| Invariants satisfied | 21.9% | 87.5% | 71.9% |
+| Schema execution | 70.7% | 93.5% | 100% |
+| Finish | 53.1% | 93.8% | 100% |
+| Forbidden actions | 0 | 0 | 0 |
+
+r2 removed all failed and unknown tool calls, but nine outputs had the wrong
+structure. Five used primitive fcc/bcc cells because the model omitted
+`cubic: true`; two selected an entire top layer instead of its first atom; one
+added unrequested nanoparticle lattice/vacuum values; and one repeated a
+clarified conventional Si cell. The 32-case catalyst slice also leaves several
+new families with one held-out structure, so it cannot support a family-level
+promotion claim.
+
+r5 stays production. The next corpus revision must add reviewed structural
+cases for cell convention, single-site layer selectors, supported-cluster
+defaults, and clarification follow-ups. Keep 200 steps and the r5 replay pool;
+do not increase paraphrase count or relax promotion thresholds. Reports:
+`training/evaluations/catalyst-supplement-r2-full-pf2-{base,r5,adapter,promotion}.json`.
 
 ## r6 evaluated — regressed, NOT promoted (2026-07-26)
 

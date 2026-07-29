@@ -1,0 +1,182 @@
+{
+  "assistant_loss_tokens": {
+    "count": 5000,
+    "maximum": 725,
+    "mean": 477.831,
+    "minimum": 115,
+    "p50": 492,
+    "p90": 677,
+    "p95": 679,
+    "p99": 724
+  },
+  "by_split": {
+    "test": {
+      "assistant_loss_tokens": {
+        "count": 484,
+        "maximum": 722,
+        "mean": 461.934,
+        "minimum": 115,
+        "p50": 465,
+        "p90": 657,
+        "p95": 679,
+        "p99": 722
+      },
+      "total_tokens": {
+        "count": 484,
+        "maximum": 2015,
+        "mean": 1315.907,
+        "minimum": 679,
+        "p50": 1274,
+        "p90": 1812,
+        "p95": 1899,
+        "p99": 1932
+      }
+    },
+    "train": {
+      "assistant_loss_tokens": {
+        "count": 4092,
+        "maximum": 725,
+        "mean": 479.781,
+        "minimum": 115,
+        "p50": 492,
+        "p90": 677,
+        "p95": 699,
+        "p99": 724
+      },
+      "total_tokens": {
+        "count": 4092,
+        "maximum": 2021,
+        "mean": 1334.605,
+        "minimum": 679,
+        "p50": 1347,
+        "p90": 1810,
+        "p95": 1899,
+        "p99": 1973
+      }
+    },
+    "validation": {
+      "assistant_loss_tokens": {
+        "count": 424,
+        "maximum": 725,
+        "mean": 477.165,
+        "minimum": 115,
+        "p50": 492,
+        "p90": 641,
+        "p95": 679,
+        "p99": 725
+      },
+      "total_tokens": {
+        "count": 424,
+        "maximum": 2021,
+        "mean": 1345.238,
+        "minimum": 680,
+        "p50": 1293,
+        "p90": 1738,
+        "p95": 1888,
+        "p99": 1932
+      }
+    }
+  },
+  "longest_records": [
+    {
+      "id": "supported-0119-evidence_extractor",
+      "tokens": 2021
+    },
+    {
+      "id": "supported-0094-evidence_extractor",
+      "tokens": 2021
+    },
+    {
+      "id": "supported-0069-evidence_extractor",
+      "tokens": 2021
+    },
+    {
+      "id": "supported-0124-evidence_extractor",
+      "tokens": 2019
+    },
+    {
+      "id": "supported-0099-evidence_extractor",
+      "tokens": 2019
+    },
+    {
+      "id": "supported-0089-evidence_extractor",
+      "tokens": 2019
+    },
+    {
+      "id": "supported-0064-evidence_extractor",
+      "tokens": 2019
+    },
+    {
+      "id": "supported-0059-evidence_extractor",
+      "tokens": 2019
+    },
+    {
+      "id": "supported-0039-evidence_extractor",
+      "tokens": 2019
+    },
+    {
+      "id": "supported-0034-evidence_extractor",
+      "tokens": 2019
+    },
+    {
+      "id": "supported-0029-evidence_extractor",
+      "tokens": 2019
+    },
+    {
+      "id": "supported-0009-evidence_extractor",
+      "tokens": 2019
+    },
+    {
+      "id": "supported-0004-evidence_extractor",
+      "tokens": 2019
+    },
+    {
+      "id": "supported-0114-evidence_extractor",
+      "tokens": 2017
+    },
+    {
+      "id": "supported-0044-evidence_extractor",
+      "tokens": 2017
+    },
+    {
+      "id": "supported-0019-evidence_extractor",
+      "tokens": 2017
+    },
+    {
+      "id": "supported-0109-evidence_extractor",
+      "tokens": 2015
+    },
+    {
+      "id": "supported-0104-evidence_extractor",
+      "tokens": 2015
+    },
+    {
+      "id": "supported-0084-evidence_extractor",
+      "tokens": 2015
+    },
+    {
+      "id": "supported-0079-evidence_extractor",
+      "tokens": 2015
+    }
+  ],
+  "model": "Qwen/Qwen3-4B-Instruct-2507",
+  "over_limit": {
+    "1024": 4250,
+    "1536": 1200,
+    "2048": 0,
+    "4096": 0,
+    "512": 5000,
+    "768": 4750
+  },
+  "revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+  "total_tokens": {
+    "count": 5000,
+    "maximum": 2021,
+    "mean": 1333.697,
+    "minimum": 679,
+    "p50": 1293,
+    "p90": 1810,
+    "p95": 1888,
+    "p99": 1932
+  }
+}

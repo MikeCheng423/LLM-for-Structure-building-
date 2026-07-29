@@ -15,7 +15,7 @@ import peft
 import torch
 import transformers
 from datasets import Dataset
-from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
+from peft import LoraConfig, PeftModel, get_peft_model, prepare_model_for_kbit_training
 from safetensors import safe_open
 from transformers import (
     AutoModelForCausalLM,
@@ -26,8 +26,9 @@ from transformers import (
     TrainingArguments,
 )
 
-from training.dataset_contract import load_jsonl, render_assistant_only
+from training.dataset_contract import load_journal_jsonl, load_jsonl, render_assistant_only
 from training.evaluations.evaluate_corpus import evaluate_dataset
+from training.evaluations.evaluate_journal_corpus import evaluate_dataset as evaluate_journal_dataset
 
 
 DEFAULT_MODEL = "Qwen/Qwen3-4B-Instruct-2507"
@@ -68,6 +69,43 @@ def adapter_integrity(path: Path) -> dict[str, int | str | float]:
     }
 
 
+def initial_adapter_metadata(
+    adapter_dir: Path,
+    *,
+    model: str,
+    revision: str,
+    lora_rank: int,
+    require_promoted: bool,
+) -> dict[str, object]:
+    """Validate a warm-start adapter and return immutable provenance."""
+    adapter_dir = adapter_dir.resolve()
+    config_path = adapter_dir / "adapter_config.json"
+    manifest_path = adapter_dir.parent / "manifest.json"
+    tensor_path = adapter_dir / "adapter_model.safetensors"
+    if not config_path.is_file() or not manifest_path.is_file():
+        raise RuntimeError("initial adapter requires adapter_config.json and parent manifest.json")
+    config = json.loads(config_path.read_text(encoding="utf-8"))
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    if config.get("base_model_name_or_path") != model or manifest.get("base_model") != model:
+        raise RuntimeError("initial adapter base model does not match --model")
+    if manifest.get("base_revision") != revision:
+        raise RuntimeError("initial adapter base revision does not match --revision")
+    if config.get("r") != lora_rank or manifest.get("lora_rank") != lora_rank:
+        raise RuntimeError("initial adapter rank does not match --lora-rank")
+    if require_promoted and manifest.get("production_ready") is not True:
+        raise RuntimeError("production warm-start requires a promoted initial adapter")
+    integrity = adapter_integrity(tensor_path)
+    expected_sha256 = manifest.get("adapter_integrity", {}).get("sha256")
+    if integrity["sha256"] != expected_sha256:
+        raise RuntimeError("initial adapter hash does not match its manifest")
+    return {
+        "path": str(adapter_dir),
+        "source_manifest": str(manifest_path),
+        "production_ready": manifest.get("production_ready") is True,
+        "integrity": integrity,
+    }
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--dataset", type=Path, required=True)
@@ -81,6 +119,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--gradient-accumulation", type=int, default=16)
     parser.add_argument("--learning-rate", type=float, default=2e-4)
     parser.add_argument("--lora-rank", type=int, default=16)
+    parser.add_argument(
+        "--initial-adapter",
+        type=Path,
+        help="Continue training a compatible, promoted LoRA adapter.",
+    )
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--minimum-records", type=int, default=1_000)
     parser.add_argument("--eval-steps", type=int, default=25)
@@ -92,6 +135,10 @@ def parse_args() -> argparse.Namespace:
         "--allow-smoke-data",
         action="store_true",
         help="Accept explicitly marked synthetic smoke records; output remains non-production.",
+    )
+    parser.add_argument(
+        "--corpus-contract", choices=("ase", "journal"), default="ase",
+        help="Select the fail-closed corpus auditor; defaults to ASE trajectories.",
     )
     return parser.parse_args()
 
@@ -107,6 +154,19 @@ def main() -> int:
     if not args.allow_smoke_data and args.eval_dataset is None:
         raise SystemExit("production training requires --eval-dataset")
 
+    initial_adapter = None
+    if args.initial_adapter is not None:
+        try:
+            initial_adapter = initial_adapter_metadata(
+                args.initial_adapter,
+                model=args.model,
+                revision=args.revision,
+                lora_rank=args.lora_rank,
+                require_promoted=not args.allow_smoke_data,
+            )
+        except (OSError, ValueError, RuntimeError) as exc:
+            raise SystemExit(f"invalid initial adapter: {exc}") from exc
+
     corpus_audit = None
     if not args.allow_smoke_data:
         assert args.eval_dataset is not None
@@ -115,7 +175,8 @@ def main() -> int:
         if args.dataset.name != "train.jsonl" or args.eval_dataset.name != "validation.jsonl":
             raise SystemExit("production training requires train.jsonl and validation.jsonl")
         try:
-            corpus_audit = evaluate_dataset(args.dataset.parent)
+            audit = evaluate_journal_dataset if args.corpus_contract == "journal" else evaluate_dataset
+            corpus_audit = audit(args.dataset.parent)
         except Exception as exc:
             raise SystemExit(f"production corpus replay failed: {exc}") from exc
         if (
@@ -125,7 +186,10 @@ def main() -> int:
         ):
             raise SystemExit("production corpus did not pass replay and safety gates")
 
-    records, dataset_sha256 = load_jsonl(args.dataset, allow_smoke=args.allow_smoke_data)
+    if args.corpus_contract == "journal":
+        records, dataset_sha256 = load_journal_jsonl(args.dataset)
+    else:
+        records, dataset_sha256 = load_jsonl(args.dataset, allow_smoke=args.allow_smoke_data)
     if args.record_id:
         if not args.allow_smoke_data:
             raise SystemExit("--record-id is restricted to explicit smoke runs")
@@ -143,10 +207,12 @@ def main() -> int:
     eval_records = None
     eval_dataset_sha256 = None
     if args.eval_dataset is not None:
-        eval_records, eval_dataset_sha256 = load_jsonl(
-            args.eval_dataset,
-            allow_smoke=args.allow_smoke_data,
-        )
+        if args.corpus_contract == "journal":
+            eval_records, eval_dataset_sha256 = load_journal_jsonl(args.eval_dataset)
+        else:
+            eval_records, eval_dataset_sha256 = load_jsonl(
+                args.eval_dataset, allow_smoke=args.allow_smoke_data,
+            )
         eval_registry_versions = {
             record["validation"]["registry_version"] for record in eval_records
         }
@@ -191,31 +257,35 @@ def main() -> int:
     )
     model.config.use_cache = False
     model = prepare_model_for_kbit_training(model, use_gradient_checkpointing=True)
-    model = get_peft_model(
-        model,
-        LoraConfig(
-            r=args.lora_rank,
-            lora_alpha=args.lora_rank * 2,
-            lora_dropout=0.05,
-            bias="none",
-            task_type="CAUSAL_LM",
-            target_modules=[
-                "q_proj",
-                "k_proj",
-                "v_proj",
-                "o_proj",
-                "gate_proj",
-                "up_proj",
-                "down_proj",
-            ],
-        ),
-    )
+    if args.initial_adapter is not None:
+        model = PeftModel.from_pretrained(model, args.initial_adapter, is_trainable=True)
+    else:
+        model = get_peft_model(
+            model,
+            LoraConfig(
+                r=args.lora_rank,
+                lora_alpha=args.lora_rank * 2,
+                lora_dropout=0.05,
+                bias="none",
+                task_type="CAUSAL_LM",
+                target_modules=[
+                    "q_proj",
+                    "k_proj",
+                    "v_proj",
+                    "o_proj",
+                    "gate_proj",
+                    "up_proj",
+                    "down_proj",
+                ],
+            ),
+        )
 
     args.output_dir.mkdir(parents=True, exist_ok=True)
     training_args = TrainingArguments(
         output_dir=str(args.output_dir),
         max_steps=args.max_steps,
         per_device_train_batch_size=1,
+        per_device_eval_batch_size=1,
         gradient_accumulation_steps=args.gradient_accumulation,
         learning_rate=args.learning_rate,
         lr_scheduler_type="constant" if args.allow_smoke_data else "cosine",
@@ -266,6 +336,7 @@ def main() -> int:
     manifest = {
         "base_model": args.model,
         "base_revision": args.revision,
+        "corpus_contract": args.corpus_contract,
         "dataset_registry_version": dataset_registry_version,
         "dataset_sha256": dataset_sha256,
         "eval_dataset_sha256": eval_dataset_sha256,
@@ -274,6 +345,7 @@ def main() -> int:
         "max_length": args.max_length,
         "max_steps": args.max_steps,
         "lora_rank": args.lora_rank,
+        "initial_adapter": initial_adapter,
         "lr_scheduler": "constant" if args.allow_smoke_data else "cosine",
         "seed": args.seed,
         "smoke_run": args.allow_smoke_data,
@@ -302,6 +374,8 @@ def main() -> int:
             "gpu": torch.cuda.get_device_name(0),
         },
     }
+    if args.corpus_contract == "journal":
+        manifest["journal_role_ready"] = False
     (args.output_dir / "manifest.json").write_text(
         json.dumps(manifest, indent=2, sort_keys=True) + "\n",
         encoding="utf-8",

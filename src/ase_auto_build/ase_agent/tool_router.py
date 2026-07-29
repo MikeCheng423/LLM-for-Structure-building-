@@ -107,7 +107,10 @@ def route_tools(request: str, registry: ToolRegistry) -> list[dict]:
     if adsorption or (" molecule " in f" {text} " and re.search(r"\b(?:surface|slab)\b|\([0-9]{3}\)", text)):
         adsorbate = (
             "add_molecular_adsorbate"
-            if re.search(r"\b(?:co|h2o|nh3|ch4|molecule)\b", text)
+            if re.search(
+                r"\b(?:co2|co|h2o|h2|o2|n2|nh3|ch4|oh|no|c2h4|c6h6|ch3oh|hcooh|molecule|molecular)\b",
+                text,
+            )
             else "add_atomic_adsorbate"
         )
         names = ("build_surface", adsorbate, "finish")
