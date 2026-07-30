@@ -17,6 +17,7 @@ export TOKENIZERS_PARALLELISM=false
 
 adapter="${ADAPTER:-$primary_root/training/runs/pilot-qwen3-4b-journal-role-r1/adapter}"
 sample="${SAMPLE_SIZE:-100}"
+report_prefix="${REPORT_PREFIX:-journal-role-r1}"
 
 for set_name in template family; do
     "$primary_root"/.venv/bin/python training/evaluations/evaluate_journal_model.py \
@@ -25,5 +26,5 @@ for set_name in template family; do
         --max-new-tokens 900 \
         --cache-dir "$primary_root/training/cache/huggingface" \
         --adapter "$adapter" \
-        --output "training/evaluations/journal-role-r1-${set_name}-holdout.json"
+        --output "training/evaluations/${report_prefix}-${set_name}-holdout.json"
 done

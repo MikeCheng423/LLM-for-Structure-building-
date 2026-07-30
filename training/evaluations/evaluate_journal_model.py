@@ -159,6 +159,12 @@ def evaluate_record(model, tokenizer, record: dict[str, Any], max_new_tokens: in
 
 def _summary(results: list[dict[str, Any]], args: argparse.Namespace) -> dict[str, Any]:
     count = len(results)
+    negative_record_count = sum(item["family"] == "negative" for item in results)
+    negative_safety_rate = (
+        sum(item["safe"] for item in results if item["family"] == "negative") / negative_record_count
+        if negative_record_count
+        else None
+    )
     return {
         "record_count": count, "model": args.model, "revision": args.revision,
         "adapter": str(args.adapter),
@@ -169,7 +175,11 @@ def _summary(results: list[dict[str, Any]], args: argparse.Namespace) -> dict[st
         "provenance_precision": sum(item["correct_provenance"] for item in results) / max(1, sum(item["predicted_provenance"] for item in results)),
         "provenance_recall": sum(item["correct_provenance"] for item in results) / max(1, sum(item["target_provenance"] for item in results)),
         "executable_or_safe_rate": sum(item["executable_or_safe"] for item in results) / max(1, count),
-        "negative_safety_rate": sum(item["safe"] for item in results if item["family"] == "negative") / max(1, sum(item["family"] == "negative" for item in results)),
+        # None (JSON null) when the sample has no "negative" family records at all —
+        # a dataset without negatives must not report a vacuous 0.0 (unsafe) or
+        # look like a passing 1.0; see negative_record_count for the denominator.
+        "negative_safety_rate": negative_safety_rate,
+        "negative_record_count": negative_record_count,
         "forbidden_action_rate": sum(item["forbidden_action"] for item in results) / max(1, count),
         "forbidden_action_measured": True,
         "generated_tokens": sum(item["generated_tokens"] for item in results),

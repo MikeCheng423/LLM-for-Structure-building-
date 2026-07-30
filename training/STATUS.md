@@ -1,4 +1,82 @@
-# Training status — 2026-07-29 Asia/Taipei
+# Training status — 2026-07-30 Asia/Taipei
+
+## r1 held-out results: strong offline generalization on both axes (2026-07-30)
+
+Both section 10.3 held-out evaluations of the journal-role r1 adapter
+(`training/runs/pilot-qwen3-4b-journal-role-r1/adapter`, Qwen3-4B QLoRA trained
+on `journal_roles_v1`) finished: `complete: true`, 100 records sampled per set,
+50 Evidence Extractor / 50 Spec Planner in each.
+
+| metric | `template_holdout` | `family_holdout` |
+| --- | --- | --- |
+| schema-valid rate | 1.000 | 1.000 |
+| exact-payload rate | **0.980** (98/100) | **0.960** (96/100) |
+| executable-or-safe rate | 1.000 | 1.000 |
+| provenance recall | 1.000 (582/582) | 1.000 (637/637) |
+| forbidden-action rate | 0.000 | 0.000 |
+| field recall / precision | 0.9979 (968/970) | 0.9960 (990/994) |
+
+Reports: `training/evaluations/journal-role-r1-{template,family}-holdout.json`
+(1.62 h and 1.84 h wall clock; `evaluation_ids_sha256` `4dfa5bc53566…` and
+`9250b4993ba5…`). Sample composition:
+
+| set | families | roles |
+| --- | --- | --- |
+| `template_holdout` | surface 43, bulk 39, adsorbate 18 | 50 / 50 |
+| `family_holdout` | surface 38, bulk 28, adsorbate 20, supported_cluster 14 | 50 / 50 |
+
+### Every non-exact record is one dropped claim, by the Evidence Extractor
+
+All six misses across both sets are the same failure shape: an EvidenceLedger
+that omits exactly one claim. None had a wrong value, none invented a claim,
+none was malformed — all six stayed schema-valid and executable-or-safe, and the
+Spec Planner was exact on all 100 of its records in both sets.
+
+| set | record id | family | claim dropped | claims gen/exp |
+| --- | --- | --- | --- | --- |
+| template | `tmpl-surface-016-evidence_extractor` | surface | `model.miller_indices = [1,0,0]` | 11/12 |
+| template | `tmpl-surface-036-evidence_extractor` | surface | `model.miller_indices = [1,1,0]` | 11/12 |
+| family | `fam-supported-005-evidence_extractor` | supported_cluster | `modifications[0].operation = add_supported_cluster` | 17/18 |
+| family | `fam-supported-009-evidence_extractor` | supported_cluster | `modifications[0].operation = add_supported_cluster` | 17/18 |
+| family | `fam-supported-013-evidence_extractor` | supported_cluster | `modifications[0].operation = add_supported_cluster` | 17/18 |
+| family | `fam-supported-014-evidence_extractor` | supported_cluster | `model.termination = ase_default` | 17/18 |
+
+Two patterns worth carrying into r2. In `template_holdout`, both dropped claims
+were rendered by the held-out **Chinese** phrase template
+(`該研究以 {value} 作為{label}。`) — weak evidence, since all 50 Evidence
+Extractor records contain at least one Chinese line and 48 of them were exact,
+but the failures land there and nowhere else. In `family_holdout`, all four
+misses are `supported_cluster` — the longest ledgers in the set at 18 claims —
+so that cell is 5/9 exact while every other family is perfect; three of the four
+drop the same field, `modifications[0].operation`.
+
+### The 0.0 negative-safety rate is a divide-guard artifact, not a failure
+
+Both summaries print `negative_safety_rate: 0.000`. Neither set contains a
+single record of family `negative` (template: surface/bulk/adsorbate only;
+family: those three plus supported_cluster — zero negatives in either), so the
+old expression `sum(...) / max(1, 0)` evaluated to `0/1 = 0.0`. It measures
+nothing here. `evaluate_journal_model.py` now emits `null` plus an explicit
+`negative_record_count` when the denominator is empty, so a set without
+negatives can no longer look like a safety failure; these two reports predate
+that change and still carry the vacuous `0.0`.
+
+### Standing caveats
+
+- **`template_holdout` chiefly stresses the Evidence Extractor.** The Spec
+  Planner is prompted with the EvidenceLedger JSON, not the prose, so wording
+  novelty reaches it only through the one-sentence request. Its 50/50 exact
+  score on this set is a much weaker generalization claim than the Extractor's.
+- **The CO records conflate two variables.** r1 was trained before the CO anchor
+  fix, so CO targets in `template_holdout` were never seen in training; those
+  records mix wording novelty with the geometry correction. (Only one CO record
+  fell into this 100-record sample, `tmpl-adsorbate-007-spec_planner`, and it
+  was exact — so the conflation did not move these numbers, but it still makes
+  CO an unusable signal for phrasing generalization.)
+- **Offline strength does not clear the live-smoke failure.** r1 remains
+  **unpromoted**: it failed its live CLI smoke, and none of these metrics
+  address that. The corpus with the fixes is still untrained. That is exactly
+  why the next step is the r2 cycle, not a promotion decision on r1.
 
 ## Held-out sets built; the GPU was here all along (2026-07-29)
 
