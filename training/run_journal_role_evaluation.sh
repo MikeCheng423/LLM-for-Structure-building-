@@ -26,6 +26,10 @@ common=(
     training/datasets/journal_roles_v1/test.jsonl
     --sample-size 300
     --max-new-tokens 900
+    # The evaluator's --cache-dir default is relative to cwd; from the worktree
+    # that directory does not exist, so the primary checkout's cache is named
+    # explicitly (the same fix run_journal_holdout_evaluation.sh already has).
+    --cache-dir "$primary_root/training/cache/huggingface"
 )
 "$venv"/bin/python "${common[@]}" \
     --adapter "$primary_root/training/runs/pilot-qwen3-4b-r5/adapter" \

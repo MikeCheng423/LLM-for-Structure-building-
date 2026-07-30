@@ -24,6 +24,7 @@ export TOKENIZERS_PARALLELISM=false
 exec > >(tee -a "$log_file") 2>&1
 echo "Starting $run_name at $(date --iso-8601=seconds)"
 "$primary_root"/.venv/bin/python training/train_qlora.py \
+    --cache-dir "$primary_root/training/cache/huggingface" \
     --dataset training/datasets/journal_roles_v1/train.jsonl \
     --eval-dataset training/datasets/journal_roles_v1/validation.jsonl \
     --output-dir "$output_dir" \
