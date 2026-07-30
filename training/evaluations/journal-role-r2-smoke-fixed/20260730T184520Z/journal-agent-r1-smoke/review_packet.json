@@ -1,0 +1,27 @@
+{
+  "artifact_hashes": {
+    "evidence_ledger.json": "7dc10ce56fa09c64b3819cb9e170d89924973394687b2ec9fee002504a7a70e0",
+    "failure_record": "f58a93af40de7a059ced79a461d1b94f662254e1bdb4617ce55b4e6e2c7acf80",
+    "supplied_evidence.json": "264ecde00914468b1821600a5229f2d2646d1947de7fa8a016d0da7ea008be94"
+  },
+  "assumptions": [],
+  "created_at": "2026-07-30T18:47:02+00:00",
+  "files": [
+    "evidence_ledger.json",
+    "supplied_evidence.json",
+    "failure_record.json"
+  ],
+  "producer_version": "ASE_auto_build/0.9.2",
+  "reproduction": {
+    "error_code": "SchemaValidationError",
+    "failed_stage": "spec_planning"
+  },
+  "request_id": "journal-agent-r1-smoke",
+  "schema_version": "review-packet/v1",
+  "source_backed_facts": [],
+  "status": "failed",
+  "structure_summary": {},
+  "warnings": [
+    "catalyst_spec.model.atom_ordering must be one of ['ase_default']"
+  ]
+}

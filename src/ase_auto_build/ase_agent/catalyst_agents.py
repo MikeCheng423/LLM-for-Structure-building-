@@ -34,6 +34,18 @@ def _metadata(request_id: str, hashes: dict[str, str]) -> dict[str, Any]:
     }
 
 
+def _canonical_json(value: Any) -> Any:
+    """Present JSON exactly as the training corpus baked it: sorted keys.
+
+    The corpus JSONL is written with sort_keys=True, so every prompt the model
+    saw had alphabetically ordered tool properties. apply_chat_template renders
+    the tool schema into the prompt verbatim, so an insertion-ordered tool is a
+    prompt shape the model never trained on -- it then mirrors that order in its
+    output and drops fields such as catalyst_spec.modifications.
+    """
+    return json.loads(json.dumps(value, sort_keys=True))
+
+
 def _tool(name: str, description: str, properties: dict[str, Any], required: list[str]) -> dict[str, Any]:
     return {"type": "function", "function": {
         "name": name, "description": description,
@@ -83,7 +95,7 @@ def evidence_call(request: str, sources: list[dict[str, Any]]) -> tuple[list[dic
         )},
         {"role": "user", "content": json.dumps({"request": request, "sources": sources}, sort_keys=True)},
     ]
-    return messages, tool
+    return messages, _canonical_json(tool)
 
 
 def evidence_target(ledger: dict[str, Any]) -> dict[str, Any]:
@@ -134,7 +146,7 @@ def proposal_call(request: str, evidence: dict[str, Any]) -> tuple[list[dict[str
         )},
         {"role": "user", "content": json.dumps({"request": request, "evidence_ledger": planner_evidence}, sort_keys=True)},
     ]
-    return messages, tool
+    return messages, _canonical_json(tool)
 
 
 def proposal_target(proposal: dict[str, Any]) -> dict[str, Any]:
