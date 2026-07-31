@@ -1,4 +1,174 @@
-# Training status — 2026-07-30 Asia/Taipei
+# Training status — 2026-07-31 Asia/Taipei
+
+## prose_holdout: the extractor cannot read prose (2026-07-31)
+
+Phase 1 of `JOURNAL_ROLE_R3_SCHEDULE.md` is measured. The journal-role **r2**
+adapter (`training/runs/pilot-qwen3-4b-journal-role-r2/adapter`) was evaluated on
+`training/datasets/journal_holdout_prose/test.jsonl` — 52 cases / 104 records
+whose source text contains **no JSON literal of any target value**.
+
+Report: `training/evaluations/journal-role-r2-prose-holdout.json`, `complete:
+true`, 80 records sampled (40 Evidence Extractor / 40 Spec Planner —
+`--sample-size 80` takes `count//2` per role), 1.23 h wall clock,
+`evaluation_ids_sha256` `7f1e43e698b56b6b…`. Sample: adsorbate 26, surface 22,
+defect 16, bulk 16.
+
+| metric | value |
+| --- | --- |
+| schema-valid rate | 0.800 (64/80) |
+| exact-payload rate | **0.000 (0/80)** |
+| executable-or-safe rate | 0.500 (40/80) |
+| provenance recall | 0.779 (415/533) |
+| forbidden-action rate | 0.000 |
+| negative-safety rate | `null` (0 negative records) |
+
+The summary's `field_recall` (0.787) understates the extractor damage and must
+not be quoted for that role: `_flatten` treats the whole `claims` list as one
+field, so every Evidence Extractor record scores a fixed 2/3 (`contradictions`
+and `unresolved_fields` are empty and always match). The per-field numbers below
+come from parsing `generated_text` and matching claims by field path.
+
+### Per-field breakdown — Evidence Extractor (40 records, 422 target claims)
+
+"present" = a claim with that exact field path appears at all; "exact" = it
+appears *and* its value equals the target.
+
+| field | n | present | present rate | exact | exact rate | what it emitted instead |
+| --- | --- | --- | --- | --- | --- | --- |
+| `material.formula` | 40 | 39 | 0.975 | 39 | **0.975** | 1× `material.element: ["Al"]` |
+| `material.crystal_structure` | 40 | 40 | 1.000 | 24 | 0.600 | `"cubic close-packed"`×13, `"face-centred cubic"`×2, `"cubic close packed"`×1 |
+| `model.layers` | 33 | 33 | 1.000 | 33 | **1.000** | — |
+| `model.miller_indices` | 33 | 0 | 0.000 | 0 | **0.000** | `model.facet:"111"`, `model.surface_orientation:"(100)"`, `model.exposed_plane:"(111)"`, `model.surface_plane`, `model.surface` |
+| `model.supercell` | 40 | 33 | 0.825 | 27 | 0.675 | `"2×2"`×3, `"2x2"`×2, `[2,2]`×1 (plus 7× as `model.surface_cell:"2x2"`) |
+| `model.vacuum_angstrom` | 33 | 23 | 0.697 | 23 | 0.697 | 10× renamed `model.vacuum_angstroms` — the *number* was right in 33/33 |
+| `model.center` | 40 | 40 | 1.000 | 26 | 0.650 | `"cell"`×4, `"surface"`×4, `"simulation_cell"`×3, `"center"`×2, `"box"`×1 |
+| `model.atom_ordering` | 40 | 40 | 1.000 | 5 | **0.125** | `"ase"`×21, `"ase-default"`×11, `"ASE-default"`×3 |
+| `model.periodic_boundary_conditions` | 40 | 40 | 1.000 | 0 | **0.000** | `["x","y"]`×17, `["surface"]`×16, `["x","y","z"]`×6, `["all"]`×1 |
+| `requested_outputs` | 40 | 40 | 1.000 | 16 | 0.400 | `["cif","poscar"]`×11, `["cif","vasp_poscar"]`×10, `["CIF","POSCAR"]`×3 |
+| `modifications[0].site` | 13 | 0 | 0.000 | 0 | **0.000** | `adatom.site:"atop"`, `adsorbate.binding_site`, `modifications.adsorbate.site:"on-top"` |
+| `modifications[0].height_angstrom` | 13 | 0 | 0.000 | 0 | **0.000** | `adatom.distance_angstrom` etc.; value right under *some* name in 9/13 |
+| `modifications[0].element` | 10 | 0 | 0.000 | 0 | **0.000** | `adsorbate.formula`, `adatom.atom`; value right under some name in 3/10 |
+| `modifications[0].species` | 7 | 0 | 0.000 | 0 | **0.000** | value right under some name in 5/7 |
+
+Aggregate claim level: **193/422 = 0.457** exact. **0 of 40** records had every
+claim right. 30 distinct field paths were invented that the schema does not
+have; `model.kind` was volunteered on all 40 (the extractor is not asked for it).
+
+`schema_valid` is 1.000 for this role and means nothing here — the
+`evidence_ledger` schema constrains neither claim field names nor value types, so
+a ledger full of `["x","y"]` and `"ase"` validates cleanly and the damage only
+surfaces at `catalyst_spec` validation one stage later. That is exactly the live
+smoke failure, reproduced offline.
+
+### Verdict: broad interpretation failure, not a narrow enum problem
+
+Only **2 of 14** target fields survive prose: `model.layers` (33/33 — "a
+four-layer slab" → `4` works) and `material.formula` (39/40 — "aluminum" → `Al`
+works). Everything else fails, and the two fields the live smoke exposed
+(`center` 0.650, `atom_ordering` 0.125) are *not* the worst cells in the table:
+`periodic_boundary_conditions` is 0/40, `miller_indices` is 0/33, and all four
+`modifications[...]` fields are 0.
+
+Three distinct failure modes, all present:
+
+1. **Value not canonicalised** — `"cubic close-packed"` for `fcc`, `"ase"` for
+   `ase_default`, `"poscar"` for `vasp`, `"cell"` for `true`. Enum-shaped.
+2. **Type not converted** — `"(111)"` instead of `[1,1,1]`, `"2×2"` instead of
+   `[2,2,1]`, `["x","y"]` instead of `[true,true,false]`. The model reproduces
+   the prose token rather than the schema's type. Only 1/33 records produced
+   `[1,1,1]`-shaped Miller indices under any field name.
+3. **Field path invented** — `model.facet`, `model.vacuum_angstroms`,
+   `adatom.site`, `adsorbate.formula`. Here the *reading* is usually right
+   (vacuum: 33/33 correct numbers, height: 9/13) and only the destination path
+   is wrong. This is the cheapest subset to fix and the largest single block of
+   zeros in the table.
+
+So Phase 2 cannot be scoped to `center` and `atom_ordering`.
+
+### Spec Planner: unaffected where it can copy, 0.000 where it must derive
+
+The planner never sees prose — it is prompted with the EvidenceLedger JSON — and
+on this set it copies **perfectly**: `material.formula`, `crystal_structure`,
+`layers`, `miller_indices`, `supercell`, `vacuum_angstrom`, `center`,
+`atom_ordering`, `periodic_boundary_conditions`, `requested_outputs`,
+`schema_version`, `modifications[0].{element,height_angstrom,site,species}` —
+every one 40/40 or n/n exact.
+
+Every field the ledger does *not* state is 0/n:
+
+| derived field | n | exact |
+| --- | --- | --- |
+| `model.kind` | 40 | 0.000 |
+| `modifications[0].operation` | 20 | 0.000 |
+| `model.fixed_layers_from_bottom` | 31 | 0.000 |
+| `modifications[0].site_index` | 13 | 0.000 |
+| `modifications[0].anchor` | 7 | 0.000 |
+| `modifications[0].selector.{layer.count,layer.side,ordinal}` | 7 each | 0.000 |
+
+Consequences: schema-valid 0.600 (all 16 failures are
+`catalyst_spec.modifications[0] missing required fields ['operation']`, i.e.
+every adsorbate/defect case), and **executable-or-safe 0.000** — `policy_gate`
+refuses all 40 with `unsupported model kind None`, so no proposal ever reaches
+`dispatch_spec`. Exact-payload is 0/40 for this role too.
+
+**Caveat — the planner is not a clean control on this set.** In
+`journal_roles_v1` the ledger carries `model.kind` in 1918/2020 planner records
+and `modifications[0].operation` in 809; in `prose_holdout` those claims are
+absent by construction (prose cannot state them as literals) and the reference
+targets mark them `evidence_type: "derived"`. So the planner half measures a
+*different* held-out axis — derivation from an incomplete ledger — and it shows
+the same pathology as the extractor: r2 copies what is written down and produces
+nothing that is not. The prose axis itself leaves the planner untouched.
+
+### Context against r2's and r1's other measured sets
+
+| set | adapter | schema | exact | notes |
+| --- | --- | --- | --- | --- |
+| `journal_roles_v1` main test | **r2** | 1.000 | 0.967 | in-distribution |
+| `template_holdout` | r1 | 1.000 | 0.980 | held-out sentence frames, literal kept |
+| `family_holdout` | r1 | 1.000 | 0.960 | held-out family |
+| `prose_holdout` | **r2** | 0.800 | **0.000** | held-out value *representation* |
+
+The holdout rows are **r1** numbers; r2 has no `template_holdout` /
+`family_holdout` results (its cycle aborted at promotion) and the schedule
+recommends not producing them. The only same-adapter comparison is r2's own
+0.967 in-distribution exact rate against 0.000 here. The corpus's own held-out
+sets vary phrasing while keeping the JSON literal in the sentence, which is why
+they read 0.96–0.98: they never tested this axis.
+
+### What Phase 2's corpus renderer must cover
+
+Every field, not a shortlist. Concretely, the renderer needs prose forms whose
+target is reached by interpretation for:
+
+- **Enum canonicalisation** — `crystal_structure` (`face-centred cubic`, `cubic
+  close-packed`, `ccp` → `fcc`), `atom_ordering` (`ASE-default`, `ASE default
+  order`, `as written by ASE` → `ase_default`), `requested_outputs` (`CIF and
+  POSCAR`, `CIF plus VASP inputs` → `["cif","vasp"]`), `site` (`on-top`, `atop`
+  → `ontop`).
+- **Prose → typed value** — `center` (`centered/centred in the cell` → `true`),
+  `periodic_boundary_conditions` (`periodic in x and y, vacuum along z` →
+  `[true,true,false]`; `periodic in all directions` → `[true,true,true]`),
+  `miller_indices` (`(111)`, `the (100) facet` → `[1,1,1]`/`[1,0,0]`),
+  `supercell` (`2×2`, `2 x 2`, `a 2 by 2 surface cell` → `[2,2,1]`).
+- **Field-path discipline** — the schema path must be produced even when the
+  paper's wording suggests another name: `vacuum_angstrom` (not
+  `vacuum_angstroms`), `miller_indices` (not `facet`/`exposed_plane`),
+  `modifications[0].{element,species,site,height_angstrom}` (not
+  `adatom.*`/`adsorbate.*`).
+- **Already fine, keep as-is** — `layers` and `formula` need no new coverage;
+  they are the control showing 4B can do this when the mapping is learned.
+
+Separately, and independently of the prose axis, the planner needs training
+where the ledger *omits* the derived fields, so `model.kind`,
+`modifications[0].operation`, `model.fixed_layers_from_bottom`,
+`modifications[0].site_index`, `anchor` and `selector.*` are inferred rather
+than copied. Today that gap alone would fail the live smoke on every adsorbate
+and defect request even with a perfect extractor.
+
+Regression target for r3: `prose_holdout` exact-payload rate ≫ 0.000 with
+schema-valid 1.000 and executable-or-safe 1.000, measured with the same
+`--sample-size 80`.
 
 ## r1 held-out results: strong offline generalization on both axes (2026-07-30)
 
