@@ -19,10 +19,18 @@ adapter="${ADAPTER:-$primary_root/training/runs/pilot-qwen3-4b-journal-role-r1/a
 sample="${SAMPLE_SIZE:-100}"
 report_prefix="${REPORT_PREFIX:-journal-role-r1}"
 
-for set_name in template family; do
+for set_name in template family prose; do
+    # prose_holdout is the Phase 2 regression test (JOURNAL_ROLE_R3_SCHEDULE.md
+    # section 3). It holds only 104 records, and Phase 1 measured r2 on 80 of
+    # them (40 per role); the r3 comparison is only valid against an identical
+    # sample, so this set keeps its own size rather than the shared default.
+    set_sample="$sample"
+    if [[ "$set_name" == prose ]]; then
+        set_sample="${PROSE_SAMPLE_SIZE:-80}"
+    fi
     "$primary_root"/.venv/bin/python training/evaluations/evaluate_journal_model.py \
         "training/datasets/journal_holdout_${set_name}/test.jsonl" \
-        --sample-size "$sample" \
+        --sample-size "$set_sample" \
         --max-new-tokens 900 \
         --cache-dir "$primary_root/training/cache/huggingface" \
         --adapter "$adapter" \

@@ -60,7 +60,9 @@ adapter (`training/runs/pilot-qwen3-4b-journal-role-r2/adapter`) was evaluated o
 `training/datasets/journal_holdout_prose/test.jsonl` — 52 cases / 104 records
 whose source text contains **no JSON literal of any target value**.
 
-Report: `training/evaluations/journal-role-r2-prose-holdout.json`, `complete:
+Report: `training/evaluations/journal-role-r2-prose-holdout-prephase2.json`
+(renamed when Phase 2 landed; the canonical `journal-role-r2-prose-holdout.json`
+path now holds the re-measurement against the current set), `complete:
 true`, 80 records sampled (40 Evidence Extractor / 40 Spec Planner —
 `--sample-size 80` takes `count//2` per role), 1.23 h wall clock,
 `evaluation_ids_sha256` `7f1e43e698b56b6b…`. Sample: adsorbate 26, surface 22,
