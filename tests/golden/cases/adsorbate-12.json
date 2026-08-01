@@ -1,0 +1,453 @@
+{
+  "case_id": "adsorbate-12",
+  "evidence_ledger": {
+    "artifact_hashes": {},
+    "claims": [
+      {
+        "confidence": "high",
+        "evidence_type": "reported",
+        "field": "material.formula",
+        "locator": "Figure S1 caption",
+        "source_id": "paper-1",
+        "value": "Rh",
+        "verbatim_span": "The reported chemical formula is \"Rh\"."
+      },
+      {
+        "confidence": "high",
+        "evidence_type": "reported",
+        "field": "material.crystal_structure",
+        "locator": "Figure S1 caption",
+        "source_id": "paper-1",
+        "value": "fcc",
+        "verbatim_span": "The reported crystal structure is \"fcc\"."
+      },
+      {
+        "confidence": "high",
+        "evidence_type": "reported",
+        "field": "model.kind",
+        "locator": "Figure S1 caption",
+        "source_id": "paper-1",
+        "value": "surface",
+        "verbatim_span": "The reported model type is \"surface\"."
+      },
+      {
+        "confidence": "high",
+        "evidence_type": "reported",
+        "field": "model.miller_indices",
+        "locator": "Figure S1 caption",
+        "source_id": "paper-1",
+        "value": [
+          1,
+          0,
+          0
+        ],
+        "verbatim_span": "The reported Miller indices is [1, 0, 0]."
+      },
+      {
+        "confidence": "high",
+        "evidence_type": "reported",
+        "field": "model.supercell",
+        "locator": "Figure S1 caption",
+        "source_id": "paper-1",
+        "value": [
+          2,
+          2,
+          1
+        ],
+        "verbatim_span": "The reported supercell repeat is [2, 2, 1]."
+      },
+      {
+        "confidence": "high",
+        "evidence_type": "reported",
+        "field": "model.layers",
+        "locator": "Figure S1 caption",
+        "source_id": "paper-1",
+        "value": 8,
+        "verbatim_span": "The reported slab layer count is 8."
+      },
+      {
+        "confidence": "high",
+        "evidence_type": "reported",
+        "field": "model.vacuum_angstrom",
+        "locator": "Figure S1 caption",
+        "source_id": "paper-1",
+        "value": 14.0,
+        "verbatim_span": "The reported vacuum thickness in angstrom is 14.0."
+      },
+      {
+        "confidence": "high",
+        "evidence_type": "reported",
+        "field": "model.periodic_boundary_conditions",
+        "locator": "Figure S1 caption",
+        "source_id": "paper-1",
+        "value": [
+          true,
+          true,
+          false
+        ],
+        "verbatim_span": "The reported periodic boundary conditions is [true, true, false]."
+      },
+      {
+        "confidence": "high",
+        "evidence_type": "reported",
+        "field": "model.fixed_layers_from_bottom",
+        "locator": "Figure S1 caption",
+        "source_id": "paper-1",
+        "value": 1,
+        "verbatim_span": "The reported number of fixed bottom layers is 1."
+      },
+      {
+        "confidence": "high",
+        "evidence_type": "reported",
+        "field": "modifications[0].species",
+        "locator": "Figure S1 caption",
+        "source_id": "paper-1",
+        "value": "H2O",
+        "verbatim_span": "The reported modification 0 species is \"H2O\"."
+      },
+      {
+        "confidence": "high",
+        "evidence_type": "reported",
+        "field": "modifications[0].anchor",
+        "locator": "Figure S1 caption",
+        "source_id": "paper-1",
+        "value": 1,
+        "verbatim_span": "The reported modification 0 anchor is 1."
+      },
+      {
+        "confidence": "high",
+        "evidence_type": "reported",
+        "field": "modifications[0].operation",
+        "locator": "Figure S1 caption",
+        "source_id": "paper-1",
+        "value": "add_adsorbate",
+        "verbatim_span": "The reported modification 0 operation is \"add_adsorbate\"."
+      },
+      {
+        "confidence": "high",
+        "evidence_type": "reported",
+        "field": "modifications[0].site",
+        "locator": "Figure S1 caption",
+        "source_id": "paper-1",
+        "value": "ontop",
+        "verbatim_span": "The reported modification 0 site is \"ontop\"."
+      },
+      {
+        "confidence": "high",
+        "evidence_type": "reported",
+        "field": "modifications[0].site_index",
+        "locator": "Figure S1 caption",
+        "source_id": "paper-1",
+        "value": 1,
+        "verbatim_span": "The reported modification 0 site index is 1."
+      },
+      {
+        "confidence": "high",
+        "evidence_type": "reported",
+        "field": "modifications[0].height_angstrom",
+        "locator": "Figure S1 caption",
+        "source_id": "paper-1",
+        "value": 2.4,
+        "verbatim_span": "The reported modification 0 height angstrom is 2.4."
+      }
+    ],
+    "contradictions": [],
+    "created_at": "2026-07-29T00:00:00+00:00",
+    "producer_version": "golden-fixture-generator/v1",
+    "request_id": "golden-adsorbate-12",
+    "schema_version": "evidence-ledger/v1",
+    "unresolved_fields": []
+  },
+  "expected_status": "review_ready",
+  "family": "adsorbate",
+  "label": "construction_golden",
+  "request": "Reconstruct the reported catalyst candidate.",
+  "request_id": "golden-adsorbate-12",
+  "review": {
+    "created_at": "2026-07-29T00:00:00+00:00",
+    "domain_review": "pending",
+    "generated_by": "golden-fixture-generator/v1"
+  },
+  "schema_valid": true,
+  "section": "7.2",
+  "sources": [
+    {
+      "locator": "Figure S1 caption",
+      "source_id": "paper-1",
+      "text": "The reported chemical formula is \"Rh\".\nThe reported crystal structure is \"fcc\".\nThe reported model type is \"surface\".\nThe reported Miller indices is [1, 0, 0].\nThe reported supercell repeat is [2, 2, 1].\nThe reported slab layer count is 8.\nThe reported vacuum thickness in angstrom is 14.0.\nThe reported periodic boundary conditions is [true, true, false].\nThe reported number of fixed bottom layers is 1.\nThe reported modification 0 species is \"H2O\".\nThe reported modification 0 anchor is 1.\nThe reported modification 0 operation is \"add_adsorbate\".\nThe reported modification 0 site is \"ontop\".\nThe reported modification 0 site index is 1.\nThe reported modification 0 height angstrom is 2.4."
+    }
+  ],
+  "spec_proposal": {
+    "agent_warnings": [],
+    "artifact_hashes": {},
+    "catalyst_spec": {
+      "clarification_questions": [],
+      "material": {
+        "crystal_structure": "fcc",
+        "formula": "Rh"
+      },
+      "model": {
+        "atom_ordering": "ase_default",
+        "center": true,
+        "fixed_layers_from_bottom": 1,
+        "kind": "surface",
+        "layers": 8,
+        "miller_indices": [
+          1,
+          0,
+          0
+        ],
+        "periodic_boundary_conditions": [
+          true,
+          true,
+          false
+        ],
+        "supercell": [
+          2,
+          2,
+          1
+        ],
+        "vacuum_angstrom": 14.0
+      },
+      "modifications": [
+        {
+          "anchor": 1,
+          "height_angstrom": 2.4,
+          "operation": "add_adsorbate",
+          "site": "ontop",
+          "site_index": 1,
+          "species": "H2O"
+        }
+      ],
+      "provenance": [
+        {
+          "claim_index": 0,
+          "evidence_type": "reported",
+          "field": "material.formula",
+          "value": "Rh"
+        },
+        {
+          "claim_index": 1,
+          "evidence_type": "reported",
+          "field": "material.crystal_structure",
+          "value": "fcc"
+        },
+        {
+          "claim_index": 2,
+          "evidence_type": "reported",
+          "field": "model.kind",
+          "value": "surface"
+        },
+        {
+          "claim_index": 3,
+          "evidence_type": "reported",
+          "field": "model.miller_indices",
+          "value": [
+            1,
+            0,
+            0
+          ]
+        },
+        {
+          "claim_index": 4,
+          "evidence_type": "reported",
+          "field": "model.supercell",
+          "value": [
+            2,
+            2,
+            1
+          ]
+        },
+        {
+          "claim_index": 5,
+          "evidence_type": "reported",
+          "field": "model.layers",
+          "value": 8
+        },
+        {
+          "claim_index": 6,
+          "evidence_type": "reported",
+          "field": "model.vacuum_angstrom",
+          "value": 14.0
+        },
+        {
+          "claim_index": 7,
+          "evidence_type": "reported",
+          "field": "model.periodic_boundary_conditions",
+          "value": [
+            true,
+            true,
+            false
+          ]
+        },
+        {
+          "claim_index": 8,
+          "evidence_type": "reported",
+          "field": "model.fixed_layers_from_bottom",
+          "value": 1
+        },
+        {
+          "evidence_type": "assumed_default",
+          "field": "model.center",
+          "reason": "Slab centering was not reported; the ASE default is disclosed.",
+          "value": true
+        },
+        {
+          "evidence_type": "assumed_default",
+          "field": "model.atom_ordering",
+          "reason": "Atom ordering was not reported; the ASE default is disclosed.",
+          "value": "ase_default"
+        },
+        {
+          "claim_index": 9,
+          "evidence_type": "reported",
+          "field": "modifications[0].species",
+          "value": "H2O"
+        },
+        {
+          "claim_index": 10,
+          "evidence_type": "reported",
+          "field": "modifications[0].anchor",
+          "value": 1
+        },
+        {
+          "claim_index": 11,
+          "evidence_type": "reported",
+          "field": "modifications[0].operation",
+          "value": "add_adsorbate"
+        },
+        {
+          "claim_index": 12,
+          "evidence_type": "reported",
+          "field": "modifications[0].site",
+          "value": "ontop"
+        },
+        {
+          "claim_index": 13,
+          "evidence_type": "reported",
+          "field": "modifications[0].site_index",
+          "value": 1
+        },
+        {
+          "claim_index": 14,
+          "evidence_type": "reported",
+          "field": "modifications[0].height_angstrom",
+          "value": 2.4
+        },
+        {
+          "evidence_type": "assumed_default",
+          "field": "requested_outputs",
+          "reason": "Output formats are a workflow choice, not a paper-reported value.",
+          "value": [
+            "cif",
+            "vasp"
+          ]
+        }
+      ],
+      "requested_outputs": [
+        "cif",
+        "vasp"
+      ],
+      "schema_version": "0.1",
+      "task_status": "ready"
+    },
+    "clarification_questions": [],
+    "created_at": "2026-07-29T00:00:00+00:00",
+    "field_sources": [
+      {
+        "claim_index": 0,
+        "evidence_type": "reported",
+        "field": "material.formula"
+      },
+      {
+        "claim_index": 1,
+        "evidence_type": "reported",
+        "field": "material.crystal_structure"
+      },
+      {
+        "claim_index": 2,
+        "evidence_type": "reported",
+        "field": "model.kind"
+      },
+      {
+        "claim_index": 3,
+        "evidence_type": "reported",
+        "field": "model.miller_indices"
+      },
+      {
+        "claim_index": 4,
+        "evidence_type": "reported",
+        "field": "model.supercell"
+      },
+      {
+        "claim_index": 5,
+        "evidence_type": "reported",
+        "field": "model.layers"
+      },
+      {
+        "claim_index": 6,
+        "evidence_type": "reported",
+        "field": "model.vacuum_angstrom"
+      },
+      {
+        "claim_index": 7,
+        "evidence_type": "reported",
+        "field": "model.periodic_boundary_conditions"
+      },
+      {
+        "claim_index": 8,
+        "evidence_type": "reported",
+        "field": "model.fixed_layers_from_bottom"
+      },
+      {
+        "evidence_type": "assumed_default",
+        "field": "model.center",
+        "reason": "Slab centering was not reported; the ASE default is disclosed."
+      },
+      {
+        "evidence_type": "assumed_default",
+        "field": "model.atom_ordering",
+        "reason": "Atom ordering was not reported; the ASE default is disclosed."
+      },
+      {
+        "claim_index": 9,
+        "evidence_type": "reported",
+        "field": "modifications[0].species"
+      },
+      {
+        "claim_index": 10,
+        "evidence_type": "reported",
+        "field": "modifications[0].anchor"
+      },
+      {
+        "claim_index": 11,
+        "evidence_type": "reported",
+        "field": "modifications[0].operation"
+      },
+      {
+        "claim_index": 12,
+        "evidence_type": "reported",
+        "field": "modifications[0].site"
+      },
+      {
+        "claim_index": 13,
+        "evidence_type": "reported",
+        "field": "modifications[0].site_index"
+      },
+      {
+        "claim_index": 14,
+        "evidence_type": "reported",
+        "field": "modifications[0].height_angstrom"
+      },
+      {
+        "evidence_type": "assumed_default",
+        "field": "requested_outputs",
+        "reason": "Output formats are a workflow choice, not a paper-reported value."
+      }
+    ],
+    "producer_version": "golden-fixture-generator/v1",
+    "request_id": "golden-adsorbate-12",
+    "schema_version": "spec-proposal/v1",
+    "task_status": "ready"
+  }
+}

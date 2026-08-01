@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "clarification-request/v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "request_id", "created_at", "producer_version", "artifact_hashes", "questions", "reasons"],
+  "properties": {
+    "schema_version": {"const": "clarification-request/v1"},
+    "request_id": {"type": "string", "minLength": 1, "maxLength": 64},
+    "created_at": {"type": "string", "minLength": 20, "maxLength": 40},
+    "producer_version": {"type": "string", "minLength": 1, "maxLength": 128},
+    "artifact_hashes": {"type": "object"},
+    "questions": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1, "maxLength": 500}},
+    "reasons": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1, "maxLength": 1000}}
+  }
+}

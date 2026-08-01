@@ -1,0 +1,159 @@
+"""Non-interactive journal evidence to CatalystSpec package command."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import os
+import re
+import sys
+from pathlib import Path
+from typing import Any
+
+from .catalyst_pipeline import run_journal_request
+from .cli import EntryPointError, default_cache_dir, prepare_environment, repo_root
+from .llm_defaults import DEFAULT_MODEL, DEFAULT_REVISION
+
+EXIT_CODES = {
+    "review_ready": 0,
+    "failed": 1,
+    "unsupported": 3,
+    "needs_clarification": 5,
+}
+JOURNAL_ADAPTER_ENV = "ASE_CATALYST_ADAPTER"
+DEFAULT_JOURNAL_ADAPTER = Path("training/runs/pilot-qwen3-4b-journal-role-r1/adapter")
+
+
+def resolve_journal_adapter(args) -> Path | None:
+    if args.base_only:
+        return None
+    candidate = Path(args.adapter or os.environ.get(JOURNAL_ADAPTER_ENV) or repo_root() / DEFAULT_JOURNAL_ADAPTER)
+    manifest_path = candidate.parent / "manifest.json"
+    if not (candidate / "adapter_config.json").is_file() or not manifest_path.is_file():
+        raise EntryPointError(f"journal adapter or manifest is missing: {candidate}")
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    if manifest.get("corpus_contract") != "journal":
+        raise EntryPointError(f"adapter was not trained on the journal contract: {candidate}")
+    if manifest.get("journal_role_ready") is not True and not getattr(args, "allow_unpromoted", False):
+        raise EntryPointError(f"adapter has not passed the journal-role promotion gate: {candidate}")
+    return candidate
+
+
+def adapter_fingerprint(adapter: Path | None) -> str | None:
+    """Hash the adapter weights so a report names the exact tensors that ran."""
+    if adapter is None:
+        return None
+    digest = hashlib.sha256()
+    for path in sorted(Path(adapter).rglob("*")):
+        if path.is_file():
+            digest.update(path.name.encode())
+            digest.update(path.read_bytes())
+    return digest.hexdigest()
+
+
+def model_info(args, adapter: Path | None) -> dict[str, Any]:
+    """Reproduction metadata for the review packet (CATALYST_STRUCTURE_LLM.md §11)."""
+    return {
+        "model": args.model,
+        "revision": args.revision,
+        "adapter": str(adapter) if adapter else None,
+        "adapter_sha256": adapter_fingerprint(adapter),
+        "promotion_gate_bypassed": bool(getattr(args, "allow_unpromoted", False)),
+        "decoding": {"do_sample": False, "seed": None, "max_new_tokens": args.max_new_tokens},
+    }
+
+
+def load_request(path: Path) -> dict[str, Any]:
+    value = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(value, dict) or not {"request_id", "request", "sources"} <= set(value):
+        raise ValueError("input must contain request_id, request, and sources")
+    if set(value) - {"request_id", "request", "sources", "paper"}:
+        raise ValueError("input must contain only request_id, request, sources, and paper")
+    if "paper" in value:
+        paper = value["paper"]
+        if not isinstance(paper, dict) or set(paper) - {"title", "doi", "year"}:
+            raise ValueError("paper accepts only title, doi, and year")
+        for key in ("title", "doi"):
+            if key in paper and (not isinstance(paper[key], str) or not paper[key]):
+                raise ValueError(f"paper {key} must be a nonempty string")
+        if "year" in paper and not isinstance(paper["year"], int):
+            raise ValueError("paper year must be an integer")
+    if not isinstance(value["request_id"], str) or not isinstance(value["request"], str):
+        raise ValueError("request_id and request must be strings")
+    if re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,63}", value["request_id"]) is None:
+        raise ValueError("request_id must be a path-free identifier")
+    if not value["request"] or len(value["request"]) > 10_000:
+        raise ValueError("request must contain 1 to 10000 characters")
+    if not isinstance(value["sources"], list):
+        raise ValueError("sources must be an array")
+    if not value["sources"]:
+        raise ValueError("sources must contain at least one item")
+    for source in value["sources"]:
+        if not isinstance(source, dict) or not {"source_id", "locator", "text"} <= set(source):
+            raise ValueError("each source requires source_id, locator, and text")
+        if set(source) - {"source_id", "locator", "text", "private"}:
+            raise ValueError("source contains an unsupported field")
+        if not all(isinstance(source[key], str) and source[key] for key in ("source_id", "locator", "text")):
+            raise ValueError("source_id, locator, and text must be nonempty strings")
+        if "private" in source and not isinstance(source["private"], bool):
+            raise ValueError("source private flag must be boolean")
+    return value
+
+
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--input", type=Path, required=True, help="Request JSON file.")
+    parser.add_argument("--out", type=Path, required=True, help="Root for immutable request packages.")
+    parser.add_argument("--adapter", type=Path)
+    parser.add_argument("--base-only", action="store_true")
+    parser.add_argument(
+        "--allow-unpromoted", action="store_true",
+        help="Run a candidate adapter that has not passed the journal-role gate. "
+             "Intended for the pre-promotion smoke; every package records the bypass.",
+    )
+    parser.add_argument("--model", default=DEFAULT_MODEL)
+    parser.add_argument("--revision", default=DEFAULT_REVISION)
+    parser.add_argument("--cache-dir", type=Path, default=None)
+    parser.add_argument("--online", action="store_true")
+    parser.add_argument("--max-new-tokens", type=int, default=2048)
+    return parser
+
+
+def main(argv: list[str] | None = None) -> int:
+    args = build_parser().parse_args(argv)
+    try:
+        request = load_request(args.input)
+        if args.max_new_tokens < 1:
+            raise ValueError("--max-new-tokens must be positive")
+        args.cache_dir = args.cache_dir or default_cache_dir()
+        prepare_environment(args.cache_dir, offline=not args.online)
+        adapter = resolve_journal_adapter(args)
+        from .llm_local import LocalModelChat, load_model
+
+        model, tokenizer = load_model(
+            model=args.model, revision=args.revision,
+            cache_dir=args.cache_dir, adapter=adapter,
+        )
+        chat = LocalModelChat(
+            model, tokenizer, tool_override=None,
+            max_new_tokens=args.max_new_tokens,
+        )
+        result = run_journal_request(
+            request["request_id"], request["request"], request["sources"],
+            chat, args.out, model_info=model_info(args, adapter),
+            paper=request.get("paper"),
+        )
+    except Exception as exc:
+        print(f"ASE_catalyst_build: {type(exc).__name__}: {exc}", file=sys.stderr)
+        return 6
+    print(json.dumps({
+        "status": result.status,
+        "request_dir": str(result.request_dir),
+        "files": [str(path) for path in result.files],
+    }, sort_keys=True))
+    return EXIT_CODES.get(result.status, 1)
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

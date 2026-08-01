@@ -1,0 +1,27 @@
+{
+  "artifact_hashes": {
+    "evidence_ledger.json": "9160e59412f825087f133d40fb541747549a584408a465a122f5574cc8d64908",
+    "failure_record": "7802ede3e41a3e8e93c669a5d68c9aabbbeaeb57ca3a72618ff1584272113858",
+    "supplied_evidence.json": "0a782a9dc4e6ba41647e760ddfa875b55893c2cbb1205e32ee99af645809b063"
+  },
+  "assumptions": [],
+  "created_at": "2026-07-29T00:34:20+00:00",
+  "files": [
+    "evidence_ledger.json",
+    "supplied_evidence.json",
+    "failure_record.json"
+  ],
+  "producer_version": "ASE_auto_build/0.9.2",
+  "reproduction": {
+    "error_code": "SchemaValidationError",
+    "failed_stage": "spec_planning"
+  },
+  "request_id": "journal-agent-r1-smoke",
+  "schema_version": "review-packet/v1",
+  "source_backed_facts": [],
+  "status": "failed",
+  "structure_summary": {},
+  "warnings": [
+    "catalyst_spec missing required fields ['modifications']"
+  ]
+}

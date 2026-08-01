@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "relaxation-record/v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "request_id", "created_at", "producer_version", "artifact_hashes", "calculator", "parameters", "resource_limit", "explicitly_confirmed", "pre_relax_sha256", "converged", "failure_reason"],
+  "properties": {
+    "schema_version": {"const": "relaxation-record/v1"},
+    "request_id": {"type": "string", "minLength": 1, "maxLength": 64},
+    "created_at": {"type": "string", "minLength": 20, "maxLength": 40},
+    "producer_version": {"type": "string", "minLength": 1, "maxLength": 128},
+    "artifact_hashes": {"type": "object"},
+    "calculator": {"type": "object"},
+    "parameters": {"type": "object"},
+    "resource_limit": {"type": "object"},
+    "explicitly_confirmed": {"type": "boolean"},
+    "pre_relax_sha256": {"type": "string", "minLength": 64, "maxLength": 64},
+    "post_relax_sha256": {"type": "string", "minLength": 64, "maxLength": 64},
+    "converged": {"type": "boolean"},
+    "energy_ev": {"type": "number"},
+    "max_force_ev_per_angstrom": {"type": "number", "minimum": 0.0},
+    "failure_reason": {"type": "string", "maxLength": 1000}
+  }
+}

@@ -1,0 +1,485 @@
+{
+  "case_id": "slice-n-doped-graphene-single-atom",
+  "evidence_ledger": {
+    "artifact_hashes": {},
+    "claims": [
+      {
+        "confidence": "high",
+        "evidence_type": "reported",
+        "field": "material.formula",
+        "locator": "Section 14 example: N-doped graphene with a supported single metal atom",
+        "source_id": "paper-1",
+        "value": "C",
+        "verbatim_span": "The reported chemical formula is \"C\"."
+      },
+      {
+        "confidence": "high",
+        "evidence_type": "reported",
+        "field": "material.crystal_structure",
+        "locator": "Section 14 example: N-doped graphene with a supported single metal atom",
+        "source_id": "paper-1",
+        "value": "graphene",
+        "verbatim_span": "The reported crystal structure is \"graphene\"."
+      },
+      {
+        "confidence": "high",
+        "evidence_type": "reported",
+        "field": "model.kind",
+        "locator": "Section 14 example: N-doped graphene with a supported single metal atom",
+        "source_id": "paper-1",
+        "value": "surface",
+        "verbatim_span": "The reported model type is \"surface\"."
+      },
+      {
+        "confidence": "high",
+        "evidence_type": "reported",
+        "field": "model.miller_indices",
+        "locator": "Section 14 example: N-doped graphene with a supported single metal atom",
+        "source_id": "paper-1",
+        "value": [
+          0,
+          0,
+          1
+        ],
+        "verbatim_span": "The reported Miller indices is [0, 0, 1]."
+      },
+      {
+        "confidence": "high",
+        "evidence_type": "reported",
+        "field": "model.supercell",
+        "locator": "Section 14 example: N-doped graphene with a supported single metal atom",
+        "source_id": "paper-1",
+        "value": [
+          3,
+          3,
+          1
+        ],
+        "verbatim_span": "The reported supercell repeat is [3, 3, 1]."
+      },
+      {
+        "confidence": "high",
+        "evidence_type": "reported",
+        "field": "model.layers",
+        "locator": "Section 14 example: N-doped graphene with a supported single metal atom",
+        "source_id": "paper-1",
+        "value": 1,
+        "verbatim_span": "The reported slab layer count is 1."
+      },
+      {
+        "confidence": "high",
+        "evidence_type": "reported",
+        "field": "model.vacuum_angstrom",
+        "locator": "Section 14 example: N-doped graphene with a supported single metal atom",
+        "source_id": "paper-1",
+        "value": 16.0,
+        "verbatim_span": "The reported vacuum thickness in angstrom is 16.0."
+      },
+      {
+        "confidence": "high",
+        "evidence_type": "reported",
+        "field": "model.periodic_boundary_conditions",
+        "locator": "Section 14 example: N-doped graphene with a supported single metal atom",
+        "source_id": "paper-1",
+        "value": [
+          true,
+          true,
+          false
+        ],
+        "verbatim_span": "The reported periodic boundary conditions is [true, true, false]."
+      },
+      {
+        "confidence": "high",
+        "evidence_type": "reported",
+        "field": "modifications[0].operation",
+        "locator": "Section 14 example: N-doped graphene with a supported single metal atom",
+        "source_id": "paper-1",
+        "value": "substitute",
+        "verbatim_span": "The reported modification 0 operation is \"substitute\"."
+      },
+      {
+        "confidence": "high",
+        "evidence_type": "reported",
+        "field": "modifications[0].selector",
+        "locator": "Section 14 example: N-doped graphene with a supported single metal atom",
+        "source_id": "paper-1",
+        "value": {
+          "ordinal": 1
+        },
+        "verbatim_span": "The reported modification 0 selector is {\"ordinal\": 1}."
+      },
+      {
+        "confidence": "high",
+        "evidence_type": "reported",
+        "field": "modifications[0].element",
+        "locator": "Section 14 example: N-doped graphene with a supported single metal atom",
+        "source_id": "paper-1",
+        "value": "N",
+        "verbatim_span": "The reported modification 0 element is \"N\"."
+      },
+      {
+        "confidence": "high",
+        "evidence_type": "reported",
+        "field": "modifications[1].operation",
+        "locator": "Section 14 example: N-doped graphene with a supported single metal atom",
+        "source_id": "paper-1",
+        "value": "add_adsorbate",
+        "verbatim_span": "The reported modification 1 operation is \"add_adsorbate\"."
+      },
+      {
+        "confidence": "high",
+        "evidence_type": "reported",
+        "field": "modifications[1].element",
+        "locator": "Section 14 example: N-doped graphene with a supported single metal atom",
+        "source_id": "paper-1",
+        "value": "Pt",
+        "verbatim_span": "The reported modification 1 element is \"Pt\"."
+      },
+      {
+        "confidence": "high",
+        "evidence_type": "reported",
+        "field": "modifications[1].site",
+        "locator": "Section 14 example: N-doped graphene with a supported single metal atom",
+        "source_id": "paper-1",
+        "value": "ontop",
+        "verbatim_span": "The reported modification 1 site is \"ontop\"."
+      },
+      {
+        "confidence": "high",
+        "evidence_type": "reported",
+        "field": "modifications[1].site_index",
+        "locator": "Section 14 example: N-doped graphene with a supported single metal atom",
+        "source_id": "paper-1",
+        "value": 1,
+        "verbatim_span": "The reported modification 1 site index is 1."
+      },
+      {
+        "confidence": "high",
+        "evidence_type": "reported",
+        "field": "modifications[1].height_angstrom",
+        "locator": "Section 14 example: N-doped graphene with a supported single metal atom",
+        "source_id": "paper-1",
+        "value": 2.0,
+        "verbatim_span": "The reported modification 1 height angstrom is 2.0."
+      }
+    ],
+    "contradictions": [],
+    "created_at": "2026-07-29T00:00:00+00:00",
+    "producer_version": "golden-fixture-generator/v1",
+    "request_id": "golden-slice-n-doped-graphene-single-atom",
+    "schema_version": "evidence-ledger/v1",
+    "unresolved_fields": []
+  },
+  "expected_status": "review_ready",
+  "family": "vertical_slice",
+  "label": "construction_golden",
+  "request": "Reconstruct the reported catalyst candidate.",
+  "request_id": "golden-slice-n-doped-graphene-single-atom",
+  "review": {
+    "created_at": "2026-07-29T00:00:00+00:00",
+    "domain_review": "pending",
+    "generated_by": "golden-fixture-generator/v1"
+  },
+  "schema_valid": true,
+  "section": "14",
+  "sources": [
+    {
+      "locator": "Section 14 example: N-doped graphene with a supported single metal atom",
+      "source_id": "paper-1",
+      "text": "The reported chemical formula is \"C\".\nThe reported crystal structure is \"graphene\".\nThe reported model type is \"surface\".\nThe reported Miller indices is [0, 0, 1].\nThe reported supercell repeat is [3, 3, 1].\nThe reported slab layer count is 1.\nThe reported vacuum thickness in angstrom is 16.0.\nThe reported periodic boundary conditions is [true, true, false].\nThe reported modification 0 operation is \"substitute\".\nThe reported modification 0 selector is {\"ordinal\": 1}.\nThe reported modification 0 element is \"N\".\nThe reported modification 1 operation is \"add_adsorbate\".\nThe reported modification 1 element is \"Pt\".\nThe reported modification 1 site is \"ontop\".\nThe reported modification 1 site index is 1.\nThe reported modification 1 height angstrom is 2.0."
+    }
+  ],
+  "spec_proposal": {
+    "agent_warnings": [],
+    "artifact_hashes": {},
+    "catalyst_spec": {
+      "clarification_questions": [],
+      "material": {
+        "crystal_structure": "graphene",
+        "formula": "C"
+      },
+      "model": {
+        "atom_ordering": "ase_default",
+        "center": true,
+        "kind": "surface",
+        "layers": 1,
+        "miller_indices": [
+          0,
+          0,
+          1
+        ],
+        "periodic_boundary_conditions": [
+          true,
+          true,
+          false
+        ],
+        "supercell": [
+          3,
+          3,
+          1
+        ],
+        "vacuum_angstrom": 16.0
+      },
+      "modifications": [
+        {
+          "element": "N",
+          "operation": "substitute",
+          "selector": {
+            "ordinal": 1
+          }
+        },
+        {
+          "element": "Pt",
+          "height_angstrom": 2.0,
+          "operation": "add_adsorbate",
+          "site": "ontop",
+          "site_index": 1
+        }
+      ],
+      "provenance": [
+        {
+          "claim_index": 0,
+          "evidence_type": "reported",
+          "field": "material.formula",
+          "value": "C"
+        },
+        {
+          "claim_index": 1,
+          "evidence_type": "reported",
+          "field": "material.crystal_structure",
+          "value": "graphene"
+        },
+        {
+          "claim_index": 2,
+          "evidence_type": "reported",
+          "field": "model.kind",
+          "value": "surface"
+        },
+        {
+          "claim_index": 3,
+          "evidence_type": "reported",
+          "field": "model.miller_indices",
+          "value": [
+            0,
+            0,
+            1
+          ]
+        },
+        {
+          "claim_index": 4,
+          "evidence_type": "reported",
+          "field": "model.supercell",
+          "value": [
+            3,
+            3,
+            1
+          ]
+        },
+        {
+          "claim_index": 5,
+          "evidence_type": "reported",
+          "field": "model.layers",
+          "value": 1
+        },
+        {
+          "claim_index": 6,
+          "evidence_type": "reported",
+          "field": "model.vacuum_angstrom",
+          "value": 16.0
+        },
+        {
+          "claim_index": 7,
+          "evidence_type": "reported",
+          "field": "model.periodic_boundary_conditions",
+          "value": [
+            true,
+            true,
+            false
+          ]
+        },
+        {
+          "evidence_type": "assumed_default",
+          "field": "model.center",
+          "reason": "Slab centering was not reported; the ASE default is disclosed.",
+          "value": true
+        },
+        {
+          "evidence_type": "assumed_default",
+          "field": "model.atom_ordering",
+          "reason": "Atom ordering was not reported; the ASE default is disclosed.",
+          "value": "ase_default"
+        },
+        {
+          "claim_index": 8,
+          "evidence_type": "reported",
+          "field": "modifications[0].operation",
+          "value": "substitute"
+        },
+        {
+          "claim_index": 9,
+          "evidence_type": "reported",
+          "field": "modifications[0].selector",
+          "value": {
+            "ordinal": 1
+          }
+        },
+        {
+          "claim_index": 10,
+          "evidence_type": "reported",
+          "field": "modifications[0].element",
+          "value": "N"
+        },
+        {
+          "claim_index": 11,
+          "evidence_type": "reported",
+          "field": "modifications[1].operation",
+          "value": "add_adsorbate"
+        },
+        {
+          "claim_index": 12,
+          "evidence_type": "reported",
+          "field": "modifications[1].element",
+          "value": "Pt"
+        },
+        {
+          "claim_index": 13,
+          "evidence_type": "reported",
+          "field": "modifications[1].site",
+          "value": "ontop"
+        },
+        {
+          "claim_index": 14,
+          "evidence_type": "reported",
+          "field": "modifications[1].site_index",
+          "value": 1
+        },
+        {
+          "claim_index": 15,
+          "evidence_type": "reported",
+          "field": "modifications[1].height_angstrom",
+          "value": 2.0
+        },
+        {
+          "evidence_type": "assumed_default",
+          "field": "requested_outputs",
+          "reason": "Output formats are a workflow choice, not a paper-reported value.",
+          "value": [
+            "cif",
+            "vasp",
+            "xyz"
+          ]
+        }
+      ],
+      "requested_outputs": [
+        "cif",
+        "vasp",
+        "xyz"
+      ],
+      "schema_version": "0.1",
+      "task_status": "ready"
+    },
+    "clarification_questions": [],
+    "created_at": "2026-07-29T00:00:00+00:00",
+    "field_sources": [
+      {
+        "claim_index": 0,
+        "evidence_type": "reported",
+        "field": "material.formula"
+      },
+      {
+        "claim_index": 1,
+        "evidence_type": "reported",
+        "field": "material.crystal_structure"
+      },
+      {
+        "claim_index": 2,
+        "evidence_type": "reported",
+        "field": "model.kind"
+      },
+      {
+        "claim_index": 3,
+        "evidence_type": "reported",
+        "field": "model.miller_indices"
+      },
+      {
+        "claim_index": 4,
+        "evidence_type": "reported",
+        "field": "model.supercell"
+      },
+      {
+        "claim_index": 5,
+        "evidence_type": "reported",
+        "field": "model.layers"
+      },
+      {
+        "claim_index": 6,
+        "evidence_type": "reported",
+        "field": "model.vacuum_angstrom"
+      },
+      {
+        "claim_index": 7,
+        "evidence_type": "reported",
+        "field": "model.periodic_boundary_conditions"
+      },
+      {
+        "evidence_type": "assumed_default",
+        "field": "model.center",
+        "reason": "Slab centering was not reported; the ASE default is disclosed."
+      },
+      {
+        "evidence_type": "assumed_default",
+        "field": "model.atom_ordering",
+        "reason": "Atom ordering was not reported; the ASE default is disclosed."
+      },
+      {
+        "claim_index": 8,
+        "evidence_type": "reported",
+        "field": "modifications[0].operation"
+      },
+      {
+        "claim_index": 9,
+        "evidence_type": "reported",
+        "field": "modifications[0].selector"
+      },
+      {
+        "claim_index": 10,
+        "evidence_type": "reported",
+        "field": "modifications[0].element"
+      },
+      {
+        "claim_index": 11,
+        "evidence_type": "reported",
+        "field": "modifications[1].operation"
+      },
+      {
+        "claim_index": 12,
+        "evidence_type": "reported",
+        "field": "modifications[1].element"
+      },
+      {
+        "claim_index": 13,
+        "evidence_type": "reported",
+        "field": "modifications[1].site"
+      },
+      {
+        "claim_index": 14,
+        "evidence_type": "reported",
+        "field": "modifications[1].site_index"
+      },
+      {
+        "claim_index": 15,
+        "evidence_type": "reported",
+        "field": "modifications[1].height_angstrom"
+      },
+      {
+        "evidence_type": "assumed_default",
+        "field": "requested_outputs",
+        "reason": "Output formats are a workflow choice, not a paper-reported value."
+      }
+    ],
+    "producer_version": "golden-fixture-generator/v1",
+    "request_id": "golden-slice-n-doped-graphene-single-atom",
+    "schema_version": "spec-proposal/v1",
+    "task_status": "ready"
+  },
+  "title": "N-doped graphene with a supported single metal atom"
+}

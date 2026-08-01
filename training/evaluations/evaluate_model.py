@@ -338,6 +338,7 @@ def _write_report(
         "complete": complete,
         "dataset_sha256": dataset_sha256,
         "evaluation_ids_sha256": evaluation_ids_sha256,
+        "registry_version": f"phase1-{create_default_registry().fingerprint()[:16]}",
         "summary": summarize(results, args),
         "results": results,
     }

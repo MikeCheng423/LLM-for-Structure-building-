@@ -1,0 +1,986 @@
+{
+  "buildable_cases": 95,
+  "case_count": 106,
+  "cases": [
+    {
+      "case_id": "adsorbate-00",
+      "expected_status": "review_ready",
+      "family": "adsorbate",
+      "label": "construction_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "b8ed70e6c1a9a9c3d97b31d24fd96cb166eb5928ede8c011f72618211e83555d"
+    },
+    {
+      "case_id": "adsorbate-01",
+      "expected_status": "review_ready",
+      "family": "adsorbate",
+      "label": "construction_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "ccc41bb709ff783b2e17056b7058a3841982868e7e5b0e4572b567550212aaea"
+    },
+    {
+      "case_id": "adsorbate-02",
+      "expected_status": "review_ready",
+      "family": "adsorbate",
+      "label": "construction_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "cb91e9150c0892588418c15e7bdba53a3945a1779a7d1b556045775baf36fd9d"
+    },
+    {
+      "case_id": "adsorbate-03",
+      "expected_status": "review_ready",
+      "family": "adsorbate",
+      "label": "construction_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "4bc26a08f61ee333e51a379d28c1fcf82bb390f33c78b02cfeb996a223f2a88c"
+    },
+    {
+      "case_id": "adsorbate-04",
+      "expected_status": "review_ready",
+      "family": "adsorbate",
+      "label": "construction_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "a49047ee17e95cd0e3ab06cc7e44b7f03abf522080c2afd0affb007287815071"
+    },
+    {
+      "case_id": "adsorbate-05",
+      "expected_status": "review_ready",
+      "family": "adsorbate",
+      "label": "construction_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "ed33e4fe6e7643f84df7e48637fe91b51825077066199d705cbb80fcba625f84"
+    },
+    {
+      "case_id": "adsorbate-06",
+      "expected_status": "review_ready",
+      "family": "adsorbate",
+      "label": "construction_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "8069dd848fa117a42d4465cc88100531d9b376a6481896a7376e8c21fa3f3a44"
+    },
+    {
+      "case_id": "adsorbate-07",
+      "expected_status": "review_ready",
+      "family": "adsorbate",
+      "label": "construction_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "047600598a01b073addb576340c31a9c3020171b78f2cd65fe63b1c0c08c33e0"
+    },
+    {
+      "case_id": "adsorbate-08",
+      "expected_status": "review_ready",
+      "family": "adsorbate",
+      "label": "construction_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "dafaea8eaa695ac78cc1edfffb49d666371a4665f5410489149865afe1b923a6"
+    },
+    {
+      "case_id": "adsorbate-09",
+      "expected_status": "review_ready",
+      "family": "adsorbate",
+      "label": "construction_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "59bcdfd21e572db246abf8708a4be80ccd3436d3256ea35cfddc9611a08d1a7f"
+    },
+    {
+      "case_id": "adsorbate-10",
+      "expected_status": "review_ready",
+      "family": "adsorbate",
+      "label": "construction_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "3f12b57633922acf475fd22b453b32e01803dc178f35545ddf1fef7d0936d909"
+    },
+    {
+      "case_id": "adsorbate-11",
+      "expected_status": "review_ready",
+      "family": "adsorbate",
+      "label": "construction_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "931fd0538988a5c68b7ddec8c6793df147514882c0462b067abe101a3c9d7f43"
+    },
+    {
+      "case_id": "adsorbate-12",
+      "expected_status": "review_ready",
+      "family": "adsorbate",
+      "label": "construction_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "d3e2665144133297650abd470ca5e8a328b7061cf50abcdf205cf4f22c307500"
+    },
+    {
+      "case_id": "adsorbate-13",
+      "expected_status": "review_ready",
+      "family": "adsorbate",
+      "label": "construction_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "15a6af08c7be51bba8ab0c42521e2abe0671a69bb9635af6cfa264734dd288b5"
+    },
+    {
+      "case_id": "adsorbate-14",
+      "expected_status": "review_ready",
+      "family": "adsorbate",
+      "label": "construction_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "148c9515ba31e79ed705ca073c373d9c8134b6c6f1ed5a4e58aab92cabd36389"
+    },
+    {
+      "case_id": "defect-00",
+      "expected_status": "review_ready",
+      "family": "defect",
+      "label": "construction_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "5e818e21beda53500db768b6b8dc4119daba7944ac5551416fec12df487453d4"
+    },
+    {
+      "case_id": "defect-01",
+      "expected_status": "review_ready",
+      "family": "defect",
+      "label": "construction_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "ead5144453fa04dc80b57957396d40e4ff60b823af1589f7fb9656bd5020c695"
+    },
+    {
+      "case_id": "defect-02",
+      "expected_status": "review_ready",
+      "family": "defect",
+      "label": "construction_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "b49701ccf36a222e1b678675589073fc91a29beac7aa53a0e395f5fe8eba2f84"
+    },
+    {
+      "case_id": "defect-03",
+      "expected_status": "review_ready",
+      "family": "defect",
+      "label": "construction_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "2c2df24611807aca87c8363a3bfcaf81f7870b84bcc4ebbd2e24c082cae72ed2"
+    },
+    {
+      "case_id": "defect-04",
+      "expected_status": "review_ready",
+      "family": "defect",
+      "label": "construction_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "21999eff9271b3773e0d2cb49f54356bb86003e80cf74c0d67199e8a5605f619"
+    },
+    {
+      "case_id": "defect-05",
+      "expected_status": "review_ready",
+      "family": "defect",
+      "label": "construction_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "019865aa1815c3efec86765b50b842ffcee686653b77a0f090dbf2e6bef44b9a"
+    },
+    {
+      "case_id": "defect-06",
+      "expected_status": "review_ready",
+      "family": "defect",
+      "label": "construction_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "ebf43a02b4335d9fb4664b89c37f932f2e28ed293fe6296c0890e9059d75352b"
+    },
+    {
+      "case_id": "defect-07",
+      "expected_status": "review_ready",
+      "family": "defect",
+      "label": "construction_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "ef726c3fac18af0456e0e7ccd25e4f84ad212a461a06297a9f553d32500382b2"
+    },
+    {
+      "case_id": "defect-08",
+      "expected_status": "review_ready",
+      "family": "defect",
+      "label": "construction_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "35badbaa22a64790706064640137ecb912f6a711b6475d6f04beabae5ee24a3f"
+    },
+    {
+      "case_id": "defect-09",
+      "expected_status": "review_ready",
+      "family": "defect",
+      "label": "construction_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "3837e6a927a88bb8b5e379486eafaece970d0d1bf112b1471cdc38a3517b3b82"
+    },
+    {
+      "case_id": "defect-10",
+      "expected_status": "review_ready",
+      "family": "defect",
+      "label": "construction_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "b43d385c5cba468942461632e51a6e54e75397a58fcee8777fc18cd7fd158092"
+    },
+    {
+      "case_id": "defect-11",
+      "expected_status": "review_ready",
+      "family": "defect",
+      "label": "construction_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "189003217aaba85592a8d9cdffd7ba0b006c295fcc3a751916387197cc11cf71"
+    },
+    {
+      "case_id": "defect-12",
+      "expected_status": "review_ready",
+      "family": "defect",
+      "label": "construction_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "7e5aeb566ec461aa5ba4b8dc8f448e7e6d849316c31d15be406d2bcefbd9043a"
+    },
+    {
+      "case_id": "defect-13",
+      "expected_status": "review_ready",
+      "family": "defect",
+      "label": "construction_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "6465b225618d84e12e53f697388236f6a7733a60438ccd132555c73c2c46e4a3"
+    },
+    {
+      "case_id": "defect-14",
+      "expected_status": "review_ready",
+      "family": "defect",
+      "label": "construction_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "96927ddd787ec5deabab72291cdcce687a94d3d0a4deee59727aed308e148c57"
+    },
+    {
+      "case_id": "mp-bulk-00",
+      "expected_status": "review_ready",
+      "family": "bulk",
+      "label": "database_bulk_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "0e1380629dc882abd9373e9cfd73d10ba59282cb5faf9e72727258779f408614"
+    },
+    {
+      "case_id": "mp-bulk-01",
+      "expected_status": "review_ready",
+      "family": "bulk",
+      "label": "database_bulk_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "aaf304f608f85d2b42f5949d13dfb0bdf69904bb56afec395ad5b3ff5c6223de"
+    },
+    {
+      "case_id": "mp-bulk-02",
+      "expected_status": "review_ready",
+      "family": "bulk",
+      "label": "database_bulk_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "8833789c6a06551e5a94c75b6014d0595ad3a0c39751ca65287156e29703c5eb"
+    },
+    {
+      "case_id": "mp-bulk-03",
+      "expected_status": "review_ready",
+      "family": "bulk",
+      "label": "database_bulk_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "6fe6f9f175cdf1679d6500e11815713d012c419bc4e8358d10bcd1aed31102d7"
+    },
+    {
+      "case_id": "mp-bulk-04",
+      "expected_status": "review_ready",
+      "family": "bulk",
+      "label": "database_bulk_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "faf2a22ba59538ae912753c6d1552795f91d19a880f76ba6d7a3eb6e71ced067"
+    },
+    {
+      "case_id": "mp-bulk-05",
+      "expected_status": "review_ready",
+      "family": "bulk",
+      "label": "database_bulk_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "8aa93da1540d0e16c77dc8d5ed51d0bcded0ee13baf556fd407477d723946c83"
+    },
+    {
+      "case_id": "mp-bulk-06",
+      "expected_status": "review_ready",
+      "family": "bulk",
+      "label": "database_bulk_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "da9432ebb9e0142d3cc25aaa066e3e6d29c80d06847eaedf92b5c9f81e468058"
+    },
+    {
+      "case_id": "mp-bulk-07",
+      "expected_status": "review_ready",
+      "family": "bulk",
+      "label": "database_bulk_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "dc8121e47ae7aeefd1b46dc7c592cbe138a4739a36bd47e22b3924988c5c8507"
+    },
+    {
+      "case_id": "mp-bulk-08",
+      "expected_status": "review_ready",
+      "family": "bulk",
+      "label": "database_bulk_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "8f611bd70db0b96fb897f8b607f3da1ee5272668fb9644d0605e1ae21302e735"
+    },
+    {
+      "case_id": "mp-bulk-09",
+      "expected_status": "review_ready",
+      "family": "bulk",
+      "label": "database_bulk_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "8ffdae9504d605c751fb481e215a69a72fb6648a52e868e5cf6eb0c8b45e51a6"
+    },
+    {
+      "case_id": "mp-bulk-10",
+      "expected_status": "review_ready",
+      "family": "bulk",
+      "label": "database_bulk_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "f3884d91866c30150edba9c541699a1cffc10c247e12abe8de109c0ce09356cb"
+    },
+    {
+      "case_id": "mp-bulk-11",
+      "expected_status": "review_ready",
+      "family": "bulk",
+      "label": "database_bulk_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "0555516e518ffa6103f15669e3d8ab9f84d8ceeb05e8cb72b554774567a05cff"
+    },
+    {
+      "case_id": "mp-bulk-12",
+      "expected_status": "review_ready",
+      "family": "bulk",
+      "label": "database_bulk_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "0c7aed434b48e417dc48cbae4b4e9a1124c5342a3d1260b3270b2dd331241255"
+    },
+    {
+      "case_id": "mp-bulk-13",
+      "expected_status": "review_ready",
+      "family": "bulk",
+      "label": "database_bulk_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "3e304cd7e793ec35a5c1d7618560d2cba4fded9b4746bc752236e610491d2efe"
+    },
+    {
+      "case_id": "mp-bulk-14",
+      "expected_status": "review_ready",
+      "family": "bulk",
+      "label": "database_bulk_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "2df17dab1cbdae42652de2744be9ce51352504184e09ed147836009ee5c14154"
+    },
+    {
+      "case_id": "mp-bulk-15",
+      "expected_status": "review_ready",
+      "family": "bulk",
+      "label": "database_bulk_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "464d2a2fbf429bc1f162f5639df8f0592d2f0479fa357b5b6dcb309245605267"
+    },
+    {
+      "case_id": "mp-bulk-16",
+      "expected_status": "review_ready",
+      "family": "bulk",
+      "label": "database_bulk_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "cba4e8207cb58a1f85c822397279c2dc5edfe54726bb5f929319f2ddbc78aeda"
+    },
+    {
+      "case_id": "mp-bulk-17",
+      "expected_status": "review_ready",
+      "family": "bulk",
+      "label": "database_bulk_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "2be0ad8c2fb188c73a545f0eea7aaa12fffe2c022dfa4a13e6d0f3bba312f864"
+    },
+    {
+      "case_id": "mp-bulk-18",
+      "expected_status": "review_ready",
+      "family": "bulk",
+      "label": "database_bulk_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "0343291af0c37ac8a3a3460057bdf67a50f2c511737cf37f2bb4ab0ed9bea1a9"
+    },
+    {
+      "case_id": "mp-bulk-19",
+      "expected_status": "review_ready",
+      "family": "bulk",
+      "label": "database_bulk_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "5b7c18a2d4b3d329d33468a4c6a4948d5185a23704644aa1c6084d246ed52f2e"
+    },
+    {
+      "case_id": "mp-bulk-20",
+      "expected_status": "review_ready",
+      "family": "bulk",
+      "label": "database_bulk_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "24b944f6a99584e533f95656643814cad844abae55b3c780fac0563a9bb4d80b"
+    },
+    {
+      "case_id": "mp-bulk-21",
+      "expected_status": "review_ready",
+      "family": "bulk",
+      "label": "database_bulk_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "d40948658661fd77f4b02aadf24fe78ae21b8d76398f9a185b73497050f29f4c"
+    },
+    {
+      "case_id": "mp-bulk-22",
+      "expected_status": "review_ready",
+      "family": "bulk",
+      "label": "database_bulk_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "4ed1d8257a57f14eb984071be39202abf0bb9dea43f92f9cf08bba9cb8c2a7a8"
+    },
+    {
+      "case_id": "mp-bulk-23",
+      "expected_status": "review_ready",
+      "family": "bulk",
+      "label": "database_bulk_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "856ca11ea7ca8605c42dfd66e6f1439ab8255797333b05c6dbf308af096ae31f"
+    },
+    {
+      "case_id": "mp-bulk-24",
+      "expected_status": "review_ready",
+      "family": "bulk",
+      "label": "database_bulk_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "e48d92eaabd3f4bbc88db6b781ebe7860fb013bf0978ca121cb75731b9d293e0"
+    },
+    {
+      "case_id": "mp-bulk-25",
+      "expected_status": "review_ready",
+      "family": "bulk",
+      "label": "database_bulk_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "94a7313ea9f1d87a9e15aee7023af78a80572d934d760537a6b9fd4db19df934"
+    },
+    {
+      "case_id": "mp-bulk-26",
+      "expected_status": "review_ready",
+      "family": "bulk",
+      "label": "database_bulk_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "9eb85527bdd8d1c991e62b9228ce95ca3d3a88995626fd9f0ce28b2385f0df49"
+    },
+    {
+      "case_id": "mp-bulk-27",
+      "expected_status": "review_ready",
+      "family": "bulk",
+      "label": "database_bulk_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "578e9e9540170ec9bc898d9491213a5a2cd5005490efc9299ab679a8bfa01533"
+    },
+    {
+      "case_id": "mp-bulk-28",
+      "expected_status": "review_ready",
+      "family": "bulk",
+      "label": "database_bulk_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "4b7382e94ddb760330517a9077184a5dfde43b24be893d4aeb38225ff25a18bd"
+    },
+    {
+      "case_id": "mp-bulk-ambiguous",
+      "expected_status": "needs_clarification",
+      "family": "bulk",
+      "label": "database_bulk_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "be946fd1eca046611220e96187f927a0f4f23c8d29d343e58aecce5b6dfa01a2"
+    },
+    {
+      "case_id": "refuse-anchor",
+      "expected_status": "needs_clarification",
+      "family": "refusal",
+      "label": "refusal_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "1ed1fe9bf65bfa09355e31efe018e3d61e5fc55695cc489cd8f27ae2bff43727"
+    },
+    {
+      "case_id": "refuse-contradiction",
+      "expected_status": "needs_clarification",
+      "family": "refusal",
+      "label": "refusal_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "582bea09a56532d976a59779cd48b3ba22d774aab50e6db178f51de83ee68994"
+    },
+    {
+      "case_id": "refuse-coverage",
+      "expected_status": "unsupported",
+      "family": "refusal",
+      "label": "refusal_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "7b505cc320be783b08d0a48fd7758d3c720f7e37128e8124893dc1e63cf79268"
+    },
+    {
+      "case_id": "refuse-element",
+      "expected_status": "unsupported",
+      "family": "refusal",
+      "label": "refusal_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "d8d79868655b615c612a4d8af897934b4d66490e0182e589128608adba801dbd"
+    },
+    {
+      "case_id": "refuse-facet",
+      "expected_status": "needs_clarification",
+      "family": "refusal",
+      "label": "refusal_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "e0b82f8e94c309004d9fa9997d9a85952fe3861cc558b118591005adaeeb2646"
+    },
+    {
+      "case_id": "refuse-incomplete",
+      "expected_status": "needs_clarification",
+      "family": "refusal",
+      "label": "refusal_golden",
+      "schema_valid": false,
+      "section": "7.2",
+      "sha256": "ef9c9083e01445782edf28b22d3203d8a232115506e7d0e09fbb34c1d5758e95"
+    },
+    {
+      "case_id": "refuse-injection",
+      "expected_status": "needs_clarification",
+      "family": "refusal",
+      "label": "refusal_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "b92789f196828e21570f881b37e66186b29612281c7a590efbaf4dede2b48816"
+    },
+    {
+      "case_id": "refuse-orientation",
+      "expected_status": "unsupported",
+      "family": "refusal",
+      "label": "refusal_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "e775fe78d26cb28a4363c8b93efccf8c071f8dbf1f8b5b14f96c1933c72bf716"
+    },
+    {
+      "case_id": "refuse-provenance",
+      "expected_status": "needs_clarification",
+      "family": "refusal",
+      "label": "refusal_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "671e231d81f00dad0028d848cc6d343a791c650aefec6f0309a1fd7420c975da"
+    },
+    {
+      "case_id": "refuse-termination",
+      "expected_status": "unsupported",
+      "family": "refusal",
+      "label": "refusal_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "20eb5a44f5777c670747e07f6374945598011fe8aa2b7d596701ef42706c9f95"
+    },
+    {
+      "case_id": "slab-00",
+      "expected_status": "review_ready",
+      "family": "slab",
+      "label": "construction_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "05c4701b734316237f6cc24c6c9652a5e99da78dba911f02c89a36ce010f8534"
+    },
+    {
+      "case_id": "slab-01",
+      "expected_status": "review_ready",
+      "family": "slab",
+      "label": "construction_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "4021ed0aed707607592c91b3879b8bf5284c19596896fde7eb932d19a16b3f61"
+    },
+    {
+      "case_id": "slab-02",
+      "expected_status": "review_ready",
+      "family": "slab",
+      "label": "construction_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "3c3ffda83f50caa9c325fa5a2669247e4e9b8632d31c9c951fa6df1d05042a5d"
+    },
+    {
+      "case_id": "slab-03",
+      "expected_status": "review_ready",
+      "family": "slab",
+      "label": "construction_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "345d721a3408f9232ce23532e57197025e43efd680bce75879f1a3f351d9cfcb"
+    },
+    {
+      "case_id": "slab-04",
+      "expected_status": "review_ready",
+      "family": "slab",
+      "label": "construction_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "dd1c9df7b6edc1d8e3b19c316f0b61fa4b1a7a3921c04f520daf71fed059a768"
+    },
+    {
+      "case_id": "slab-05",
+      "expected_status": "review_ready",
+      "family": "slab",
+      "label": "construction_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "c9b6eff61591a65a6ea4e16e01b5c0eedbfc7017f3b21f8771b204448350b175"
+    },
+    {
+      "case_id": "slab-06",
+      "expected_status": "review_ready",
+      "family": "slab",
+      "label": "construction_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "f3e80b2b95e20d3fd5aa9290923ae4f0a4ed8cc37a7459624f0cd50f8c472d98"
+    },
+    {
+      "case_id": "slab-07",
+      "expected_status": "review_ready",
+      "family": "slab",
+      "label": "construction_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "35664950b04188f0afe9e457c665c54d5b04c495df4301f8b4a645218f2ef729"
+    },
+    {
+      "case_id": "slab-08",
+      "expected_status": "review_ready",
+      "family": "slab",
+      "label": "construction_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "a3269e5ba3c5a4743b257230789a410af172def4ca420d3dcdf7a3e166a32a8a"
+    },
+    {
+      "case_id": "slab-09",
+      "expected_status": "review_ready",
+      "family": "slab",
+      "label": "construction_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "36cf2dd1a377af952c5f24a3ad4b589cabafa2b6da25a322ff3f7065ad85817b"
+    },
+    {
+      "case_id": "slab-10",
+      "expected_status": "review_ready",
+      "family": "slab",
+      "label": "construction_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "5c175581e9309cf70ed70fb88133b6133b426862c0789d4b47fc0815718595f6"
+    },
+    {
+      "case_id": "slab-11",
+      "expected_status": "review_ready",
+      "family": "slab",
+      "label": "construction_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "4909bc80e48601c58dbf546e46717ade555b9417a41718dd470579c8ebd310d1"
+    },
+    {
+      "case_id": "slab-12",
+      "expected_status": "review_ready",
+      "family": "slab",
+      "label": "construction_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "c9d9bb4afadb3e9ec94d646d9a1ce6e282cf2e0f82990caceb9477c982dd42fb"
+    },
+    {
+      "case_id": "slab-13",
+      "expected_status": "review_ready",
+      "family": "slab",
+      "label": "construction_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "405e86010ece69f352acd7ddfeadef0003222a902587243745b673f3260ae6ba"
+    },
+    {
+      "case_id": "slab-14",
+      "expected_status": "review_ready",
+      "family": "slab",
+      "label": "construction_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "7d2e5f2eaf5688170ac934a31c3902db75fbf58ca1620c8a9cb6d2885a644061"
+    },
+    {
+      "case_id": "slab-15",
+      "expected_status": "review_ready",
+      "family": "slab",
+      "label": "construction_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "b76f2acadbdfcf18bddc5b3f328f8a1b65ed9b4752d0c893b0effe29d6bd69ee"
+    },
+    {
+      "case_id": "slab-16",
+      "expected_status": "review_ready",
+      "family": "slab",
+      "label": "construction_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "90478400c9cfe39cd7bc28b2d17c7e785aa4b0807444ae0a31d5604f029a1f9b"
+    },
+    {
+      "case_id": "slab-17",
+      "expected_status": "review_ready",
+      "family": "slab",
+      "label": "construction_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "dfb0f53041cb5b911a484cbc05b8d81bc90906e19a0f814229a1916177c2b287"
+    },
+    {
+      "case_id": "slab-18",
+      "expected_status": "review_ready",
+      "family": "slab",
+      "label": "construction_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "a4c70df1a9ed2ebb162320c226d927b484f0dffbb3fb5b1e0439ac4c545b64a7"
+    },
+    {
+      "case_id": "slab-19",
+      "expected_status": "review_ready",
+      "family": "slab",
+      "label": "construction_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "e2b5ae9bf90de111b81bb4d7ec9adee37e0b7db8a9b8a4baad32d93f2cebe431"
+    },
+    {
+      "case_id": "slab-20",
+      "expected_status": "review_ready",
+      "family": "slab",
+      "label": "construction_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "cee1f352e357f36c2c9c7f38d3b139242edf11227dfe42d750e141ae3c7003ac"
+    },
+    {
+      "case_id": "slab-21",
+      "expected_status": "review_ready",
+      "family": "slab",
+      "label": "construction_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "86362e109bfad956e7840b3298b289172108068c280017b0ee81932e70b08b91"
+    },
+    {
+      "case_id": "slab-22",
+      "expected_status": "review_ready",
+      "family": "slab",
+      "label": "construction_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "bc73a4e6ff529dbbf9c37a1061f5e32d2aa400f808dfbacfdcb2c33a9998f675"
+    },
+    {
+      "case_id": "slab-23",
+      "expected_status": "review_ready",
+      "family": "slab",
+      "label": "construction_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "347684a70714f6091fe19fab222bd86ddd88cdb7caf0f2d1c1a6fd475809bf02"
+    },
+    {
+      "case_id": "slab-24",
+      "expected_status": "review_ready",
+      "family": "slab",
+      "label": "construction_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "151cf217c113aab8e2f4d8f816395ce38b524cf83c4d4278ee29b86ea8af11da"
+    },
+    {
+      "case_id": "slab-25",
+      "expected_status": "review_ready",
+      "family": "slab",
+      "label": "construction_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "da1c062a1e5d0437c5ff1312b717ea2084ff735d5f36b38e79fb51a26c693be4"
+    },
+    {
+      "case_id": "slab-26",
+      "expected_status": "review_ready",
+      "family": "slab",
+      "label": "construction_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "a026401874446df5bb1292e5c4fa9514962315ff50739f59debf5920b1f818e1"
+    },
+    {
+      "case_id": "slab-27",
+      "expected_status": "review_ready",
+      "family": "slab",
+      "label": "construction_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "34fb290f4a96ea9cf8685875a237553aade08148707bb9c80ec29d427e9b37d8"
+    },
+    {
+      "case_id": "slab-28",
+      "expected_status": "review_ready",
+      "family": "slab",
+      "label": "construction_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "a99bc1acd4a92cc27219b8e95f3d483e5bcca9a8d99ef70770fe54e5d30d70dd"
+    },
+    {
+      "case_id": "slab-29",
+      "expected_status": "review_ready",
+      "family": "slab",
+      "label": "construction_golden",
+      "schema_valid": true,
+      "section": "7.2",
+      "sha256": "958bd82768e7cc9d52b78c4f3d02bff902999d75fe66a65f600c3b51dc78da38"
+    },
+    {
+      "case_id": "slice-co-on-pt111",
+      "expected_status": "review_ready",
+      "family": "vertical_slice",
+      "label": "construction_golden",
+      "schema_valid": true,
+      "section": "14",
+      "sha256": "30a2961b74fe54d4679fc924671dcefdef36eba7d74796530dd903e3ca561832"
+    },
+    {
+      "case_id": "slice-cu-cluster-on-ceo2-111",
+      "expected_status": "review_ready",
+      "family": "vertical_slice",
+      "label": "construction_golden",
+      "schema_valid": true,
+      "section": "14",
+      "sha256": "7421403568fe491b6bf9fcd209b84163d983f26f414dc00e3bc6f1bd9ec9a01a"
+    },
+    {
+      "case_id": "slice-n-doped-graphene-single-atom",
+      "expected_status": "review_ready",
+      "family": "vertical_slice",
+      "label": "construction_golden",
+      "schema_valid": true,
+      "section": "14",
+      "sha256": "7beeedfe95a8532ea1bd6a29717e784a090e0d38613debc1153e5b9ae4846b29"
+    },
+    {
+      "case_id": "slice-o-on-pd100",
+      "expected_status": "review_ready",
+      "family": "vertical_slice",
+      "label": "construction_golden",
+      "schema_valid": true,
+      "section": "14",
+      "sha256": "bcc4ff2aab963343b1bd045a3cbabecb9dfe4acb1a86c7830af12f8a6dfaf412"
+    },
+    {
+      "case_id": "slice-o-vacancy-tio2-110",
+      "expected_status": "review_ready",
+      "family": "vertical_slice",
+      "label": "construction_golden",
+      "schema_valid": true,
+      "section": "14",
+      "sha256": "2cdc4cecde398da31176a8628bc74f0bfbda9f527432f61aeb7537946f371c7f"
+    },
+    {
+      "case_id": "slice-pt-substituted-au111",
+      "expected_status": "review_ready",
+      "family": "vertical_slice",
+      "label": "construction_golden",
+      "schema_valid": true,
+      "section": "14",
+      "sha256": "4e4a00b976695c3cebadd1086045077e616e8226492e6db817f976e484d37bc6"
+    }
+  ],
+  "created_at": "2026-07-29T00:00:00+00:00",
+  "family_counts": {
+    "adsorbate": 15,
+    "bulk": 30,
+    "defect": 15,
+    "refusal": 10,
+    "slab": 30
+  },
+  "generator": "training/generators/build_golden_fixtures.py",
+  "label_counts": {
+    "construction_golden": 66,
+    "database_bulk_golden": 30,
+    "physical_reference_golden": 0,
+    "refusal_golden": 10
+  },
+  "notes": {
+    "domain_review": "Fixtures are deterministic and immutable but have NOT had the section 7.1 domain-expert review; every case records domain_review: pending.",
+    "physical_reference_golden": "Empty on purpose: section 7.1 requires licensed literature data or a declared converged calculation, and neither is available in this repository.",
+    "standardization": "standardize_cell is not in the deterministic registry, so the MP cases exercise reference resolution, hash verification and dispatch instead.",
+    "vertical_slice": "The six section 14 examples are carried as a separate group (section 14); section 7.2's 100 fixtures and family counts are unchanged by them."
+  },
+  "schema_version": "golden-corpus/v1",
+  "section_counts": {
+    "14": 6,
+    "7.2": 100
+  }
+}

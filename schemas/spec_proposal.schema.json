@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "spec-proposal/v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "request_id", "created_at", "producer_version", "artifact_hashes", "task_status", "catalyst_spec", "field_sources", "clarification_questions", "agent_warnings"],
+  "properties": {
+    "schema_version": {"const": "spec-proposal/v1"},
+    "request_id": {"type": "string", "minLength": 1, "maxLength": 64},
+    "created_at": {"type": "string", "minLength": 20, "maxLength": 40},
+    "producer_version": {"type": "string", "minLength": 1, "maxLength": 128},
+    "artifact_hashes": {"type": "object"},
+    "task_status": {"type": "string", "enum": ["ready", "needs_clarification", "unsupported"]},
+    "catalyst_spec": {"type": "object"},
+    "field_sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["field", "evidence_type"],
+        "properties": {
+          "field": {"type": "string", "minLength": 1, "maxLength": 160},
+          "evidence_type": {"type": "string", "enum": ["reported", "derived", "assumed_default", "user_supplied", "ambiguous"]},
+          "claim_index": {"type": "integer", "minimum": 0},
+          "reason": {"type": "string", "minLength": 1, "maxLength": 500}
+        }
+      }
+    },
+    "clarification_questions": {"type": "array", "items": {"type": "string", "minLength": 1, "maxLength": 500}},
+    "agent_warnings": {"type": "array", "items": {"type": "string", "minLength": 1, "maxLength": 500}}
+  }
+}

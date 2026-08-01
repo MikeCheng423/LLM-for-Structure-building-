@@ -73,6 +73,37 @@ problem, `7` `--strict` mismatch.
 
 Full walkthrough: **[docs/TUTORIAL_ASE_AGENT.md](docs/TUTORIAL_ASE_AGENT.md)**.
 
+### Journal evidence workflow (experimental)
+
+`ASE_catalyst_build` accepts one JSON request and writes an immutable audit
+package containing the supplied evidence, `EvidenceLedger`, `CatalystSpec`, ASE
+recipe, validation report, exported structures, and review packet.
+
+```json
+{
+  "request_id": "paper-001",
+  "request": "Build the four-layer 2 x 2 Pt(111) slab described here.",
+  "sources": [
+    {
+      "source_id": "methods-1",
+      "locator": "Methods, p. 4",
+      "text": "A four-layer 2 x 2 Pt(111) slab was used."
+    }
+  ]
+}
+```
+
+```bash
+ASE_catalyst_build --input request.json --out catalyst_requests
+```
+
+The command does not fetch PDFs or expose filesystem, shell, network, or
+calculator tools to the model. See
+[CATALYST_STRUCTURE_LLM.md](CATALYST_STRUCTURE_LLM.md) for the supported
+scientific scope and fail-closed controls. The production r5 adapter has not
+passed the journal-role schema gate; use this command for prompt-baseline work,
+not production reconstruction.
+
 ---
 
 ## What it can build

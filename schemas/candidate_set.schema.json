@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CandidateSet",
+  "description": "Several scientifically reasonable reconstructions, each built separately rather than one chosen silently (CATALYST_STRUCTURE_LLM.md section 7).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "request_id",
+    "created_at",
+    "producer_version",
+    "artifact_hashes",
+    "ambiguous_field",
+    "reason",
+    "candidates"
+  ],
+  "properties": {
+    "schema_version": {"const": "candidate-set/v1"},
+    "request_id": {"type": "string", "minLength": 1, "maxLength": 64},
+    "created_at": {"type": "string", "minLength": 1, "maxLength": 64},
+    "producer_version": {"type": "string", "minLength": 1, "maxLength": 128},
+    "artifact_hashes": {"type": "object"},
+    "ambiguous_field": {"type": "string", "minLength": 1, "maxLength": 200},
+    "reason": {"type": "string", "minLength": 1, "maxLength": 1000},
+    "candidates": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["candidate_id", "request_id", "value", "status", "directory"],
+        "properties": {
+          "candidate_id": {"type": "string", "minLength": 1, "maxLength": 128},
+          "request_id": {"type": "string", "minLength": 1, "maxLength": 64},
+          "value": {"type": "string", "minLength": 1, "maxLength": 128},
+          "status": {
+            "type": "string",
+            "enum": ["review_ready", "needs_clarification", "unsupported", "failed"]
+          },
+          "directory": {"type": "string", "minLength": 1, "maxLength": 500},
+          "atoms_hash": {"type": "string", "minLength": 1, "maxLength": 128}
+        }
+      }
+    }
+  }
+}

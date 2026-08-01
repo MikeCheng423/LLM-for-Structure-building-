@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "build-record/v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "request_id", "created_at", "producer_version", "artifact_hashes", "registry_version", "ase_version", "approved_tool_calls", "input_hashes", "output_hashes", "output_paths"],
+  "properties": {
+    "schema_version": {"const": "build-record/v1"},
+    "request_id": {"type": "string", "minLength": 1, "maxLength": 64},
+    "created_at": {"type": "string", "minLength": 20, "maxLength": 40},
+    "producer_version": {"type": "string", "minLength": 1, "maxLength": 128},
+    "artifact_hashes": {"type": "object"},
+    "registry_version": {"type": "string", "minLength": 1, "maxLength": 128},
+    "ase_version": {"type": "string", "minLength": 1, "maxLength": 64},
+    "approved_tool_calls": {"type": "array", "items": {"type": "object"}},
+    "input_hashes": {"type": "object"},
+    "output_hashes": {"type": "object"},
+    "output_paths": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1, "maxLength": 256}}
+  }
+}

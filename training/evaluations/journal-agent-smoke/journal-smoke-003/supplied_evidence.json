@@ -1,0 +1,19 @@
+{
+  "artifact_hashes": {
+    "request": "4bb62471afc0b1af51f1f7932a41f1669e91f301c291daa338645822515e0cce"
+  },
+  "created_at": "2026-07-28T12:54:10+00:00",
+  "model_location": "local",
+  "private_external_authorized": false,
+  "producer_version": "ASE_auto_build/0.9.2",
+  "request": "Build the fully specified conventional fcc Pt bulk candidate.",
+  "request_id": "journal-smoke-003",
+  "schema_version": "supplied-evidence/v1",
+  "sources": [
+    {
+      "locator": "user request",
+      "source_id": "user-spec-1",
+      "text": "Use formula Pt, fcc crystal structure, bulk model, a 1 x 1 x 1 supercell, periodic boundary conditions [true, true, true], centered geometry, ASE-default atom ordering, and CIF plus VASP outputs."
+    }
+  ]
+}

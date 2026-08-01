@@ -35,7 +35,11 @@ dev = ["pytest"]
 # case directory out. Needs the fine-tuned local model — see the `agent`
 # extra — but its argument handling imports without it.
 ASE_auto_build = "ase_auto_build.ase_agent.cli:main"
+ASE_catalyst_build = "ase_auto_build.ase_agent.catalyst_cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
 include = ["ase_auto_build*"]
+
+[tool.setuptools.data-files]
+"share/ase_auto_build/schemas" = ["schemas/*.schema.json"]

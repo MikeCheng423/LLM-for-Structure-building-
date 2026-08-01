@@ -15,6 +15,12 @@ class SchemaValidationError(ValueError):
     pass
 
 
+def validate_schema(value: Any, schema: dict[str, Any], *, path: str = "value") -> Any:
+    """Validate arbitrary JSON data with the registry's bounded schema subset."""
+    _validate(value, schema, path)
+    return normalize_json(value)
+
+
 def _is_integer(value: Any) -> bool:
     return isinstance(value, int) and not isinstance(value, bool)
 

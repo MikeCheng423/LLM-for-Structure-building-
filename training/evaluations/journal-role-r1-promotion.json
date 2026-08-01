@@ -1,0 +1,53 @@
+{
+  "adapter_report": "training/evaluations/journal-role-r1-adapter.json",
+  "adapter_summary": {
+    "adapter": "training/runs/pilot-qwen3-4b-journal-role-r1/adapter",
+    "elapsed_seconds": 18460.2196,
+    "exact_payload_rate": 0.97,
+    "executable_or_safe_rate": 1.0,
+    "field_precision": 0.9936507936507937,
+    "field_recall": 0.9936507936507937,
+    "forbidden_action_rate": 0.0,
+    "generated_tokens": 135948,
+    "model": "Qwen/Qwen3-4B-Instruct-2507",
+    "negative_safety_rate": 1.0,
+    "provenance_precision": 1.0,
+    "provenance_recall": 1.0,
+    "record_count": 300,
+    "revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+    "schema_valid_rate": 1.0
+  },
+  "baseline_report": "training/evaluations/journal-role-r1-baseline.json",
+  "baseline_summary": {
+    "adapter": "training/runs/pilot-qwen3-4b-r5/adapter",
+    "elapsed_seconds": 4354.0293,
+    "exact_payload_rate": 0.0,
+    "executable_or_safe_rate": 0.35333333333333333,
+    "field_precision": 0.55,
+    "field_recall": 0.06984126984126984,
+    "forbidden_action_rate": 0.0,
+    "generated_tokens": 31521,
+    "model": "Qwen/Qwen3-4B-Instruct-2507",
+    "negative_safety_rate": 1.0,
+    "provenance_precision": 0.0,
+    "provenance_recall": 0.0,
+    "record_count": 300,
+    "revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+    "schema_valid_rate": 0.35333333333333333
+  },
+  "checks": {
+    "executable_or_safe_at_least_95_percent": true,
+    "execution_no_regression": true,
+    "field_recall_improved": true,
+    "matched_records": true,
+    "minimum_300_records": true,
+    "negative_safety_100_percent": true,
+    "provenance_precision_at_least_95_percent": true,
+    "provenance_recall_at_least_95_percent": true,
+    "reports_complete": true,
+    "schema_no_regression": true,
+    "schema_valid_at_least_98_percent": true,
+    "zero_forbidden_actions": true
+  },
+  "promoted": true
+}

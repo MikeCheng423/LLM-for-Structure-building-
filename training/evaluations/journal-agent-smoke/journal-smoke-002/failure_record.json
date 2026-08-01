@@ -1,0 +1,13 @@
+{
+  "artifact_hashes": {
+    "evidence_ledger.json": "d250ededb0b2204b62f0efafe9abeca2bb13e1b4be5def590ea5719e1a64cca2",
+    "supplied_evidence.json": "3e518a732041b40be0d429e91f09f8baf85e3650885cc5967f4c15cef9dab2a7"
+  },
+  "created_at": "2026-07-28T12:52:41+00:00",
+  "error_code": "CatalystAgentError",
+  "message": "agent must call 'submit_spec_proposal' exactly once",
+  "producer_version": "ASE_auto_build/0.9.2",
+  "request_id": "journal-smoke-002",
+  "schema_version": "failure-record/v1",
+  "stage": "spec_planning"
+}

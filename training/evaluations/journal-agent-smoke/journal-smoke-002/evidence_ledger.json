@@ -1,0 +1,80 @@
+{
+  "artifact_hashes": {
+    "supplied_evidence": "ebe245b202b292691fa4ecea9e1f4c22d6e20f85a7eded91ba1baed115184429"
+  },
+  "claims": [
+    {
+      "confidence": "high",
+      "evidence_type": "reported",
+      "field": "crystal_structure",
+      "locator": "user request",
+      "source_id": "user-spec-1",
+      "value": "fcc"
+    },
+    {
+      "confidence": "high",
+      "evidence_type": "reported",
+      "field": "formula",
+      "locator": "user request",
+      "source_id": "user-spec-1",
+      "value": "Pt"
+    },
+    {
+      "confidence": "high",
+      "evidence_type": "reported",
+      "field": "model_type",
+      "locator": "user request",
+      "source_id": "user-spec-1",
+      "value": "bulk"
+    },
+    {
+      "confidence": "high",
+      "evidence_type": "reported",
+      "field": "supercell",
+      "locator": "user request",
+      "source_id": "user-spec-1",
+      "value": "1x1x1"
+    },
+    {
+      "confidence": "high",
+      "evidence_type": "reported",
+      "field": "boundary_conditions",
+      "locator": "user request",
+      "source_id": "user-spec-1",
+      "value": "periodic"
+    },
+    {
+      "confidence": "high",
+      "evidence_type": "reported",
+      "field": "geometry",
+      "locator": "user request",
+      "source_id": "user-spec-1",
+      "value": "centered"
+    },
+    {
+      "confidence": "high",
+      "evidence_type": "reported",
+      "field": "atom_ordering",
+      "locator": "user request",
+      "source_id": "user-spec-1",
+      "value": "ASE-default"
+    },
+    {
+      "confidence": "high",
+      "evidence_type": "reported",
+      "field": "output_formats",
+      "locator": "user request",
+      "source_id": "user-spec-1",
+      "value": [
+        "CIF",
+        "VASP"
+      ]
+    }
+  ],
+  "contradictions": [],
+  "created_at": "2026-07-28T12:50:37+00:00",
+  "producer_version": "ASE_auto_build/0.9.2",
+  "request_id": "journal-smoke-002",
+  "schema_version": "evidence-ledger/v1",
+  "unresolved_fields": []
+}

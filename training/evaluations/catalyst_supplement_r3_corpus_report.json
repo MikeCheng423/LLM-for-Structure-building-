@@ -1,0 +1,167 @@
+{
+  "dataset_manifest_sha256": "74c3b1ad30e08b3c2c3fe0ec483672a2088e0d4471353046e9033d523988ef3e",
+  "errors": [],
+  "execution_success_rate": 1.0,
+  "failed_replays": 0,
+  "family_counts": {
+    "atomic_adsorption": 864,
+    "bulk": 144,
+    "catalyst_adsorption_site": 20,
+    "catalyst_bulk_reference": 8,
+    "catalyst_high_index": 6,
+    "catalyst_nanoparticle": 9,
+    "catalyst_oxide_surface": 10,
+    "catalyst_supported_cluster": 9,
+    "catalyst_surface": 15,
+    "catalyst_surface_substitution": 11,
+    "catalyst_surface_vacancy": 12,
+    "clarification": 16,
+    "error_recovery": 12,
+    "molecular_adsorption": 216,
+    "molecule": 144,
+    "nanotube": 132,
+    "prototype": 30,
+    "substitution": 96,
+    "surface": 432,
+    "surface_constraint": 432,
+    "vacancy": 96
+  },
+  "family_split_counts": {
+    "atomic_adsorption": {
+      "test": 66,
+      "train": 738,
+      "validation": 60
+    },
+    "bulk": {
+      "test": 24,
+      "train": 108,
+      "validation": 12
+    },
+    "catalyst_adsorption_site": {
+      "test": 3,
+      "train": 14,
+      "validation": 3
+    },
+    "catalyst_bulk_reference": {
+      "test": 1,
+      "train": 5,
+      "validation": 2
+    },
+    "catalyst_high_index": {
+      "test": 1,
+      "train": 4,
+      "validation": 1
+    },
+    "catalyst_nanoparticle": {
+      "test": 1,
+      "train": 7,
+      "validation": 1
+    },
+    "catalyst_oxide_surface": {
+      "test": 2,
+      "train": 7,
+      "validation": 1
+    },
+    "catalyst_supported_cluster": {
+      "test": 3,
+      "train": 5,
+      "validation": 1
+    },
+    "catalyst_surface": {
+      "test": 2,
+      "train": 10,
+      "validation": 3
+    },
+    "catalyst_surface_substitution": {
+      "test": 1,
+      "train": 6,
+      "validation": 4
+    },
+    "catalyst_surface_vacancy": {
+      "test": 1,
+      "train": 8,
+      "validation": 3
+    },
+    "clarification": {
+      "test": 2,
+      "train": 13,
+      "validation": 1
+    },
+    "error_recovery": {
+      "test": 3,
+      "train": 6,
+      "validation": 3
+    },
+    "molecular_adsorption": {
+      "test": 24,
+      "train": 174,
+      "validation": 18
+    },
+    "molecule": {
+      "test": 12,
+      "train": 108,
+      "validation": 24
+    },
+    "nanotube": {
+      "test": 24,
+      "train": 96,
+      "validation": 12
+    },
+    "prototype": {
+      "test": 6,
+      "train": 18,
+      "validation": 6
+    },
+    "substitution": {
+      "test": 12,
+      "train": 78,
+      "validation": 6
+    },
+    "surface": {
+      "test": 60,
+      "train": 342,
+      "validation": 30
+    },
+    "surface_constraint": {
+      "test": 48,
+      "train": 324,
+      "validation": 60
+    },
+    "vacancy": {
+      "test": 6,
+      "train": 78,
+      "validation": 12
+    }
+  },
+  "family_split_gaps": {},
+  "forbidden_action_rate": 0.0,
+  "maximum_atoms": 776,
+  "maximum_tool_calls": 4,
+  "output_hash_overlap": {
+    "train_test": [],
+    "train_validation": [],
+    "validation_test": []
+  },
+  "passed": true,
+  "recipe_hash_overlap": {
+    "train_test": [],
+    "train_validation": [],
+    "validation_test": []
+  },
+  "record_count": 2714,
+  "records_on_current_registry": 2714,
+  "registry_versions": {
+    "phase1-f61d666433933ea4": 2714
+  },
+  "split_counts": {
+    "test": 302,
+    "train": 2149,
+    "validation": 263
+  },
+  "split_group_overlap": {
+    "train_test": [],
+    "train_validation": [],
+    "validation_test": []
+  },
+  "successful_replays": 2714
+}

@@ -1,0 +1,88 @@
+{
+  "artifact_hashes": {
+    "supplied_evidence": "ebe245b202b292691fa4ecea9e1f4c22d6e20f85a7eded91ba1baed115184429"
+  },
+  "claims": [
+    {
+      "confidence": "high",
+      "evidence_type": "user_supplied",
+      "field": "material.formula",
+      "locator": "user request",
+      "source_id": "user-spec-1",
+      "value": "Pt"
+    },
+    {
+      "confidence": "high",
+      "evidence_type": "user_supplied",
+      "field": "material.crystal_structure",
+      "locator": "user request",
+      "source_id": "user-spec-1",
+      "value": "fcc"
+    },
+    {
+      "confidence": "high",
+      "evidence_type": "user_supplied",
+      "field": "model.kind",
+      "locator": "user request",
+      "source_id": "user-spec-1",
+      "value": "bulk"
+    },
+    {
+      "confidence": "high",
+      "evidence_type": "user_supplied",
+      "field": "model.supercell",
+      "locator": "user request",
+      "source_id": "user-spec-1",
+      "value": [
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "confidence": "high",
+      "evidence_type": "user_supplied",
+      "field": "model.periodic_boundary_conditions",
+      "locator": "user request",
+      "source_id": "user-spec-1",
+      "value": [
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "confidence": "high",
+      "evidence_type": "user_supplied",
+      "field": "model.center",
+      "locator": "user request",
+      "source_id": "user-spec-1",
+      "value": "geometry"
+    },
+    {
+      "confidence": "high",
+      "evidence_type": "user_supplied",
+      "field": "model.atom_ordering",
+      "locator": "user request",
+      "source_id": "user-spec-1",
+      "value": "ase_default"
+    },
+    {
+      "confidence": "high",
+      "evidence_type": "user_supplied",
+      "field": "requested_outputs",
+      "locator": "user request",
+      "source_id": "user-spec-1",
+      "value": [
+        "cif",
+        "vasp"
+      ]
+    }
+  ],
+  "contradictions": [],
+  "created_at": "2026-07-30T18:14:36+00:00",
+  "producer_version": "ASE_auto_build/0.9.2",
+  "request_id": "journal-agent-r1-smoke",
+  "schema_version": "evidence-ledger/v1",
+  "unresolved_fields": []
+}

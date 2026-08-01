@@ -95,6 +95,8 @@ class LocalModelChat:
                 do_sample=False,
                 pad_token_id=self.tokenizer.pad_token_id,
                 eos_token_id=self.tokenizer.eos_token_id,
+                stop_strings=["</tool_call>"],
+                tokenizer=self.tokenizer,
             )
         generated = output[0, inputs["input_ids"].shape[1] :]
         self.generated_tokens += int(generated.shape[0])

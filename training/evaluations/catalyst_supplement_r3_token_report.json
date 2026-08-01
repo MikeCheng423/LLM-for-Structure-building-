@@ -1,0 +1,182 @@
+{
+  "assistant_loss_tokens": {
+    "count": 2714,
+    "maximum": 231,
+    "mean": 143.248,
+    "minimum": 68,
+    "p50": 159,
+    "p90": 171,
+    "p95": 172,
+    "p99": 180
+  },
+  "by_split": {
+    "test": {
+      "assistant_loss_tokens": {
+        "count": 302,
+        "maximum": 231,
+        "mean": 137.831,
+        "minimum": 72,
+        "p50": 156,
+        "p90": 172,
+        "p95": 172,
+        "p99": 192
+      },
+      "total_tokens": {
+        "count": 302,
+        "maximum": 1777,
+        "mean": 1142.593,
+        "minimum": 624,
+        "p50": 1315,
+        "p90": 1407,
+        "p95": 1550,
+        "p99": 1576
+      }
+    },
+    "train": {
+      "assistant_loss_tokens": {
+        "count": 2149,
+        "maximum": 230,
+        "mean": 144.339,
+        "minimum": 68,
+        "p50": 159,
+        "p90": 168,
+        "p95": 172,
+        "p99": 173
+      },
+      "total_tokens": {
+        "count": 2149,
+        "maximum": 1763,
+        "mean": 1200.292,
+        "minimum": 623,
+        "p50": 1345,
+        "p90": 1409,
+        "p95": 1523,
+        "p99": 1555
+      }
+    },
+    "validation": {
+      "assistant_loss_tokens": {
+        "count": 263,
+        "maximum": 229,
+        "mean": 140.551,
+        "minimum": 68,
+        "p50": 159,
+        "p90": 172,
+        "p95": 172,
+        "p99": 192
+      },
+      "total_tokens": {
+        "count": 263,
+        "maximum": 1800,
+        "mean": 1174.004,
+        "minimum": 624,
+        "p50": 1327,
+        "p90": 1510,
+        "p95": 1547,
+        "p99": 1574
+      }
+    }
+  },
+  "longest_records": [
+    {
+      "id": "supported-pt-icosahedron-fluorite-ceo2-111-p1",
+      "tokens": 1800
+    },
+    {
+      "id": "supported-pd-icosahedron-fluorite-ceo2-111-p1",
+      "tokens": 1777
+    },
+    {
+      "id": "supported-ni-cuboctahedron-wurtzite-zno-001-p1",
+      "tokens": 1767
+    },
+    {
+      "id": "supported-pt-cuboctahedron-rocksalt-mgo-100-p1",
+      "tokens": 1763
+    },
+    {
+      "id": "supported-cu-cuboctahedron-rocksalt-mgo-100-p1",
+      "tokens": 1760
+    },
+    {
+      "id": "supported-au-cuboctahedron-rocksalt-mgo-100-p1",
+      "tokens": 1760
+    },
+    {
+      "id": "supported-ag-cuboctahedron-rocksalt-mgo-100-p1",
+      "tokens": 1760
+    },
+    {
+      "id": "supported-au-icosahedron-fluorite-ceo2-100-p1",
+      "tokens": 1757
+    },
+    {
+      "id": "supported-ni-octahedron-rocksalt-nio-100-p1",
+      "tokens": 1748
+    },
+    {
+      "id": "si-invalid-index-recovery-p3",
+      "tokens": 1583
+    },
+    {
+      "id": "surface-substitution-ta100-nb-top-first-p1",
+      "tokens": 1582
+    },
+    {
+      "id": "si-invalid-index-recovery-p2",
+      "tokens": 1581
+    },
+    {
+      "id": "si-invalid-index-recovery-p1",
+      "tokens": 1580
+    },
+    {
+      "id": "surface-substitution-pd111-pt-top-first-p1",
+      "tokens": 1578
+    },
+    {
+      "id": "surface-vacancy-ceo2-111-top-o-first-p1",
+      "tokens": 1576
+    },
+    {
+      "id": "surface-substitution-au100-pd-top-first-p1",
+      "tokens": 1576
+    },
+    {
+      "id": "surface-substitution-al111-mg-top-first-p1",
+      "tokens": 1575
+    },
+    {
+      "id": "pt-invalid-index-recovery-p3",
+      "tokens": 1575
+    },
+    {
+      "id": "fe-invalid-index-recovery-p3",
+      "tokens": 1575
+    },
+    {
+      "id": "pt-invalid-index-recovery-p2",
+      "tokens": 1574
+    }
+  ],
+  "model": "Qwen/Qwen3-4B-Instruct-2507",
+  "over_limit": {
+    "1024": 1778,
+    "1536": 138,
+    "2048": 0,
+    "4096": 0,
+    "512": 2714,
+    "768": 2351
+  },
+  "revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+  "total_tokens": {
+    "count": 2714,
+    "maximum": 1800,
+    "mean": 1191.324,
+    "minimum": 623,
+    "p50": 1337,
+    "p90": 1409,
+    "p95": 1539,
+    "p99": 1572
+  }
+}

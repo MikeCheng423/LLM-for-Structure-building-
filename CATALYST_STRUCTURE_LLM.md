@@ -60,6 +60,85 @@ Paper text / SI excerpt / user description
 ```
 
 The LLM should normally generate `CatalystSpec` JSON rather than unrestricted Python. A deterministic dispatcher converts the specification into ASE calls. This makes outputs testable and avoids executing arbitrary model-generated code.
+### 3.1 Agent implementation design and feature catalogue
+
+[`CATALYST_FEATURES.md`](CATALYST_FEATURES.md) lists what the implementation can
+build today, what it deliberately refuses, and how each claim is checked.
+
+
+This document is the product, scientific-scope, and data-quality contract. The
+implementation design for the cooperating agents, their permissions, hand-off
+schemas, failure handling, and acceptance tests lives in
+[`CATALYST_STRUCTURE_LLM_AGENT_DESIGN.md`](CATALYST_STRUCTURE_LLM_AGENT_DESIGN.md).
+
+The non-negotiable boundary is: agents may extract evidence and propose a
+versioned `CatalystSpec`; deterministic code performs Materials Project
+retrieval, ASE construction, validation, file export, and any calculation. No
+agent may execute arbitrary code, silently choose a scientifically material
+missing value, or label an inference as a paper-reported fact.
+
+### 3.2 Implemented local workflow
+
+The local implementation lives in `src/ase_auto_build/ase_agent/`. It includes
+the hand-off schemas, two bounded LLM roles, the policy gate, an injected
+Materials Project resolver, the CatalystSpec dispatcher, validation, export,
+failure records, and review packets. `ASE_catalyst_build` runs the two LLM calls
+and deterministic pipeline without an interactive prompt:
+
+```bash
+ASE_catalyst_build --input request.json --out catalyst_requests
+```
+
+The input JSON contains only `request_id`, `request`, and `sources`. Each source
+has a caller-assigned ID, locator, and text. The command writes one immutable
+directory under the output root and returns a nonzero status for clarification,
+unsupported work, pipeline failure, or environment failure.
+
+The deterministic slice is gated by 106 immutable golden fixtures in
+`tests/golden/` -- section 7.2's 100 plus the six section 14 examples, all of
+which now build and validate -- and the section 9 runner
+`training/evaluations/run_vertical_slice_gate.py`, which reports all six
+criteria at their thresholds (106/106 schema conformance, 95/95 build and export
+round trips, zero writes outside a request package, zero unregistered tool
+calls, zero fields without provenance, 11/11 ambiguities refused). Milestone 1's
+exit criterion is therefore met for the supported scope, with the caveat that
+the fixtures have not had a domain-expert review.
+
+The journal command is an experimental, fail-closed baseline. The production r5
+adapter was trained for direct ASE tool calling, not EvidenceLedger and
+SpecProposal generation. Live prompt-only smokes on 2026-07-28 failed the journal
+schema gate, so no journal-role adapter is promoted. The typed Python pipeline
+can consume reviewed records while a dedicated journal-role corpus and adapter
+are developed.
+
+The dispatcher builds elemental, compound-family and fixed-prototype bulk/slab
+structures -- `fcc`/`bcc`/`hcp`/`diamond`/`sc` phases, the `fluorite`,
+`rocksalt`, `wurtzite` and `zincblende` families, and the registered `rutile`,
+`anatase`, `graphene`, `graphite` and `hBN` prototypes -- plus typed vacancies
+and substitutions, atomic or ASE-known molecular adsorbates, simple elemental
+nanoparticles, and one supported cluster. A caller may pass a resolved MP bulk
+parent through the Python API.
+
+A molecular adsorbate is oriented so its declared `anchor` is the atom nearest
+the surface. `ase.build.molecule` geometries are not built for adsorption --
+`molecule("CO")` is stored as (O, C) with the carbon lower -- so placing the
+anchor at the requested height would otherwise leave the rest of the molecule
+between it and the slab. `anchor` is 1-based over that ASE ordering, so the
+carbon of CO is atom 2.
+
+When the reference resolver cannot reduce a bulk parent to one entry,
+`run_candidate_set` builds one separately named package per candidate and writes
+a `candidate_set.json` index, as section 7 requires. Each package labels its own
+`material.reference_id` as `derived` with the reason; the choice is never
+presented as reported.
+
+A request may carry the section 4 `paper` block (`title`, `doi`, `year`). Every
+source-backed fact in the review packet then carries that DOI alongside its
+locator, and the reproduction record retains the full block.
+
+Non-default compound terminations, repeated coverage/coadsorption, user-supplied
+molecular orientation controls, lattice matching, and relaxation remain
+fail-closed until deterministic tools and validation rules cover them.
 
 ## 4. Input contract
 
@@ -119,10 +198,9 @@ Use a versioned schema. A minimal `CatalystSpec` is:
     {
       "operation": "add_adsorbate",
       "species": "CO",
-      "site": "atop",
-      "coverage_monolayer": 0.25,
+      "site": "ontop",
       "height_angstrom": 1.85,
-      "orientation": "C_down"
+      "anchor": 1
     }
   ],
   "provenance": [
@@ -130,7 +208,7 @@ Use a versioned schema. A minimal `CatalystSpec` is:
       "field": "model.layers",
       "value": 4,
       "evidence_type": "reported",
-      "citation": "Methods, page 4"
+      "claim_index": 0
     },
     {
       "field": "model.vacuum_angstrom",
@@ -143,6 +221,12 @@ Use a versioned schema. A minimal `CatalystSpec` is:
   "requested_outputs": ["cif", "vasp", "xyz"]
 }
 ```
+
+This compact example abbreviates provenance. The policy gate requires a
+`field_sources` entry and matching `CatalystSpec.provenance` entry for every
+supplied structure value, including each modification field. Reported and
+user-supplied values link to an `EvidenceLedger` claim; assumptions and derived
+values carry a reason.
 
 Allowed `task_status` values:
 
@@ -225,7 +309,7 @@ Store supervised fine-tuning data as chat JSONL:
     },
     {
       "role": "assistant",
-      "content": "{\"schema_version\":\"0.1\",\"task_status\":\"needs_clarification\",\"material\":{\"formula\":\"Au\",\"crystal_structure\":\"fcc\"},\"model\":{\"kind\":\"surface\",\"miller_indices\":[1,1,1],\"supercell\":[3,3,1],\"layers\":4,\"fixed_layers_from_bottom\":2},\"modifications\":[{\"operation\":\"substitute_atom\",\"from\":\"Au\",\"to\":\"Pd\",\"layer\":\"top\",\"site\":null}],\"clarification_questions\":[\"Which top-layer Au site should be replaced by Pd, or are all top-layer sites symmetry-equivalent before adsorption?\"]}"
+      "content": "{\"schema_version\":\"0.1\",\"task_status\":\"needs_clarification\",\"material\":{\"formula\":\"Au\",\"crystal_structure\":\"fcc\"},\"model\":{\"kind\":\"surface\",\"miller_indices\":[1,1,1],\"supercell\":[3,3,1],\"layers\":4,\"fixed_layers_from_bottom\":2},\"modifications\":[{\"operation\":\"substitute\",\"element\":\"Pd\"}],\"provenance\":[],\"clarification_questions\":[\"Which top-layer Au site should be replaced by Pd?\"],\"requested_outputs\":[\"cif\",\"vasp\"]}"
     }
   ]
 }
@@ -320,6 +404,22 @@ Create three held-out sets:
 - `template_holdout`: familiar chemistry with unseen wording.
 - `family_holdout`: unseen catalyst families or supports.
 - `journal_holdout`: complete papers never used in data preparation.
+
+Two of the three are built by
+`training/generators/build_journal_holdouts.py` (200 records each,
+evaluation-only). `template_holdout` varies wording alone: five phrase templates
+and both request sentences disjoint from the training pool, which the generator
+imports rather than copies, so a change to training cannot silently invalidate
+the claim. `family_holdout` varies chemistry alone: elements Rh, Ir, Pb, Mo and
+Ta, adsorbates N, C, NO, O2 and OH, and CeO2 and CaO supports, none of which
+appear in training. Generation fails closed if held-out wording or chemistry
+turns out to be present in the training corpus.
+
+`journal_holdout` is **not** built. It requires complete papers never used in
+data preparation, and this repository contains no licensed journal text.
+
+Because the Spec Planner is prompted with the EvidenceLedger JSON rather than the
+prose, `template_holdout` chiefly stresses the Evidence Extractor role.
 
 Manually inspect failed structures in a 3D viewer and assign failure categories such as extraction error, ambiguity handling, incorrect ASE mapping, geometry collision, or source inconsistency.
 
@@ -444,5 +544,3 @@ The project is successful when a held-out journal description can be transformed
 - Field-level provenance tied to the supplied journal evidence.
 - Explicit assumptions and unresolved ambiguities.
 - Versioned records sufficient to regenerate the same pre-relaxation structure.
-
-

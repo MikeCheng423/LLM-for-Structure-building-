@@ -16,6 +16,7 @@ def report(
         "complete": True,
         "dataset_sha256": "abc",
         "evaluation_ids_sha256": "records-abc",
+        "registry_version": "phase1-registry-abc",
         "summary": {
             "tool_mode": "full",
             "record_count": 30,
@@ -38,14 +39,23 @@ def report(
     }
 
 
+def corpus():
+    return {
+        "passed": True,
+        "record_count": 30,
+        "records_on_current_registry": 30,
+        "registry_versions": {"phase1-registry-abc": 30},
+    }
+
+
 def test_promotes_only_non_regressing_safe_adapter() -> None:
-    decision = promotion_decision({"passed": True}, report(0.4), report(0.6))
+    decision = promotion_decision(corpus(), report(0.4), report(0.6))
     assert decision["promoted"] is True
     assert all(decision["checks"].values())
 
 
 def test_forbidden_action_always_blocks_promotion() -> None:
-    decision = promotion_decision({"passed": True}, report(0.4), report(0.8, forbidden=0.01))
+    decision = promotion_decision(corpus(), report(0.4), report(0.8, forbidden=0.01))
     assert decision["promoted"] is False
     assert decision["checks"]["zero_forbidden_actions"] is False
 
@@ -53,7 +63,7 @@ def test_forbidden_action_always_blocks_promotion() -> None:
 def test_dataset_mismatch_blocks_promotion() -> None:
     adapter = report(0.8)
     adapter["dataset_sha256"] = "different"
-    decision = promotion_decision({"passed": True}, report(0.4), adapter)
+    decision = promotion_decision(corpus(), report(0.4), adapter)
     assert decision["promoted"] is False
     assert decision["checks"]["same_evaluation_dataset"] is False
 
@@ -63,7 +73,7 @@ def test_recipe_family_regression_blocks_promotion() -> None:
     adapter = report(0.7)
     base["summary"]["family_metrics"]["surface"]["exact_structure_rate"] = 0.8
     adapter["summary"]["family_metrics"]["surface"]["exact_structure_rate"] = 0.6
-    decision = promotion_decision({"passed": True}, base, adapter)
+    decision = promotion_decision(corpus(), base, adapter)
     assert decision["promoted"] is False
     assert decision["checks"]["family_exact_rates_not_regressed"] is False
 
@@ -71,7 +81,7 @@ def test_recipe_family_regression_blocks_promotion() -> None:
 def test_different_record_subset_blocks_promotion() -> None:
     adapter = report(0.8)
     adapter["evaluation_ids_sha256"] = "other-records"
-    decision = promotion_decision({"passed": True}, report(0.4), adapter)
+    decision = promotion_decision(corpus(), report(0.4), adapter)
     assert decision["promoted"] is False
     assert decision["checks"]["same_ordered_evaluation_records"] is False
 
@@ -81,7 +91,7 @@ def test_oracle_record_mode_cannot_promote() -> None:
     adapter = report(0.9)
     base["summary"]["tool_mode"] = "record"
     adapter["summary"]["tool_mode"] = "record"
-    decision = promotion_decision({"passed": True}, base, adapter)
+    decision = promotion_decision(corpus(), base, adapter)
     assert decision["promoted"] is False
     assert decision["checks"]["deployment_tool_mode"] is False
 
@@ -89,20 +99,20 @@ def test_oracle_record_mode_cannot_promote() -> None:
 def test_incomplete_evaluation_cannot_promote() -> None:
     adapter = report(0.9)
     adapter["complete"] = False
-    decision = promotion_decision({"passed": True}, report(0.8), adapter)
+    decision = promotion_decision(corpus(), report(0.8), adapter)
     assert decision["promoted"] is False
     assert decision["checks"]["adapter_evaluation_complete"] is False
 
 
 def test_low_invariant_rate_blocks_promotion() -> None:
-    decision = promotion_decision({"passed": True}, report(0.4), report(0.6, invariant=0.5))
+    decision = promotion_decision(corpus(), report(0.4), report(0.6, invariant=0.5))
     assert decision["promoted"] is False
     assert decision["checks"]["minimum_invariant_rate"] is False
 
 
 def test_invariant_regression_blocks_promotion() -> None:
     decision = promotion_decision(
-        {"passed": True}, report(0.4, invariant=0.95), report(0.6, invariant=0.9)
+        corpus(), report(0.4, invariant=0.95), report(0.6, invariant=0.9)
     )
     assert decision["promoted"] is False
     assert decision["checks"]["invariant_rate_not_regressed"] is False
@@ -111,15 +121,32 @@ def test_invariant_regression_blocks_promotion() -> None:
 def test_missing_safety_block_cannot_promote() -> None:
     adapter = report(0.9)
     del adapter["safety"]
-    decision = promotion_decision({"passed": True}, report(0.4), adapter)
+    decision = promotion_decision(corpus(), report(0.4), adapter)
     assert decision["promoted"] is False
     assert decision["checks"]["adversarial_safety_evaluated"] is False
 
 
 def test_forbidden_execution_blocks_promotion() -> None:
     decision = promotion_decision(
-        {"passed": True}, report(0.4), report(0.9, forbidden_exec=1, safety_rate=0.8)
+        corpus(), report(0.4), report(0.9, forbidden_exec=1, safety_rate=0.8)
     )
     assert decision["promoted"] is False
     assert decision["checks"]["zero_forbidden_executions"] is False
     assert decision["checks"]["minimum_adversarial_safety_rate"] is False
+
+
+def test_low_finish_rate_blocks_promotion() -> None:
+    decision = promotion_decision(
+        corpus(), report(0.4), report(0.9, finish=0.94), minimum_finish_rate=0.98
+    )
+    assert decision["promoted"] is False
+    assert decision["checks"]["minimum_finish_rate"] is False
+
+
+def test_registry_mismatch_blocks_promotion() -> None:
+    adapter = report(0.9)
+    adapter["registry_version"] = "phase1-other"
+    decision = promotion_decision(corpus(), report(0.4), adapter)
+    assert decision["promoted"] is False
+    assert decision["checks"]["same_runtime_registry"] is False
+    assert decision["checks"]["corpus_matches_runtime_registry"] is False
