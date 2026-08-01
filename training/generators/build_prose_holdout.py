@@ -31,7 +31,6 @@ import argparse
 import hashlib
 import itertools
 import json
-import re
 from pathlib import Path
 from typing import Any, Iterator
 
@@ -41,10 +40,12 @@ from training.dataset_contract import JOURNAL_SCHEMA_VERSION
 from training.generators.build_journal_corpus import (
     CREATED_AT,
     PHASES as TRAINING_PHASES,
+    TRAINING_PROSE_TEMPLATES,
     _paths as provenance_paths,
     _role_records,
     _spec,
 )
+from training.generators.prose_leak_guard import _assert_no_leak, _bare_leak, _literal_tokens
 
 PRODUCER = "prose-holdout-generator/v1"
 
@@ -64,10 +65,9 @@ ELEMENT_NAMES = {
     "Au": "gold", "Ag": "silver", "Pd": "palladium", "Fe": "iron", "W": "tungsten",
     "O": "oxygen", "H": "hydrogen",
 }
-CRYSTAL_NAMES = {
-    "fcc": ("a face-centered cubic lattice", "the face-centred cubic phase", "a cubic close-packed lattice"),
-    "bcc": ("a body-centered cubic lattice", "the body-centred cubic phase"),
-}
+#: CRYSTAL_NAMES (per-family noun phrases) is defined further down, next to
+#: the other prose-template pools it must stay disjoint from -- see
+#: `HOLDOUT_PROSE_TEMPLATES` and the cross-pool assertion below it.
 _MOLECULE_NAMES = {"CO": "carbon monoxide", "NH3": "ammonia", "H2O": "water"}
 _ANCHOR_ATOM = {"CO": "carbon", "NH3": "nitrogen", "H2O": "oxygen"}
 _LAYER_WORDS = {4: "four", 5: "five", 6: "six"}
@@ -95,129 +95,143 @@ DERIVED_REASONS = {
 # --------------------------------------------------------------------------
 # The literal-leakage guard -- the property that distinguishes this set from
 # template_holdout, which varies sentence *frames* but keeps the embedded
-# JSON literal (JOURNAL_ROLE_R3_SCHEDULE.md section 1).
+# JSON literal (JOURNAL_ROLE_R3_SCHEDULE.md section 1). Implementation lives
+# in `prose_leak_guard.py`, shared with `build_journal_corpus.py`'s training
+# prose pool, so the two generators cannot silently diverge on what counts as
+# a leak; re-imported here (`_assert_no_leak` etc. above) so `prose._assert_no_leak`
+# keeps working for existing callers/tests.
 # --------------------------------------------------------------------------
 
-def _literal_tokens(value: Any) -> tuple[set[str], set[str]]:
-    """Return (quoted_forms, bare_forms) that would let a model copy `value`
-    out of the text instead of interpreting prose.
-
-    - bool: only the JSON spelling ("true"/"false") is a risk.
-    - list/dict: only the exact bracketed/braced JSON literal is a risk --
-      English prose about a Miller index or a supercell repeat is full of
-      digits that are not that literal (see `_bare_leak`'s word-boundary
-      matching below).
-    - float: excluded entirely. `"1.85 A above the surface"` is how English
-      states a decimal quantity; `json.dumps(1.85)` renders the identical
-      digits, so there is no alternate prose form to require. This is not
-      the failure mode the schedule documents (enum/boolean/JSON-syntax
-      copying) -- it is an unavoidable identity for continuous measurements.
-    - str: a single-character token (bare element symbols "O"/"H"/"W") is
-      excluded from the bare check because a lone capital letter appears
-      constantly in ordinary English regardless of the target value; the
-      quoted JSON form ('"O"') is still checked since prose never emits
-      quote marks around a symbol.
-    """
-    if isinstance(value, bool):
-        return set(), {"true" if value else "false"}
-    if isinstance(value, (list, dict)):
-        return {
-            json.dumps(value, sort_keys=True),
-            json.dumps(value, sort_keys=True, separators=(",", ":")),
-        }, set()
-    if isinstance(value, float):
-        return set(), set()
-    if isinstance(value, int):
-        return set(), {str(value)}
-    if isinstance(value, str):
-        bare = {value} if len(value) > 1 else set()
-        return {json.dumps(value)}, bare
-    return set(), set()
-
-
-def _bare_leak(text: str, token: str) -> bool:
-    """Word-boundary match: "Al" must not flag "Aluminum" (no boundary after
-    the match), but must flag a standalone "Al" token."""
-    pattern = re.compile(rf"(?<![A-Za-z0-9_]){re.escape(token)}(?![A-Za-z0-9_])")
-    return pattern.search(text) is not None
-
-
-def _assert_no_leak(case_id: str, field: str, value: Any, text: str) -> None:
-    quoted, bare = _literal_tokens(value)
-    for token in quoted:
-        if token in text:
-            raise RuntimeError(f"{case_id}: field {field!r} leaks JSON literal {token!r} into source text: {text!r}")
-    for token in bare:
-        if _bare_leak(text, token):
-            raise RuntimeError(f"{case_id}: field {field!r} leaks bare literal {token!r} into source text: {text!r}")
-
-
 # --------------------------------------------------------------------------
-# Per-field prose. Every sentence below must independently satisfy
-# `_assert_no_leak` for the field(s) it grounds -- exercised at generation
-# time for every case, not just spot-checked.
+# Per-field prose templates. Every raw template string below is collected into
+# `HOLDOUT_PROSE_TEMPLATES` and asserted disjoint from
+# `build_journal_corpus.TRAINING_PROSE_TEMPLATES` -- see the assertion at the
+# end of this section. Every sentence rendered from these templates must also
+# independently satisfy `_assert_no_leak` for the field(s) it grounds --
+# exercised at generation time for every case, not just spot-checked.
 # --------------------------------------------------------------------------
+
+_FORMULA_BULK_TEMPLATES = ("The catalyst is {name}.", "{name_cap} is the material of interest.", "The bulk phase is {name}.")
+_FORMULA_SURFACE_TEMPLATES = ("The host metal is {name}.", "{name_cap} was used as the substrate.", "The catalyst surface is {name}.")
+
+#: Noun phrases per crystal family -- disjoint from build_journal_corpus's own
+#: pool (which uses "face-centred cubic"/"an fcc lattice" wording instead).
+CRYSTAL_NAMES = {
+    "fcc": ("a cubic close-packed lattice", "the ccp structure", "cubic close packing"),
+    "bcc": ("a body-centered cubic lattice", "the body-centered cubic form", "body-centered cubic packing"),
+}
+_CRYSTAL_SENTENCE_TEMPLATES = ("It crystallizes in {phrase}.", "The lattice is {phrase}.", "{phrase_cap} describes the structure.")
+
+_SUPERCELL_SQUARE_TEMPLATES = ("A {a} x {a} surface cell was used.", "A {a}×{a} supercell was built.", "The cell was repeated {a} by {a}.")
+_SUPERCELL_GENERAL_TEMPLATES = ("A {a}×{b}×{c} repeat of the cell was used.", "The cell was repeated {a} by {b} by {c}.")
+
+_PBC_BULK_TEMPLATES = ("The cell is periodic in all three directions.", "Periodic boundary conditions apply along every axis.")
+_PBC_SURFACE_TEMPLATES = (
+    "The system is periodic in x and y, with vacuum separating slabs along z.",
+    "Periodicity is enforced only in the surface plane, with a vacuum gap normal to it.",
+)
+
+_CENTER_TEMPLATES = ("The slab was centred in the simulation cell.", "The structure was centered within the cell.", "Atoms were centered in the box before export.")
+_ORDERING_TEMPLATES = ("Atoms were kept in ASE-default order.", "The atom ordering follows ASE's default sequence.", "Atoms are listed in the ASE default order.")
+_OUTPUTS_TEMPLATES = ("CIF and VASP outputs are requested.", "Please export CIF plus POSCAR files.", "Provide both a CIF file and a VASP POSCAR output.")
+
+#: Miller-index phrasing avoids the parenthesised "(111)" style reserved for
+#: build_journal_corpus's training pool.
+_MILLER_TEMPLATES = ("A {idx}-oriented surface was modeled.", "The {{{idx}}} facet was examined.", "The surface orientation is {idx}.")
+
+_LAYERS_TEMPLATES = ("The slab has {word} atomic layers.", "A {word}-layer slab was built.", "{word_cap} layers make up the slab.")
+_VACUUM_TEMPLATES = ("{n} Å of vacuum separates the slabs.", "About {n} angstroms of vacuum were added.", "{article} {n} angstrom vacuum gap was used.")
+_ELEMENT_SUB_TEMPLATES = ("The topmost atom was substituted with a {name} atom.", "A surface atom was replaced by {name}.", "{name_cap} was substituted for the outermost atom.")
+
+_ADSORBATE_MOLECULE_TEMPLATES = (
+    "A {name} molecule was bound through its {atom} atom at an atop site, {height} Å above the surface.",
+    "{name_cap} adsorbs via its {atom} atom on the on-top site, {height} Å from the surface.",
+    "The {name} molecule sits at the atop adsorption site, anchored through {atom}, {height} Å above the top layer.",
+)
+_ADSORBATE_ATOM_TEMPLATES = (
+    "An atomic {name} adsorbate occupies the atop site, {height} Å above the surface.",
+    "A single {name} atom was placed on the on-top site, {height} Å from the surface.",
+    "{name_cap} adsorbs at the atop position, {height} Å above the top layer.",
+)
+
+#: Every raw template string this module renders from, flattened for the
+#: cross-pool disjointness assertion below.
+HOLDOUT_PROSE_TEMPLATES: tuple[str, ...] = (
+    _FORMULA_BULK_TEMPLATES + _FORMULA_SURFACE_TEMPLATES
+    + tuple(phrase for phrases in CRYSTAL_NAMES.values() for phrase in phrases)
+    + _CRYSTAL_SENTENCE_TEMPLATES
+    + _SUPERCELL_SQUARE_TEMPLATES + _SUPERCELL_GENERAL_TEMPLATES
+    + _PBC_BULK_TEMPLATES + _PBC_SURFACE_TEMPLATES
+    + _CENTER_TEMPLATES + _ORDERING_TEMPLATES + _OUTPUTS_TEMPLATES
+    + _MILLER_TEMPLATES + _LAYERS_TEMPLATES + _VACUUM_TEMPLATES + _ELEMENT_SUB_TEMPLATES
+    + _ADSORBATE_MOLECULE_TEMPLATES + _ADSORBATE_ATOM_TEMPLATES
+)
+
+
+def _assert_disjoint_prose_forms(training: tuple[str, ...], holdout: tuple[str, ...]) -> None:
+    """Fail closed if this module's own wording reuses a training surface
+    form for any field. Called at import time below (real pools); a negative
+    control that proves this fires on a deliberately-shared pair lives in
+    `tests/test_prose_holdout.py`."""
+    shared = set(training) & set(holdout)
+    if shared:
+        raise RuntimeError(f"prose_holdout reuses training prose surface forms: {sorted(shared)[:5]}")
+
+
+_assert_disjoint_prose_forms(TRAINING_PROSE_TEMPLATES, HOLDOUT_PROSE_TEMPLATES)
+
 
 def _formula_sentence(value: str, ordinal: int, family: str) -> str:
     name = ELEMENT_NAMES[value]
-    if family == "bulk":
-        pool = (f"The catalyst is {name}.", f"{name.capitalize()} is the material of interest.", f"The bulk phase is {name}.")
-    else:
-        pool = (f"The host metal is {name}.", f"{name.capitalize()} was used as the substrate.", f"The catalyst surface is {name}.")
-    return pool[ordinal % len(pool)]
+    pool = _FORMULA_BULK_TEMPLATES if family == "bulk" else _FORMULA_SURFACE_TEMPLATES
+    return pool[ordinal % len(pool)].format(name=name, name_cap=name.capitalize())
 
 
 def _crystal_sentence(value: str, ordinal: int) -> str:
     phrase = CRYSTAL_NAMES[value][ordinal % len(CRYSTAL_NAMES[value])]
-    pool = (f"It crystallizes in {phrase}.", f"The lattice is {phrase}.", f"{phrase.capitalize()} describes the structure.")
-    return pool[ordinal % len(pool)]
+    pool = _CRYSTAL_SENTENCE_TEMPLATES
+    return pool[ordinal % len(pool)].format(phrase=phrase, phrase_cap=phrase.capitalize())
 
 
 def _supercell_sentence(value: list[int], ordinal: int) -> str:
     a, b, c = value
     if a == b and c == 1 and a in (2, 3):
-        pool = (f"A {a} x {a} surface cell was used.", f"A {a}×{a} supercell was built.", f"The cell was repeated {a} by {a}.")
-    else:
-        pool = (f"A {a}×{b}×{c} repeat of the cell was used.", f"The cell was repeated {a} by {b} by {c}.")
-    return pool[ordinal % len(pool)]
+        pool = _SUPERCELL_SQUARE_TEMPLATES
+        return pool[ordinal % len(pool)].format(a=a)
+    pool = _SUPERCELL_GENERAL_TEMPLATES
+    return pool[ordinal % len(pool)].format(a=a, b=b, c=c)
 
 
 def _pbc_sentence(bulk: bool, ordinal: int) -> str:
-    if bulk:
-        pool = ("The cell is periodic in all three directions.", "Periodic boundary conditions apply along every axis.")
-    else:
-        pool = (
-            "The system is periodic in x and y, with vacuum separating slabs along z.",
-            "Periodicity is enforced only in the surface plane, with a vacuum gap normal to it.",
-        )
+    pool = _PBC_BULK_TEMPLATES if bulk else _PBC_SURFACE_TEMPLATES
     return pool[ordinal % len(pool)]
 
 
 def _center_sentence(ordinal: int) -> str:
-    pool = ("The slab was centred in the simulation cell.", "The structure was centered within the cell.", "Atoms were centered in the box before export.")
+    pool = _CENTER_TEMPLATES
     return pool[ordinal % len(pool)]
 
 
 def _ordering_sentence(ordinal: int) -> str:
-    pool = ("Atoms were kept in ASE-default order.", "The atom ordering follows ASE's default sequence.", "Atoms are listed in the ASE default order.")
+    pool = _ORDERING_TEMPLATES
     return pool[ordinal % len(pool)]
 
 
 def _outputs_sentence(ordinal: int) -> str:
-    pool = ("CIF and VASP outputs are requested.", "Please export CIF plus POSCAR files.", "Provide both a CIF file and a VASP POSCAR output.")
+    pool = _OUTPUTS_TEMPLATES
     return pool[ordinal % len(pool)]
 
 
 def _miller_sentence(value: list[int], ordinal: int) -> str:
     idx = "".join(str(i) for i in value)
-    pool = (f"This is the ({idx}) surface.", f"A ({idx}) facet was modeled.", f"The exposed plane is ({idx}).")
-    return pool[ordinal % len(pool)]
+    pool = _MILLER_TEMPLATES
+    return pool[ordinal % len(pool)].format(idx=idx)
 
 
 def _layers_sentence(value: int, ordinal: int) -> str:
     word = _LAYER_WORDS[value]
-    pool = (f"The slab has {word} atomic layers.", f"A {word}-layer slab was built.", f"{word.capitalize()} layers make up the slab.")
-    return pool[ordinal % len(pool)]
+    pool = _LAYERS_TEMPLATES
+    return pool[ordinal % len(pool)].format(word=word, word_cap=word.capitalize())
 
 
 #: Spoken forms of the vacuum pool that start with a vowel sound ("eleven",
@@ -228,32 +242,24 @@ _VOWEL_SOUND_VACUUM = {11, 18}
 def _vacuum_sentence(value: float, ordinal: int) -> str:
     n = int(value)
     article = "An" if n in _VOWEL_SOUND_VACUUM else "A"
-    pool = (f"{n} Å of vacuum separates the slabs.", f"About {n} angstroms of vacuum were added.", f"{article} {n} angstrom vacuum gap was used.")
-    return pool[ordinal % len(pool)]
+    pool = _VACUUM_TEMPLATES
+    return pool[ordinal % len(pool)].format(n=n, article=article)
 
 
 def _element_sentence(value: str, ordinal: int) -> str:
     name = ELEMENT_NAMES[value]
-    pool = (f"The topmost atom was substituted with a {name} atom.", f"A surface atom was replaced by {name}.", f"{name.capitalize()} was substituted for the outermost atom.")
-    return pool[ordinal % len(pool)]
+    pool = _ELEMENT_SUB_TEMPLATES
+    return pool[ordinal % len(pool)].format(name=name, name_cap=name.capitalize())
 
 
 def _adsorbate_sentence(species: str | None, element: str | None, height: float, ordinal: int) -> str:
     if species:
         name, atom = _MOLECULE_NAMES[species], _ANCHOR_ATOM[species]
-        pool = (
-            f"A {name} molecule was bound through its {atom} atom at an atop site, {height} Å above the surface.",
-            f"{name.capitalize()} adsorbs via its {atom} atom on the on-top site, {height} Å from the surface.",
-            f"The {name} molecule sits at the atop adsorption site, anchored through {atom}, {height} Å above the top layer.",
-        )
-    else:
-        name = ELEMENT_NAMES[element]
-        pool = (
-            f"An atomic {name} adsorbate occupies the atop site, {height} Å above the surface.",
-            f"A single {name} atom was placed on the on-top site, {height} Å from the surface.",
-            f"{name.capitalize()} adsorbs at the atop position, {height} Å above the top layer.",
-        )
-    return pool[ordinal % len(pool)]
+        pool = _ADSORBATE_MOLECULE_TEMPLATES
+        return pool[ordinal % len(pool)].format(name=name, name_cap=name.capitalize(), atom=atom, height=height)
+    name = ELEMENT_NAMES[element]
+    pool = _ADSORBATE_ATOM_TEMPLATES
+    return pool[ordinal % len(pool)].format(name=name, name_cap=name.capitalize(), height=height)
 
 
 # --------------------------------------------------------------------------

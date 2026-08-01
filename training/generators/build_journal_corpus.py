@@ -13,6 +13,7 @@ from typing import Any, Iterable
 from ase_auto_build.ase_agent.catalyst_agents import evidence_call, evidence_target, proposal_call, proposal_target
 from ase_auto_build.ase_agent.catalyst_contracts import policy_gate, validate_record
 from training.dataset_contract import JOURNAL_SCHEMA_VERSION, validate_journal_record
+from training.generators.prose_leak_guard import _assert_no_leak
 
 
 CREATED_AT = "2026-07-28T00:00:00+00:00"
@@ -39,6 +40,285 @@ PHASES = (
 )
 PRODUCER = "journal-corpus-generator/v1"
 REGISTRY = "journal-policy-v1"
+
+
+# ==========================================================================
+# Training prose pool -- Phase 2 of `training/JOURNAL_ROLE_R3_SCHEDULE.md`.
+#
+# `training/STATUS.md`'s "prose_holdout: the extractor cannot read prose"
+# entry measured why the r2 extractor could not read real excerpts: every
+# training sentence was `The reported {label} is {json.dumps(value)}.` -- a
+# literal wrapped in a frame, never a value requiring interpretation. This
+# pool renders the same claims as genuine prose instead, so the corpus
+# teaches the *mapping* (prose -> canonical schema value), not copying.
+#
+# Every renderer below independently satisfies `prose_leak_guard._assert_no_leak`
+# for the field(s) it grounds, checked at generation time for every case (see
+# `_training_prose_text`), not just spot-checked. Two structural rules make
+# that possible everywhere, including `model.kind`, which template_holdout
+# and family_holdout never had to ground as prose and `build_prose_holdout.py`
+# avoids entirely by marking it "derived":
+#
+# 1. Every integer claim (`layers`, `fixed_layers_from_bottom`, `shells`,
+#    `site_index`, `anchor`, `supercell` components) is spelled out as an
+#    English word, never a bare digit -- so no sentence about one field's
+#    small integer (say, two fixed layers) can accidentally contain the
+#    literal digit of a different field's small-integer value (say, two
+#    cluster shells). Miller indices are the one exception: their digits are
+#    always written adjacent inside parentheses, e.g. "(111)", which the
+#    guard's word-boundary matching can never confuse with a bare "1".
+# 2. `model.kind` is "bulk", "surface", or "nanoparticle" -- and every
+#    surface-family sentence (formula, PBC, termination, adsorbate, defect,
+#    supported-cluster) would otherwise use the word "surface" constantly,
+#    which would leak that very claim. Every training sentence below says
+#    "slab" instead of "surface", "periodic cell" instead of "bulk", and
+#    "particle" instead of "nanoparticle" -- real synonyms a paper would use,
+#    which is exactly why this works: the model must still map them onto the
+#    schema's enum spelling.
+#
+# `build_prose_holdout.py` imports `TRAINING_PROSE_TEMPLATES` (the flat set of
+# every raw template string below, unformatted) and asserts at import time
+# that its own wording shares none of them -- see the assertion next to
+# `HOLDOUT_PROSE_TEMPLATES` there. That is what keeps `prose_holdout` an
+# actually-held-out test of this exact capability.
+# ==========================================================================
+
+TRAINING_ELEMENT_NAMES = {
+    "Al": "aluminium", "Cu": "copper", "Ni": "nickel", "Pt": "platinum",
+    "Au": "gold", "Ag": "silver", "Pd": "palladium", "Fe": "iron", "W": "tungsten",
+    "O": "oxygen", "H": "hydrogen",
+}
+#: Compound support formulas (the oxide/sulfide `<family>-<formula>` prototypes
+#: from `compound-prototypes` -- only MgO rocksalt is trained on today).
+TRAINING_COMPOUND_NAMES = {"MgO": "magnesium oxide"}
+TRAINING_COMPOUND_CRYSTAL_NAMES = {
+    "rocksalt": ("a rock-salt structure", "the rock-salt arrangement", "a rock-salt-type lattice"),
+}
+TRAINING_MOLECULE_NAMES = {"CO": "carbon monoxide", "NH3": "ammonia", "H2O": "water"}
+TRAINING_ANCHOR_ATOM = {"CO": "carbon", "NH3": "nitrogen", "H2O": "oxygen"}
+_NUMBER_WORDS = {1: "one", 2: "two", 3: "three", 4: "four", 5: "five", 6: "six"}
+
+#: Noun phrases per crystal family -- disjoint from build_prose_holdout's own
+#: pool, which uses "cubic close-packed"/"ccp" wording instead.
+TRAINING_CRYSTAL_NAMES = {
+    "fcc": ("a face-centred cubic lattice", "the face-centred cubic arrangement", "a cubic lattice with face-centred symmetry"),
+    "bcc": ("a body-centred cubic lattice", "the body-centred cubic arrangement", "a cubic lattice with atoms centred in the body"),
+}
+
+_T_FORMULA_BULK = ("The compound under study is {name}.", "{name_cap} was modelled as the pure element.", "This candidate is composed of {name}.")
+_T_FORMULA_SLAB = ("{name_cap} forms the metal substrate studied here.", "The slab is cut from {name}.", "{name_cap} constitutes the host metal for this slab model.")
+_T_FORMULA_PARTICLE = ("{name_cap} was used to build the particle.", "The particle is composed of {name}.", "{article} {name} particle was modelled.")
+_T_CRYSTAL_SENTENCE = ("It crystallizes as {phrase}.", "The material adopts {phrase}.", "{phrase_cap} is reported for this phase.")
+
+_T_KIND = {
+    "bulk": ("A full three-dimensional periodic cell was requested.", "The extended periodic crystal itself was modelled."),
+    "surface": ("A slab model was requested.", "A finite-thickness slab was built to represent the exposed facet."),
+    "nanoparticle": ("A finite, isolated particle model was requested.", "A free-standing cluster was modelled."),
+}
+_T_MILLER = ("This is the ({idx}) facet of the slab.", "The exposed facet is ({idx}).", "A ({idx})-oriented slab was built.")
+_T_SUPERCELL_SQUARE = ("The slab cell was expanded {word}-by-{word} in the surface plane.", "A {word}-by-{word} repeat cell was constructed.")
+_T_SUPERCELL_GENERAL = ("The unit was repeated {word_a} time(s) along a, {word_b} time(s) along b and {word_c} time(s) along c.", "A {word_a}-by-{word_b}-by-{word_c} repeat of the cell was constructed.")
+_T_LAYERS = ("The slab was built with {word} atomic layers.", "{word_cap} layers make up the modelled slab.")
+_T_VACUUM = ("A vacuum region of {n} angstrom separates periodic images.", "{article} {n} Å vacuum gap isolates the slabs.")
+_T_PBC_BULK = ("Periodicity was imposed along all three cell vectors.", "The full three-dimensional periodic cell was retained.")
+_T_PBC_SURFACE = ("Periodicity is imposed only in the slab plane, with vacuum normal to it.", "The cell repeats in-plane only; the direction perpendicular to the slab is not periodic.")
+_T_PBC_PARTICLE = ("No periodic boundary conditions were imposed; the particle stands alone in vacuum.", "The particle was modelled as an isolated, non-periodic object.")
+_T_CENTER = ("The structure was placed centrally within its cell.", "Atoms were positioned at the cell centre before export.")
+_T_ORDERING = ("Atoms follow the default ordering produced by the build tool.", "No custom atom ordering was requested; the toolkit's own sequence was kept.")
+_T_FIXED_LAYERS = ("The bottom {word} layers were held fixed.", "{word_cap} layers at the base of the slab were frozen in place.")
+_T_TERMINATION = ("The default termination was accepted for this slab.", "No custom termination was requested for this compound slab.")
+_T_SHAPE = {
+    "icosahedron": ("an icosahedral particle", "a twenty-faced polyhedral particle"),
+    "octahedron": ("an octahedral particle", "an eight-faced polyhedral particle"),
+    "cuboctahedron": ("a cuboctahedral particle", "a fourteen-faced polyhedral particle"),
+}
+_T_SHAPE_SENTENCE = ("The particle was built as {phrase}.", "{phrase_cap} was modelled.")
+_T_SHELLS = ("The particle contains {word} atomic shell(s).", "{word_cap} shell(s) make up the particle.")
+_T_OUTPUTS = ("Both CIF and VASP-format files were requested.", "Export both a CIF file and a VASP structure file.")
+_T_OPERATION = {
+    "make_vacancy": ("A slab atom was removed to create a vacancy.", "One atomic site at the top of the slab was left empty."),
+    "substitute": ("The outermost atom of the slab was replaced by a different element.", "A single top-layer atom was swapped for another element."),
+}
+_T_SELECTOR = ("The change targets the sole outermost position of the slab.", "Only the single topmost atom of the slab is affected.")
+_T_SITE_INDEX = ("Only one such site of that kind is reported.", "A single equivalent adsorption site is described.")
+_T_ADSORBATE_MOLECULE = (
+    "{article} {name} molecule binds through its {atom} atom at the atop position, {height} Å above the top layer of the slab.",
+    "{name_cap} adsorbs atop the slab via its {atom} atom, {height} Å from the top layer.",
+)
+_T_ADSORBATE_ATOM = (
+    "A lone {name} atom sits atop the slab, {height} Å above the top layer.",
+    "{name_cap} occupies the atop position on the slab, {height} Å from the top layer.",
+)
+_T_ELEMENT_SUB = ("The outermost atom of the slab was replaced by {name}.", "{name_cap} was substituted for the top-layer atom.")
+_T_CLUSTER = (
+    "A {shape_phrase} of {name} was deposited on the slab, leaving {gap} Å to the support and {vac} Å of vacuum around the particle.",
+    "{name_cap} was deposited as {shape_phrase}, {gap} Å above the slab with {vac} Å of surrounding vacuum.",
+)
+
+#: Every raw template string this pool renders from, flattened for the
+#: cross-pool disjointness assertion `build_prose_holdout.py` performs.
+TRAINING_PROSE_TEMPLATES: tuple[str, ...] = (
+    _T_FORMULA_BULK + _T_FORMULA_SLAB + _T_FORMULA_PARTICLE
+    + tuple(phrase for phrases in TRAINING_CRYSTAL_NAMES.values() for phrase in phrases)
+    + tuple(phrase for phrases in TRAINING_COMPOUND_CRYSTAL_NAMES.values() for phrase in phrases)
+    + _T_CRYSTAL_SENTENCE
+    + tuple(sentence for pool in _T_KIND.values() for sentence in pool)
+    + _T_MILLER + _T_SUPERCELL_SQUARE + _T_SUPERCELL_GENERAL + _T_LAYERS + _T_VACUUM
+    + _T_PBC_BULK + _T_PBC_SURFACE + _T_PBC_PARTICLE + _T_CENTER + _T_ORDERING
+    + _T_FIXED_LAYERS + _T_TERMINATION
+    + tuple(phrase for phrases in _T_SHAPE.values() for phrase in phrases)
+    + _T_SHAPE_SENTENCE + _T_SHELLS + _T_OUTPUTS
+    + tuple(sentence for pool in _T_OPERATION.values() for sentence in pool)
+    + _T_SELECTOR + _T_SITE_INDEX + _T_ADSORBATE_MOLECULE + _T_ADSORBATE_ATOM
+    + _T_ELEMENT_SUB + _T_CLUSTER
+)
+
+#: Spoken forms of the vacuum pool that start with a vowel sound.
+_VOWEL_SOUND_VACUUM = {11, 18}
+
+
+def _article(word: str) -> str:
+    return "An" if word[:1].lower() in "aeiou" else "A"
+
+
+def _is_prose_case(ordinal: int, material: dict[str, Any]) -> bool:
+    """Deterministic prose/literal split by case ordinal -- roughly half the
+    corpus. Silicon is excluded (always literal): "diamond cubic" cannot be
+    phrased in English without writing the word "diamond", which *is* the
+    `crystal_structure` literal (the same reason `build_prose_holdout.py`
+    drops silicon entirely)."""
+    if material.get("formula") == "Si":
+        return False
+    return ordinal % 2 == 1
+
+
+def _training_prose_text(case_id: str, spec: dict[str, Any], fields: list[tuple[str, Any]], ordinal: int) -> str:
+    """Render every field in `fields` as prose requiring interpretation, using
+    wording disjoint from `build_prose_holdout.py`. Fails closed (via
+    `prose_leak_guard._assert_no_leak`) if any rendered sentence leaks a JSON
+    literal or bare enum/boolean spelling of the value it grounds."""
+    kind = spec["model"]["kind"]
+    sentence_by_field: dict[str, str] = {}
+    mod_fields: list[tuple[str, Any]] = []
+    other_fields: list[tuple[str, Any]] = []
+    for field, value in fields:
+        (mod_fields if field.startswith("modifications[") else other_fields).append((field, value))
+
+    for index, (field, value) in enumerate(other_fields):
+        ordinal_here = ordinal + index
+        if field == "material.formula":
+            name = TRAINING_ELEMENT_NAMES.get(value) or TRAINING_COMPOUND_NAMES[value]
+            pool = {"bulk": _T_FORMULA_BULK, "nanoparticle": _T_FORMULA_PARTICLE}.get(kind, _T_FORMULA_SLAB)
+            sentence_by_field[field] = pool[ordinal_here % len(pool)].format(
+                name=name, name_cap=name.capitalize(), article=_article(name),
+            )
+        elif field == "material.crystal_structure":
+            names = TRAINING_CRYSTAL_NAMES.get(value) or TRAINING_COMPOUND_CRYSTAL_NAMES[value]
+            phrase = names[ordinal_here % len(names)]
+            sentence_by_field[field] = _T_CRYSTAL_SENTENCE[ordinal_here % len(_T_CRYSTAL_SENTENCE)].format(
+                phrase=phrase, phrase_cap=phrase.capitalize(),
+            )
+        elif field == "model.kind":
+            pool = _T_KIND[value]
+            sentence_by_field[field] = pool[ordinal_here % len(pool)]
+        elif field == "model.miller_indices":
+            idx = "".join(str(i) for i in value)
+            sentence_by_field[field] = _T_MILLER[ordinal_here % len(_T_MILLER)].format(idx=idx)
+        elif field == "model.supercell":
+            a, b, c = value
+            if a == b and c == 1:
+                word = _NUMBER_WORDS[a]
+                sentence_by_field[field] = _T_SUPERCELL_SQUARE[ordinal_here % len(_T_SUPERCELL_SQUARE)].format(word=word)
+            else:
+                sentence_by_field[field] = _T_SUPERCELL_GENERAL[ordinal_here % len(_T_SUPERCELL_GENERAL)].format(
+                    word_a=_NUMBER_WORDS[a], word_b=_NUMBER_WORDS[b], word_c=_NUMBER_WORDS[c],
+                )
+        elif field == "model.layers":
+            word = _NUMBER_WORDS[value]
+            sentence_by_field[field] = _T_LAYERS[ordinal_here % len(_T_LAYERS)].format(word=word, word_cap=word.capitalize())
+        elif field == "model.vacuum_angstrom":
+            n = int(value)
+            article = "An" if n in _VOWEL_SOUND_VACUUM else "A"
+            sentence_by_field[field] = _T_VACUUM[ordinal_here % len(_T_VACUUM)].format(n=n, article=article)
+        elif field == "model.periodic_boundary_conditions":
+            pool = {"bulk": _T_PBC_BULK, "nanoparticle": _T_PBC_PARTICLE}.get(kind, _T_PBC_SURFACE)
+            sentence_by_field[field] = pool[ordinal_here % len(pool)]
+        elif field == "model.fixed_layers_from_bottom":
+            word = _NUMBER_WORDS[value]
+            sentence_by_field[field] = _T_FIXED_LAYERS[ordinal_here % len(_T_FIXED_LAYERS)].format(word=word, word_cap=word.capitalize())
+        elif field == "model.center":
+            sentence_by_field[field] = _T_CENTER[ordinal_here % len(_T_CENTER)]
+        elif field == "model.atom_ordering":
+            sentence_by_field[field] = _T_ORDERING[ordinal_here % len(_T_ORDERING)]
+        elif field == "model.termination":
+            sentence_by_field[field] = _T_TERMINATION[ordinal_here % len(_T_TERMINATION)]
+        elif field == "model.shape":
+            phrase = _T_SHAPE[value][ordinal_here % len(_T_SHAPE[value])]
+            sentence_by_field[field] = _T_SHAPE_SENTENCE[ordinal_here % len(_T_SHAPE_SENTENCE)].format(
+                phrase=phrase, phrase_cap=phrase.capitalize(),
+            )
+        elif field == "model.shells":
+            word = _NUMBER_WORDS[value]
+            sentence_by_field[field] = _T_SHELLS[ordinal_here % len(_T_SHELLS)].format(word=word, word_cap=word.capitalize())
+        elif field == "requested_outputs":
+            sentence_by_field[field] = _T_OUTPUTS[ordinal_here % len(_T_OUTPUTS)]
+        else:
+            raise RuntimeError(f"{case_id}: no training prose renderer for field {field!r}")
+
+    groups: dict[str, dict[str, Any]] = {}
+    for field, value in mod_fields:
+        prefix, suffix = field.split("].", 1)
+        groups.setdefault(prefix + "]", {})[suffix] = value
+    offset = len(other_fields)
+    for group_index, (prefix, group) in enumerate(groups.items()):
+        base = ordinal + offset + group_index * 3
+        operation = group.get("operation")
+        if operation == "add_adsorbate":
+            if "species" in group:
+                name, atom = TRAINING_MOLECULE_NAMES[group["species"]], TRAINING_ANCHOR_ATOM[group["species"]]
+                sentence = _T_ADSORBATE_MOLECULE[base % len(_T_ADSORBATE_MOLECULE)].format(
+                    name=name, name_cap=name.capitalize(), atom=atom, height=group["height_angstrom"],
+                    article=_article(name),
+                )
+            else:
+                name = TRAINING_ELEMENT_NAMES[group["element"]]
+                sentence = _T_ADSORBATE_ATOM[base % len(_T_ADSORBATE_ATOM)].format(
+                    name=name, name_cap=name.capitalize(), height=group["height_angstrom"],
+                )
+            for suffix in ("operation", "site", "site_index", "height_angstrom", "species", "element", "anchor"):
+                if suffix in group:
+                    sentence_by_field[f"{prefix}.{suffix}"] = sentence
+        elif operation in ("make_vacancy", "substitute"):
+            pool = _T_OPERATION[operation]
+            sentence = pool[base % len(pool)]
+            for suffix in ("operation", "selector"):
+                sentence_by_field[f"{prefix}.{suffix}"] = sentence
+            if "element" in group:
+                name = TRAINING_ELEMENT_NAMES[group["element"]]
+                sentence_by_field[f"{prefix}.element"] = _T_ELEMENT_SUB[(base + 1) % len(_T_ELEMENT_SUB)].format(
+                    name=name, name_cap=name.capitalize(),
+                )
+        elif operation == "add_supported_cluster":
+            name = TRAINING_ELEMENT_NAMES[group["element"]]
+            shape_phrase = _T_SHAPE[group["shape"]][base % len(_T_SHAPE[group["shape"]])]
+            sentence = _T_CLUSTER[base % len(_T_CLUSTER)].format(
+                shape_phrase=shape_phrase, name=name, name_cap=name.capitalize(),
+                gap=group["gap_angstrom"], vac=group["vacuum_angstrom"],
+            )
+            for suffix in ("operation", "element", "shape", "shells", "gap_angstrom", "vacuum_angstrom"):
+                sentence_by_field[f"{prefix}.{suffix}"] = sentence
+        else:
+            raise RuntimeError(f"{case_id}: no training prose renderer for modification {operation!r}")
+
+    ordered: list[str] = []
+    for field, _ in fields:
+        sentence = sentence_by_field[field]
+        if sentence not in ordered:
+            ordered.append(sentence)
+    text = " ".join(ordered)
+    for field, value in fields:
+        _assert_no_leak(case_id, field, value, text)
+    return text
 
 
 def _sha(value: Any) -> str:
@@ -175,15 +455,19 @@ def _records(case_id: str, family: str, spec: dict[str, Any], ordinal: int) -> l
         "model.fixed_layers_from_bottom": "fixed bottom layers", "model.center": "centering flag",
         "model.atom_ordering": "atom ordering", "requested_outputs": "requested output formats",
     }
-    lines = []
-    for field, value in fields:
-        label = labels.get(field, field.replace("_", " ").replace(".", " "))
-        rendered = json.dumps(value, sort_keys=True)
-        lines.append(PHRASE_TEMPLATES[_LANGUAGE_PHRASE[language]].format(
-            label=label, label_capitalized=label.capitalize(), value=rendered,
-        ))
+    if _is_prose_case(ordinal, spec["material"]):
+        text = _training_prose_text(case_id, spec, fields, ordinal)
+    else:
+        lines = []
+        for field, value in fields:
+            label = labels.get(field, field.replace("_", " ").replace(".", " "))
+            rendered = json.dumps(value, sort_keys=True)
+            lines.append(PHRASE_TEMPLATES[_LANGUAGE_PHRASE[language]].format(
+                label=label, label_capitalized=label.capitalize(), value=rendered,
+            ))
+        text = "\n".join(lines)
     request = REQUEST_TEMPLATES[1 if language == 4 else 0]
-    source = {"source_id": "fixture-1", "locator": locator, "text": "\n".join(lines)}
+    source = {"source_id": "fixture-1", "locator": locator, "text": text}
     claims = [{
         "field": field, "value": value, "evidence_type": "user_supplied",
         "source_id": "fixture-1", "locator": locator,
@@ -298,8 +582,14 @@ def main() -> int:
     parser.add_argument("--output-dir", type=Path, default=Path("training/datasets/journal_roles_v1"))
     args = parser.parse_args()
     records: list[dict[str, Any]] = []
+    prose_cases = 0
+    literal_cases = 0
     for ordinal, (case_id, family, spec) in enumerate(_ready_specs()):
         records.extend(_records(case_id, family, spec, ordinal))
+        if _is_prose_case(ordinal, spec["material"]):
+            prose_cases += 1
+        else:
+            literal_cases += 1
     for index in range(125):
         records.extend(_negative_records(index))
     if len(records) != 5_000:
@@ -320,6 +610,11 @@ def main() -> int:
         "registry_version": REGISTRY, "record_count": len(records),
         "split_counts": {name: len(items) for name, items in splits.items()},
         "split_sha256": hashes, "source_policy": "deterministic synthetic fixtures; no journal text",
+        "source_rendering": {
+            "prose_cases": prose_cases, "literal_cases": literal_cases,
+            "prose_ratio": prose_cases / max(1, prose_cases + literal_cases),
+            "note": "negative (ambiguity) fixtures are always literal free-text; not counted here",
+        },
     }
     (args.output_dir / "manifest.json").write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     print(json.dumps(manifest, indent=2, sort_keys=True))

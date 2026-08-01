@@ -1,6 +1,59 @@
-# Training status — 2026-07-31 Asia/Taipei
+# Training status — 2026-08-02 Asia/Taipei
+
+## Phase 2 corpus: half the training text is now prose (2026-08-02)
+
+Phase 2 of `JOURNAL_ROLE_R3_SCHEDULE.md` is complete. `build_journal_corpus.py`
+renders a deterministic ~50% share of cases as prose requiring interpretation
+instead of `Use "fcc" for the crystal structure.`-style literal frames, so the
+corpus teaches the *mapping* prose → canonical schema value. The other half stays
+literal: the model needs both skills.
+
+- Corpus: 5,000 records, 1,187 prose / 1,188 literal cases (ratio 0.4998).
+  Splits 4,040 / 450 / 510.
+- **Targets are provably unchanged.** Regenerating with the pre-Phase-2 builder
+  and diffing per id: 5,000/5,000 records identical `payload_hash`,
+  `split_group`, and split assignment. The only delta is `sources[].text`
+  (2,374 records). Prose rendering did not move a single graded target.
+- Leakage is guarded by `training/generators/prose_leak_guard.py`, a shared leaf
+  module both generators import so they cannot drift. Generation fails closed if
+  a rendered sentence contains a JSON literal or bare enum/boolean spelling of
+  the value it grounds.
+- **`prose_holdout` stays held out.** The training pool is exported as
+  `TRAINING_PROSE_TEMPLATES`; `build_prose_holdout.py` imports it and fails
+  closed on any shared surface form. Measured at the rendered-text level: 88
+  distinct holdout sentences vs 578 training sentences, **0 shared**.
+
+Two guard defects found and fixed before commit:
+
+1. `_bare_leak` excluded `.` from the word boundary on both sides so an integer
+   token `1` would not match `1.2`. That also made every **sentence-final**
+   literal invisible — `"The centering flag is true."` passed the guard. The
+   `.` exclusion now applies to numeric tokens only. Audited both datasets under
+   the corrected guard: **0 actual leaks**, so this was latent, not
+   contamination.
+2. `build_prose_holdout.CRYSTAL_NAMES["bcc"]` contained `"the bcc phase"`, which
+   spells the target enum verbatim. No production case reached it (the rebuilt
+   holdout is byte-identical, `ef810397…`), but any bcc defect case would have
+   leaked. Replaced with `"the body-centered cubic form"`.
+
+Gates: `evaluate_journal_corpus.py` `passed: true` (execution 1.0, forbidden 0.0,
+zero split-group overlap), `run_vertical_slice_gate.py` `passed: true` exit 0,
+full suite 875 passed / 2 skipped.
+
+**Caveat carried into r3:** the r2 numbers in the next section were measured on a
+*superseded* build of `prose_holdout`. Phase 2 moved wording between the pools to
+enforce disjointness — Miller indices went `(111)` → `111-oriented` / `{111}`,
+and `"face-centred cubic"` moved into the training pool. The datasets are
+git-ignored, so nothing in git records the change. r2 must be re-measured on the
+current file (`ef810397…`, ~1.2 h GPU) before any r3-vs-r2 comparison is valid.
 
 ## prose_holdout: the extractor cannot read prose (2026-07-31)
+
+> **Superseded input set.** The numbers below were measured 2026-07-31 13:18
+> against the *pre-Phase-2* build of `journal_holdout_prose/test.jsonl`. The file
+> at that path is now `ef810397…` and its wording differs (see the Phase 2 entry
+> above). The failure *modes* below still stand — they are what Phase 2 was built
+> to fix — but the per-field rates do not describe the current file.
 
 Phase 1 of `JOURNAL_ROLE_R3_SCHEDULE.md` is measured. The journal-role **r2**
 adapter (`training/runs/pilot-qwen3-4b-journal-role-r2/adapter`) was evaluated on
