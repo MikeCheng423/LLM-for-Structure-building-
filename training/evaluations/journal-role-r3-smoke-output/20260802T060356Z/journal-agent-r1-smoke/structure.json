@@ -1,0 +1,80 @@
+{
+  "atoms_hash": "282d061915c01e9ef2341e238b2dd47d18ce9d74201ff7af70771b79d106526b",
+  "controller_state": "BUILT",
+  "files": {
+    "extra": [
+      "structure.cif"
+    ],
+    "poscar": "POSCAR"
+  },
+  "generated_at": "2026-08-02T06:05:47+00:00",
+  "generated_by": "ASE_auto_build",
+  "invariants": {
+    "cell_angles": [
+      90.0,
+      90.0,
+      90.0
+    ],
+    "cell_lengths": [
+      3.92,
+      3.92,
+      3.92
+    ],
+    "constrained_atoms": 0,
+    "formula": {
+      "Pt": 4
+    },
+    "natoms": 4,
+    "pbc": [
+      true,
+      true,
+      true
+    ]
+  },
+  "model": {
+    "adapter": "/home/tlclab/Structure_building/training/runs/pilot-qwen3-4b-journal-role-r3/adapter",
+    "adapter_sha256": "19a00eb6dbf72570ece59e3bd07d80898bf279018833a252470d0e63d078f000",
+    "decoding": {
+      "do_sample": false,
+      "max_new_tokens": 1200,
+      "seed": null
+    },
+    "model": "Qwen/Qwen3-4B-Instruct-2507",
+    "promotion_gate_bypassed": true,
+    "revision": "cdbee75f17c01a7cc42f958dc650907174af0554"
+  },
+  "preflight_advisory": null,
+  "recipe": {
+    "schema_version": 1,
+    "steps": [
+      {
+        "args": {
+          "crystal": "fcc",
+          "cubic": true,
+          "element": "Pt",
+          "name": "candidate",
+          "repeat": [
+            1,
+            1,
+            1
+          ]
+        },
+        "tool": "build_bulk"
+      },
+      {
+        "args": {
+          "name": "candidate"
+        },
+        "tool": "finish"
+      }
+    ]
+  },
+  "recipe_hash": "602732822c20e0c798d01cb1acedebe7d96ac86dd7af214582ef863c22d756ef",
+  "request": "CatalystSpec reconstruction",
+  "schema_version": 1,
+  "tool_sequence": [
+    "build_bulk",
+    "finish"
+  ],
+  "value_mismatches": []
+}

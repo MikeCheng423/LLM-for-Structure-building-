@@ -1,0 +1,133 @@
+{
+  "artifact_hashes": {
+    "build_record": "1db7144f50c7c5bcb6f94b9e7102a717130d20794f340d67caaa64d84a605497",
+    "evidence_ledger": "490cbd0220238bc665b1f46ad2ce4fb6bd42d987ddaafe503f570a8fc26ec98b",
+    "spec_proposal": "7ccae46fea9f53f18d737340b19079f9a4a960a66eb5b00d36e9c56f4892c966",
+    "supplied_evidence": "86c81895c9a2596c4177780bfe2dd138ffee1486dd5a6516e8529ee62a9ccd57"
+  },
+  "created_at": "2026-08-02T06:05:47+00:00",
+  "invariants": {
+    "cell_angles": [
+      90.0,
+      90.0,
+      90.0
+    ],
+    "cell_lengths": [
+      3.92,
+      3.92,
+      3.92
+    ],
+    "constrained_atoms": 0,
+    "formula": {
+      "Pt": 4
+    },
+    "natoms": 4,
+    "pbc": [
+      true,
+      true,
+      true
+    ]
+  },
+  "passed": true,
+  "producer_version": "ASE_auto_build/0.9.2",
+  "profile": "final",
+  "request_id": "journal-agent-r1-smoke",
+  "rules": [
+    {
+      "measured": [
+        true,
+        true,
+        true
+      ],
+      "message": "PBC matches CatalystSpec",
+      "passed": true,
+      "rule": "periodic_boundary_conditions",
+      "severity": "error",
+      "threshold": [
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "measured": [
+        "Pt"
+      ],
+      "message": "final elements are declared by the host and modifications",
+      "passed": true,
+      "rule": "allowed_composition",
+      "severity": "error",
+      "threshold": [
+        "Pt"
+      ]
+    },
+    {
+      "measured": {
+        "Pt": 1
+      },
+      "message": "built host composition matches the declared material formula",
+      "passed": true,
+      "rule": "host_stoichiometry",
+      "severity": "error",
+      "threshold": {
+        "Pt": 1
+      }
+    },
+    {
+      "measured": 4,
+      "message": "final atom count matches the host plus the requested modifications",
+      "passed": true,
+      "rule": "atom_count",
+      "severity": "error",
+      "threshold": 4
+    },
+    {
+      "measured": "not requested",
+      "message": "no target symmetry or standardization setting was supplied",
+      "passed": true,
+      "rule": "symmetry_standardization",
+      "severity": "not_applicable",
+      "threshold": "not_applicable"
+    },
+    {
+      "measured": "not configured",
+      "message": "oxidation-state and coordination heuristics are optional warnings",
+      "passed": true,
+      "rule": "chemistry_plausibility",
+      "severity": "not_applicable",
+      "threshold": "not_applicable"
+    },
+    {
+      "measured": "symbols, positions, cell and constraints preserved",
+      "message": "POSCAR round-trips to the built structure",
+      "passed": true,
+      "rule": "export_round_trip:POSCAR",
+      "severity": "error",
+      "threshold": "positions within 0.01 A and cell within 0.01"
+    },
+    {
+      "measured": "symbols, positions, cell and constraints preserved",
+      "message": "structure.cif round-trips to the built structure",
+      "passed": true,
+      "rule": "export_round_trip:structure.cif",
+      "severity": "error",
+      "threshold": "positions within 0.01 A and cell within 0.01"
+    },
+    {
+      "measured": [
+        "POSCAR",
+        "structure.cif",
+        "structure.json"
+      ],
+      "message": "every requested output format produced a file",
+      "passed": true,
+      "rule": "requested_output_formats",
+      "severity": "error",
+      "threshold": [
+        "cif",
+        "vasp"
+      ]
+    }
+  ],
+  "schema_version": "validation-report/v1"
+}

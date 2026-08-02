@@ -1,0 +1,51 @@
+{
+  "approved_tool_calls": [
+    {
+      "args": {
+        "crystal": "fcc",
+        "cubic": true,
+        "element": "Pt",
+        "name": "candidate",
+        "repeat": [
+          1,
+          1,
+          1
+        ]
+      },
+      "tool": "build_bulk"
+    },
+    {
+      "args": {
+        "name": "candidate"
+      },
+      "tool": "finish"
+    }
+  ],
+  "artifact_hashes": {
+    "evidence_ledger": "490cbd0220238bc665b1f46ad2ce4fb6bd42d987ddaafe503f570a8fc26ec98b",
+    "spec_proposal": "7ccae46fea9f53f18d737340b19079f9a4a960a66eb5b00d36e9c56f4892c966",
+    "supplied_evidence": "86c81895c9a2596c4177780bfe2dd138ffee1486dd5a6516e8529ee62a9ccd57"
+  },
+  "ase_version": "3.28.0",
+  "created_at": "2026-08-02T06:05:47+00:00",
+  "input_hashes": {
+    "evidence_ledger": "490cbd0220238bc665b1f46ad2ce4fb6bd42d987ddaafe503f570a8fc26ec98b",
+    "spec_proposal": "7ccae46fea9f53f18d737340b19079f9a4a960a66eb5b00d36e9c56f4892c966",
+    "supplied_evidence": "86c81895c9a2596c4177780bfe2dd138ffee1486dd5a6516e8529ee62a9ccd57"
+  },
+  "output_hashes": {
+    "POSCAR": "89bce6375bb53b99480f8d3650afc196d263967af64c22d1c6bd21eade714243",
+    "atoms": "282d061915c01e9ef2341e238b2dd47d18ce9d74201ff7af70771b79d106526b",
+    "structure.cif": "f998eded92fa5aa61c88ab08abbadade8b54c761f7bcb5c2a407bee671968930",
+    "structure.json": "37d4a32087e3ecfc9596f01542fa78efc1087565783b9becf1adfaceace2c8a1"
+  },
+  "output_paths": [
+    "POSCAR",
+    "structure.cif",
+    "structure.json"
+  ],
+  "producer_version": "ASE_auto_build/0.9.2",
+  "registry_version": "phase1-f61d666433933ea4",
+  "request_id": "journal-agent-r1-smoke",
+  "schema_version": "build-record/v1"
+}

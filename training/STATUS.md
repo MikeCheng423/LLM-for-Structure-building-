@@ -1,5 +1,130 @@
 # Training status — 2026-08-02 Asia/Taipei
 
+## r3 promoted (journal_role_ready), but prose generalization is NOT solved (2026-08-02)
+
+Phase 3 ran end to end: r2 re-measured on the rebuilt `prose_holdout`, then the
+full r3 cycle. Cycle 00:25:59 → 18:29:46, exit 0. Training 2.64 h, best
+`eval_loss` 0.000462 at checkpoint-125, adapter SHA-256 `96dd87a5…`, 252 LoRA-B
+tensors all nonzero. Hyperparameters are field-for-field identical to r2's
+manifest, so **the corpus is the only variable**.
+
+`promote_journal_adapter.py` returned `promoted: true` — all 14 checks — and
+flipped `journal_role_ready` to `true`. **`production_ready` remains `false`
+and human-only.** Read the caveat below before treating this as done.
+
+### What passed
+
+| paired, 300 records, ids `5e1be4f1…` | r5 baseline | r3 |
+| --- | ---: | ---: |
+| schema-valid | 0.237 | **1.000** |
+| exact payload | 0.000 | **0.953** |
+| executable-or-safe | 0.237 | **1.000** |
+| provenance recall / precision | 0.000 | **1.000** |
+| forbidden actions | 0 | 0 |
+| negative safety (n=17) | 1.000 | 1.000 |
+
+`template_holdout` 0.990 exact (n=100), `family_holdout` 1.000 exact (n=100).
+
+**The live smoke passed** — `status: review_ready`, the first time since
+2026-07-28. It mapped "ASE-default atom ordering" → `"ase_default"` (r2's exact
+failure), "centered geometry" → `true`, "CIF plus VASP outputs" →
+`["cif","vasp"]`, and built a 4-atom conventional fcc Pt cell at 3.92 Å.
+Caveat: that fixture's text is largely *literal* ("fcc crystal structure",
+"periodic boundary conditions [true, true, true]") and is a single bulk request.
+It proves the specific blocker is gone; it is not evidence of prose competence.
+
+### What did not: prose_holdout, the set this whole effort targeted
+
+Same 80 records, ids `7f1e43e6…` both runs:
+
+| | r2 | r3 |
+| --- | ---: | ---: |
+| exact payload | 0.000 | **0.000** |
+| schema-valid | 0.800 | 0.738 |
+| executable-or-safe | 0.500 | 0.450 |
+
+The aggregate is flat-to-worse. The per-field data says something different, and
+both are true at once — **9 of 14 extractor fields went from broken to solved**:
+
+| field | n | r2 exact | r3 exact |
+| --- | ---: | ---: | ---: |
+| `model.periodic_boundary_conditions` | 40 | 0.000 | **1.000** |
+| `model.atom_ordering` | 40 | 0.450 | **1.000** |
+| `model.center` | 40 | 0.650 | **1.000** |
+| `model.miller_indices` | 33 | 0.000 | **0.970** |
+| `model.vacuum_angstrom` | 33 | 0.697 | **1.000** |
+| `modifications[0].site` / `.element` | 13 / 10 | 0.000 | **1.000** |
+| `material.formula` | 40 | 0.975 | **1.000** |
+| `model.supercell` | 40 | 0.775 | **0.875** |
+| `material.crystal_structure` | 40 | 0.000 | 0.350 |
+| `requested_outputs` | 40 | 0.400 | 0.475 |
+| `model.layers` | 33 | **1.000** | 0.788 |
+
+Invented field paths collapsed from **31 distinct to 3**, and the survivors are
+near-miss synonyms (`modifications[0].distance_angstrom`) rather than free
+invention (`model.facet`, `adatom.site`). r3 learned the schema.
+
+Three separate causes hold the aggregate down, and only one is about prose:
+
+1. **Vocabulary hallucination (real, and the important one).**
+   `crystal_structure` is per-template, not a smooth gap: "It crystallizes in a
+   cubic close-packed lattice." → 10/10 correct `fcc`; "The lattice is the ccp
+   structure." → 16/16 literal `"ccp"`; **"Cubic close packing describes the
+   structure." → 10/14 confidently emit `"bcc"`** — the wrong crystal system.
+   Training grounds fcc almost only as "face-centred cubic". An unseen paraphrase
+   does not degrade gracefully; it can invert the answer.
+2. **A new r3 conflation bug.** `model.layers` regressed 1.000 → 0.788 with
+   *unchanged* wording. In all 7 drops `model.supercell` simultaneously became
+   `[2,2,4]` instead of `[2,2,1]` — the "4" of "four-layer slab" bleeds into the
+   supercell's third component. Not a vocabulary problem.
+3. **A pre-existing corpus ambiguity.** `requested_outputs` emits `"poscar"` for
+   `"vasp"` in **14/40 records in both r2 and r3** — identical count, untouched by
+   retraining. Training says "Both CIF and VASP-format files were requested",
+   nearly the holdout's wording, so this is not prose comprehension: it is
+   VASP-format ↔ POSCAR-filename ambiguity baked into the corpus.
+
+### Two measurement defects found, both of which distorted the numbers above
+
+- **The extractor's `field_recall` is meaningless and must not be quoted.**
+  `_flatten` reports `target_fields/predicted_fields/correct_fields` as a fixed
+  `3/3/2` for every extractor record — it counts `claims`, `contradictions`, and
+  `unresolved_fields` as three "fields" and never inspects the claims. This is
+  why r2 scored *byte-identically* on the old and rebuilt holdout builds while
+  its actual behaviour changed a great deal (crystal_structure 24/40 → 0/40,
+  atom_ordering 5/40 → 18/40). Any per-field claim must be parsed from
+  `generated_text`.
+- **The schema-valid drop 40/40 → 36/40 is a harness artifact, not a
+  regression.** All 4 failures are adsorbate records with
+  `generated_tokens == generation_limit` exactly (643/643, 643/643, 642/642,
+  642/642), truncated mid-JSON inside `"contradictions"`. `generation_limit =
+  min(max_new_tokens, reference_tokens + 128)` is calibrated to the *reference*
+  length; r3 emits 17 claims where r2 emitted 11–15 under wrong names, so the
+  more complete extraction runs past a budget sized for the less complete one.
+  r3 is being penalised for saying more, correctly.
+
+### Verdict and what r4 needs
+
+r3 is a large structural win (schema learned, 9/14 fields solved, live smoke
+green) that does **not** deliver the schedule's actual goal: reading prose it
+has not seen. `journal_role_ready: true` was decided by a gate that runs
+*before* `prose_holdout` is measured and does not include it. On this evidence
+that flip is premature — reviewing it is a human decision, and
+`production_ready` must stay `false`.
+
+For r4, in priority order:
+
+1. Widen the crystal-structure paraphrase pool in training (ccp / close-packed /
+   Strukturbericht forms) so canonicalisation is taught, not memorised. This is
+   the only fix that addresses the actual capability.
+2. Disambiguate `requested_outputs` in the corpus: `"vasp"` is the format,
+   POSCAR the filename. Cheap, and worth ~14/40 records.
+3. Fix the layers/supercell conflation — likely needs adsorbate cases where the
+   layer count and the supercell third component differ.
+4. Raise `generation_limit` for the adsorbate family, or key it to the *model's*
+   plausible output length rather than the reference's, and re-measure.
+5. Add `prose_holdout` to the promotion gate so a green gate cannot again
+   precede this evidence.
+
 ## Phase 2 corpus: half the training text is now prose (2026-08-02)
 
 Phase 2 of `JOURNAL_ROLE_R3_SCHEDULE.md` is complete. `build_journal_corpus.py`
